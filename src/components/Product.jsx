@@ -161,19 +161,20 @@ export default function Product() {
                     </div>
 
                     {car.loan_available && (
-                      <div>
-                        <p className="monthly">
-                          ₦
-                          {Number(
-                            car.estimated_monthly_repayment
-                          ).toLocaleString()}{" "}
-                          / Mo
-                        </p>
-                        <small>
-                          {car.min_down_payment_percent}% Down payment
-                        </small>
-                      </div>
-                    )}
+  <div>
+    <p className="monthly">
+      ₦
+      {Number(
+        car.loan?.precomputed?.tenures?.m_6?.monthly_payment
+      ).toLocaleString()}{" "}
+      / Mo
+    </p>
+    <small>
+      {car.loan?.precomputed?.down_payment_percent}% Down payment
+    </small>
+  </div>
+)}
+
                   </div>
 
                   <div className="actions">
