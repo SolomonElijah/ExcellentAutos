@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import useSWR from "swr";
@@ -14,7 +13,7 @@ import CarsSearchHeader from "@/components/CarsSearchHeader";
 ========================= */
 const fetcher = async (url) => {
   const res = await api(url);
-  return res; // 🔥 return full API response (data + meta)
+  return res;
 };
 
 export default function Product() {
@@ -49,7 +48,9 @@ export default function Product() {
     if (urlSearch || priceMin || priceMax) setPage(1);
   }, []);
 
-  // 🔹 CONTACT MODAL STATE
+  /* =========================
+     CONTACT MODAL
+  ========================= */
   const [showContact, setShowContact] = useState(false);
   const [selectedCar, setSelectedCar] = useState(null);
 
@@ -62,14 +63,10 @@ export default function Product() {
     ...filters,
   }).toString();
 
-  const { data, isLoading } = useSWR(
-    `/cars?${query}`,
-    fetcher,
-    {
-      refreshInterval: 60000,
-      revalidateOnFocus: false,
-    }
-  );
+  const { data, isLoading } = useSWR(`/cars?${query}`, fetcher, {
+    refreshInterval: 60000,
+    revalidateOnFocus: false,
+  });
 
   const cars = data?.data || [];
   const meta = data?.meta;
@@ -125,83 +122,100 @@ export default function Product() {
             ))}
 
           {!isLoading &&
-            cars.map((car) => (
-              <div className="card" key={car.id}>
-                <div
-                  className="imgWrap"
-                  onClick={() => router.push(`/cars/${car.id}`)}
-                >
-                  <img
-                    src={`${API_BASE_URL.replace("/api", "")}${car.featured_image}`}
-                    alt={`${car.year} ${car.brand.name} ${car.model}`}
-                    className="img"
-                  />
-                </div>
+            cars.map((car) => {
+              /* =========================
+                 SAFE LOAN DEFAULT (m_6)
+              ========================= */
+              const tenures = car.loan?.precomputed?.tenures || {};
+              const defaultTenure =
+                tenures.m_6 || tenures[Object.keys(tenures)[0]];
 
-                <div className="body">
-                  <h3 onClick={() => router.push(`/cars/${car.id}`)}>
-                    {car.year} {car.brand.name} {car.model}
-                  </h3>
-
-                  <div className="meta">
-                    <span>
-                      {car.condition === "foreign_used" ? "Foreign" : "Local"}
-                    </span>
-                    <span>{car.mileage}kms</span>
-                    <span>{car.engine_specs || "—"}</span>
-                    <span className="rating">⭐ 6.0</span>
+              return (
+                <div className="card" key={car.id}>
+                  <div
+                    className="imgWrap"
+                    onClick={() => router.push(`/cars/${car.id}`)}
+                  >
+                    <img
+                      src={`${API_BASE_URL.replace(
+                        "/api",
+                        ""
+                      )}${car.featured_image}`}
+                      alt={`${car.year} ${car.brand.name} ${car.model}`}
+                      className="img"
+                    />
                   </div>
 
-                  <div className="priceRow">
-                    <div>
-                      <p className="price">
-                        ₦{Number(car.price).toLocaleString()}
-                      </p>
-                      <small>{car.location}</small>
+                  <div className="body">
+                    <h3 onClick={() => router.push(`/cars/${car.id}`)}>
+                      {car.year} {car.brand.name} {car.model}
+                    </h3>
+
+                    <div className="meta">
+                      <span>
+                        {car.condition === "foreign_used"
+                          ? "Foreign"
+                          : "Local"}
+                      </span>
+                      <span>{car.mileage}kms</span>
+                      <span>{car.engine_specs || "—"}</span>
+                      <span className="rating">⭐ 6.0</span>
                     </div>
 
-                    {car.loan_available && (
-  <div>
-    <p className="monthly">
-      ₦
-      {Number(
-        car.loan?.precomputed?.tenures?.m_6?.monthly_payment
-      ).toLocaleString()}{" "}
-      / Mo
-    </p>
-    <small>
-      {car.loan?.precomputed?.down_payment_percent}% Down payment
-    </small>
-  </div>
-)}
+                    <div className="priceRow">
+                      <div>
+                        <p className="price">
+                          ₦{Number(car.price).toLocaleString()}
+                        </p>
+                        <small>{car.location}</small>
+                      </div>
 
-                  </div>
+                      {car.loan_available && defaultTenure && (
+                        <div>
+                          <p className="monthly">
+                            ₦
+                            {Number(
+                              defaultTenure.monthly_payment
+                            ).toLocaleString()}{" "}
+                            / Mo
+                          </p>
+                          <small>
+                            {
+                              car.loan?.precomputed
+                                ?.down_payment_percent
+                            }
+                            % Down payment
+                          </small>
+                        </div>
+                      )}
+                    </div>
 
-                  <div className="actions">
-                    <button
-                      className="outline"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedCar(car);
-                        setShowContact(true);
-                      }}
-                    >
-                      Contact Seller
-                    </button>
+                    <div className="actions">
+                      <button
+                        className="outline"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedCar(car);
+                          setShowContact(true);
+                        }}
+                      >
+                        Contact Seller
+                      </button>
 
-                    <button
-                      className="solid"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        router.push(`/cars/${car.id}/loan`);
-                      }}
-                    >
-                      Apply For Loan
-                    </button>
+                      <button
+                        className="solid"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          router.push(`/cars/${car.id}/loan`);
+                        }}
+                      >
+                        Apply For Loan
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
         </div>
 
         {meta && meta.last_page > 1 && (
@@ -233,6 +247,8 @@ export default function Product() {
           onClose={() => setShowContact(false)}
         />
       )}
+
+    
 
       {/* STYLES — COMPLETELY UNCHANGED */}
       <style >{`
