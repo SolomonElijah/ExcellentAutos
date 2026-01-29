@@ -11,35 +11,57 @@ export default function Hero() {
           alt="Hero car"
           fill
           priority
-          sizes="100vw"
+          sizes="(max-width: 768px) 100vw, 100vw"
           className="heroImg"
         />
       </section>
 
-      <style>{`
+      <style jsx>{`
         .hero {
           position: relative;
           width: 100%;
-          height: 100vh;
+          height: 100svh; /* safer than 100vh on mobile */
           overflow: hidden;
         }
 
         .heroImg {
           object-fit: cover;
           object-position: center;
-          transform: scale(1);
+          transform: scale(1.05);
           transition: transform 0.3s ease;
         }
 
-        /* MOBILE: zoom image OUT so car looks smaller */
-        @media (max-width: 768px) {
+        /* Tablets */
+        @media (max-width: 1024px) {
           .hero {
-            height: 30vh;
+            height: 60svh;
           }
 
           .heroImg {
-            object-fit: contain;
-            transform: scale(0.9);
+            transform: scale(1);
+          }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+          .hero {
+            height: 35svh;
+          }
+
+          .heroImg {
+            transform: scale(0.9); /* zoom OUT on mobile */
+            object-position: center top;
+          }
+        }
+
+        /* Small phones */
+        @media (max-width: 480px) {
+          .hero {
+            height: 30svh;
+          }
+
+          .heroImg {
+            transform: scale(0.85);
           }
         }
       `}</style>
