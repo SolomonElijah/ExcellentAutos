@@ -1,15 +1,16 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 import { api } from "@/lib/api";
+import Link from "next/link";
+
 
 export default function LoanApplicationForm() {
   const { id } = useParams(); // car_id
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  // 🔥 POPUP STATE (ADDED)
+  // POPUP STATE
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
 
@@ -26,14 +27,11 @@ export default function LoanApplicationForm() {
     nationality_status: "",
     nationality: "",
     state_of_residence: "",
-    equity_contribution: "",
     desired_monthly_payment: "",
     desired_interest_rate: "",
     loan_term_months: "",
     roadworthiness: true,
     licence_renewal: true,
-    fee_payment_type: "upfront",
-    upfront_items: [],
     credit_consent: false,
     terms_accepted: false,
   });
@@ -45,26 +43,50 @@ export default function LoanApplicationForm() {
   async function submit(e) {
     e.preventDefault();
 
-    // ❌ REPLACED alert()
-    if (!form.credit_consent || !form.terms_accepted) {
-      setPopupMessage("You must accept credit consent and terms");
-      setShowPopup(true);
-      return;
+    /* =========================
+       CLIENT-SIDE VALIDATION
+    ========================= */
+    const errors = [];
+
+    if (!form.first_name) errors.push("First name is required");
+    if (!form.last_name) errors.push("Last name is required");
+    if (!form.email) errors.push("Email is required");
+    if (!form.phone) errors.push("Phone number is required");
+    if (!form.date_of_birth) errors.push("Date of birth is required");
+    if (!form.nin) errors.push("NIN is required");
+    if (!form.bvn) errors.push("BVN is required");
+    if (!form.gender) errors.push("Gender is required");
+    if (!form.employment_type) errors.push("Employment type is required");
+    if (!form.nationality) errors.push("Nationality is required");
+    if (!form.state_of_residence) errors.push("State of residence is required");
+    if (!form.nationality_status) errors.push("Nationality status is required");
+
+    if (!form.desired_monthly_payment || Number(form.desired_monthly_payment) <= 0) {
+      errors.push("Desired monthly payment must be greater than 0");
     }
 
-    if (form.fee_payment_type === "upfront" && form.upfront_items.length === 0) {
-      setPopupMessage("Select at least one upfront item");
-      setShowPopup(true);
-      return;
+    if (!form.desired_interest_rate || Number(form.desired_interest_rate) <= 0) {
+      errors.push("Interest rate must be greater than 0");
     }
 
     const allowedTerms = [6, 12, 18, 24, 36];
     if (!allowedTerms.includes(Number(form.loan_term_months))) {
-      setPopupMessage("Loan term must be 6, 12, 18, 24, or 36 months");
+      errors.push("Loan term must be 6, 12, 18, 24, or 36 months");
+    }
+
+    if (!form.credit_consent) errors.push("Credit consent must be accepted");
+    if (!form.terms_accepted) errors.push("Terms must be accepted");
+
+    // ❌ STOP — DO NOT SEND REQUEST
+    if (errors.length > 0) {
+      setPopupMessage(errors.join("\n"));
       setShowPopup(true);
       return;
     }
 
+    /* =========================
+       SAFE TO SUBMIT
+    ========================= */
     const interestRate = Math.min(
       100,
       Math.max(1, Number(form.desired_interest_rate))
@@ -86,14 +108,11 @@ export default function LoanApplicationForm() {
       nationality_status: form.nationality_status,
       nationality: form.nationality,
       state_of_residence: form.state_of_residence,
-      equity_contribution: Number(form.equity_contribution),
       desired_monthly_payment: Number(form.desired_monthly_payment),
       desired_interest_rate: interestRate,
       loan_term_months: Number(form.loan_term_months),
       roadworthiness: form.roadworthiness,
       licence_renewal: form.licence_renewal,
-      fee_payment_type: form.fee_payment_type,
-      upfront_items: form.upfront_items,
       credit_consent: form.credit_consent,
       terms_accepted: form.terms_accepted,
     };
@@ -108,7 +127,7 @@ export default function LoanApplicationForm() {
       setShowPopup(true);
     } catch (err) {
       console.error(err);
-      setPopupMessage("Failed to submit application");
+      setPopupMessage("Failed to submit application. Please try again.");
       setShowPopup(true);
     } finally {
       setLoading(false);
@@ -151,71 +170,74 @@ export default function LoanApplicationForm() {
             <option value="resident">Resident</option>
           </select>
 
-          <input type="number" placeholder="Equity contribution" onChange={(e) => update("equity_contribution", e.target.value)} />
           <input type="number" placeholder="Desired monthly payment" onChange={(e) => update("desired_monthly_payment", e.target.value)} />
           <input type="number" placeholder="Interest rate (%)" onChange={(e) => update("desired_interest_rate", e.target.value)} />
-          <input type="number" placeholder="Loan term  6, 12, 18, 24, or 36 months" onChange={(e) => update("loan_term_months", e.target.value)} />
+          <input type="number" placeholder="Loan term (6, 12, 18, 24, 36 months)" onChange={(e) => update("loan_term_months", e.target.value)} />
         </div>
 
-        <div className="checks">
-          <label>
+        {/* CREDIT CONSENT */}
+        <div className="consent-block">
+          <label className="consent-title">
             <input
               type="checkbox"
-              onChange={(e) =>
-                update(
-                  "upfront_items",
-                  e.target.checked
-                    ? [...form.upfront_items, "plate_number"]
-                    : form.upfront_items.filter((i) => i !== "plate_number")
-                )
-              }
+              onChange={(e) => update("credit_consent", e.target.checked)}
             />
-            Plate number
+            <strong>Credit consent</strong>
           </label>
 
-          <label>
+          <p className="consent-text">
+            I hereby consent that Excellent J&C Autos is allowed to make enquiries and access my credit
+            information regarding my credit history with any credit bureau. I also consent
+            to Excellent J&C Autos sharing my credit information with their banking partners as required
+            by law in order to finalise or fulfil my loan agreement as part of this application.
+            I consent that Excellent J&C Autos reports the conclusion of any credit agreement with me to
+            the relevant credit reporting regulator. I hereby declare that the information
+            provided by me is true and correct.
+          </p>
+        </div>
+
+        {/* ACCEPT TERMS */}
+        <div className="consent-block">
+          <label className="consent-title">
             <input
               type="checkbox"
-              onChange={(e) =>
-                update(
-                  "upfront_items",
-                  e.target.checked
-                    ? [...form.upfront_items, "insurance"]
-                    : form.upfront_items.filter((i) => i !== "insurance")
-                )
-              }
+              onChange={(e) => update("terms_accepted", e.target.checked)}
             />
-            Insurance
+            <strong>Accept terms</strong>
           </label>
+
+          <p className="consent-text">
+  I agree to the:
+  <br />
+  (a) terms and Conditions of the platform (
+  <Link href="/terms">terms of service</Link>
+  ) and the
+  <br />
+  (b) privacy policy of the platform (
+  <Link href="/privacy">privacy policy</Link>
+  ).
+</p>
+
         </div>
 
-        <div className="checks">
-          <label>
-            <input type="checkbox" onChange={(e) => update("credit_consent", e.target.checked)} />
-            Credit consent
-          </label>
-          <label>
-            <input type="checkbox" onChange={(e) => update("terms_accepted", e.target.checked)} />
-            Accept terms
-          </label>
-        </div>
 
         <button disabled={loading}>
           {loading ? "Submitting..." : "Submit Application"}
         </button>
       </form>
 
-      {/* 🔥 POPUP OVERLAY */}
       {showPopup && (
         <div className="overlay">
           <div className="popup">
-            <p>{popupMessage}</p>
+            <pre style={{ whiteSpace: "pre-wrap", textAlign: "left" }}>
+              {popupMessage}
+            </pre>
             <button onClick={() => setShowPopup(false)}>OK</button>
           </div>
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .page {
           max-width: 1200px;
           margin: 40px auto;
@@ -223,12 +245,6 @@ export default function LoanApplicationForm() {
           background: #000;
           color: #fff;
           border-radius: 16px;
-          border: 1px solid #111;
-        }
-
-        .title {
-          font-size: 22px;
-          margin-bottom: 28px;
         }
 
         .grid {
@@ -237,22 +253,56 @@ export default function LoanApplicationForm() {
           gap: 16px;
         }
 
-        input,
-        select {
+        input, select {
           padding: 14px;
           border-radius: 10px;
-          border: 1px solid #111;
           background: #0b0b0b;
+          border: 1px solid #111;
           color: #fff;
         }
 
         .checks {
-          margin: 28px 0;
+          margin: 24px 0;
           display: flex;
           gap: 24px;
           font-size: 13px;
           color: #ccc;
         }
+
+        .checks-note {
+          font-size: 0.85rem;
+          color: #777;
+          margin-top: 20px;
+        }
+
+        .consent-block {
+  margin-top: 28px;
+  padding: 16px;
+  border: 1px solid #111;
+  border-radius: 12px;
+  background: #0b0b0b;
+}
+
+.consent-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #fff;
+}
+
+.consent-text {
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #aaa;
+}
+
+.consent-text a {
+  color: #ff4444;
+  text-decoration: underline;
+}
+
 
         button {
           background: red;
@@ -261,37 +311,26 @@ export default function LoanApplicationForm() {
           width: 100%;
           border-radius: 10px;
           font-weight: 600;
-          cursor: pointer;
           color: #fff;
+          margin-top: 16px;
         }
 
-        button:disabled {
-          opacity: 0.6;
-        }
-
-        /* POPUP */
         .overlay {
           position: fixed;
           inset: 0;
-          background: rgba(0, 0, 0, 0.75);
+          background: rgba(0,0,0,0.75);
           display: flex;
-          align-items: center;
           justify-content: center;
-          z-index: 9999;
+          align-items: center;
         }
 
         .popup {
           background: #0b0b0b;
-          border: 1px solid #222;
           padding: 30px;
           border-radius: 16px;
           text-align: center;
-          max-width: 400px;
+          max-width: 500px;
           width: 90%;
-        }
-
-        .popup p {
-          margin-bottom: 20px;
         }
 
         @media (max-width: 900px) {

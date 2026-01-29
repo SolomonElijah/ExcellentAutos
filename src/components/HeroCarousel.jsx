@@ -7,7 +7,7 @@ export default function CarCarousel() {
   const [slides, setSlides] = useState([]);
   const [isDesktop, setIsDesktop] = useState(false);
 
-  // Screen detection
+  /* ---------------- SCREEN SIZE ---------------- */
   useEffect(() => {
     const check = () => setIsDesktop(window.innerWidth >= 769);
     check();
@@ -15,19 +15,22 @@ export default function CarCarousel() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  // Load slides from API
+  /* ---------------- LOAD CAROUSEL (NO CACHE) ---------------- */
   useEffect(() => {
     async function load() {
       try {
         const res = await api("/carousel", {
-          headers: { Accept: "application/json" },
+          headers: {
+            Accept: "application/json",
+            "Cache-Control": "no-store", // 🚫 no cache
+          },
         });
 
         if (res?.success && Array.isArray(res.data)) {
           setSlides(res.data);
         }
-      } catch (e) {
-        console.error("Carousel load failed", e);
+      } catch (err) {
+        console.error("Carousel load failed", err);
       }
     }
 
@@ -36,7 +39,7 @@ export default function CarCarousel() {
 
   if (!slides.length) return null;
 
-  // Duplicate slides ONCE for infinite flow
+  // duplicate for infinite scroll
   const loopSlides = [...slides, ...slides];
 
   return (
@@ -51,76 +54,70 @@ export default function CarCarousel() {
         </div>
       </div>
 
-      <style >{`
+      <style>{`
         /* ---------- CONTAINER ---------- */
-       .carousel {
-  width: 100%;
-  overflow: hidden;
-  margin: 0 auto;
-}
+        .carousel {
+          width: 100%;
+          overflow: hidden;
+          margin: 0 auto;
+        }
 
-/* ---------- MOBILE ---------- */
+        /* ---------- DESKTOP AUTO SCROLL ---------- */
+        .desktop {
+          max-width: 1100px;
+        }
+
+        .desktop .track {
+          display: flex;
+          width: max-content;
+          gap: 16px;
+          animation: scrollLeft 30s linear infinite;
+        }
+
+        .desktop .slide {
+          width: 340px;
+          flex-shrink: 0;
+        }
+
+        /* ---------- MOBILE (AUTO SCROLL BUT SMALLER) ---------- */
 .mobile {
-  height: auto;
+  padding: 12px 0; /* 🔥 reduce top & bottom space */
 }
 
 .mobile .track {
   display: flex;
   width: max-content;
-  animation: mobileScroll 12s linear infinite;
+  gap: 12px; 
+  animation: scrollLeft 45s linear infinite;
 }
 
 .mobile .slide {
-  width: 100vw;
+  width: 80vw;      
+  max-width: 200px;  
   flex-shrink: 0;
-  padding: 16px 0;
+  padding: 4px 0;    /* 🔥 reduce vertical padding */
 }
 
-/* ---------- DESKTOP ---------- */
-.desktop {
-  max-width: 1100px;
-  height: 260px;
-}
 
-.desktop .track {
-  display: flex;
-  width: max-content;
-  animation: desktopScroll 30s linear infinite;
-}
 
-.desktop .slide {
-  width: 340px;
-  margin-right: 16px;
-  flex-shrink: 0;
-}
+        /* ---------- IMAGE ---------- */
+        .slide img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          display: block;
+          border-radius: 16px;
+        }
 
-/* ---------- IMAGE ---------- */
-.slide img {
-  width: 100%;
-  height: 100%;        /* ✅ prevents cropping */
-  object-fit: contain;
-  display: block;
-}
-
-/* ---------- ANIMATION ---------- */
-@keyframes mobileScroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes desktopScroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
+        /* ---------- ANIMATION ---------- */
+        @keyframes scrollLeft {
+          from {
+            transform: translateX(0);
+          }
+          to {
+            transform: translateX(-50%);
+          }
+        }
       `}</style>
     </>
   );

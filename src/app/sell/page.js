@@ -9,21 +9,31 @@ export default function SellLanding() {
     <>
       <section className="wrapper">
         {/* HERO SECTION */}
-        <div className="hero">
-          <h1 className="headline">We Are Here to Help You Sell Your Car</h1>
-          <p className="subtext">
-            The easiest and most reliable way to sell or swap your car in
-            Nigeria. We connect you with verified buyers and handle the process
-            professionally from inspection to closing.
-          </p>
+        <div className="sell-hero">
+          <div className="sell-hero-content">
+            <h1 className="sell-headline">
+              We Are Here to Help You Sell Your Car
+            </h1>
 
-          <button
-            className="primary-cta"
-            onClick={() => router.push("/sell/apply")}
-          >
-            Book an Inspection
-          </button>
+            <p className="sell-subtext">
+              The easiest and most reliable way to sell or swap your car in Nigeria.
+              We connect you with verified buyers and handle the process professionally
+              from inspection to closing.
+            </p>
+
+            <button
+              className="primary-cta"
+              onClick={() => router.push("/sell/apply")}
+            >
+              Book an Inspection
+            </button>
+          </div>
+
+          <div className="sell-hero-image">
+            <img src="/sellpics.png" alt="Sell your car" />
+          </div>
         </div>
+
 
         {/* TRUST INDICATORS */}
         <div className="trust">
@@ -219,6 +229,61 @@ export default function SellLanding() {
           border-radius: 16px;
           padding: 30px 20px;
         }
+
+
+        /* ================= SELL HERO ================= */
+
+.sell-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 30px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sell-hero-content {
+  max-width: 520px;
+}
+
+.sell-headline {
+  font-size: 40px;
+  font-weight: 700;
+  color: red;
+  margin-bottom: 16px;
+}
+
+.sell-subtext {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #ccc;
+  margin-bottom: 24px;
+}
+
+.sell-hero-image img {
+  max-width: 480px;
+  width: 90%;
+  height: auto;
+  display: block;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 900px) {
+  .sell-hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .sell-hero-image {
+    display: none; /* 🔥 hide image on phones */
+  }
+
+  .sell-headline {
+    font-size: 26px;
+  }
+}
+
 
         .icon {
           font-size: 40px;

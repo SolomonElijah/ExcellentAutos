@@ -31,101 +31,120 @@ export default function HeroProduct() {
 
   return (
     <>
-      <section className="wrapper">
-        <h2 className="title">Featured cars</h2>
+<section className="wrapper">
+  <h2 className="title">Featured cars</h2>
 
-        <div className="grid">
-          {isLoading &&
-            Array.from({ length: 3 }).map((_, i) => (
-              <div className="card skeleton" key={i} />
-            ))}
+  <div className="grid">
+    {isLoading &&
+      Array.from({ length: 3 }).map((_, i) => (
+        <div className="card skeleton" key={i} />
+      ))}
 
-          {!isLoading &&
-            cars.map((car) => (
-              <div className="card" key={car.id}>
-                <div
-                  className="imgWrap"
-                  onClick={() => router.push(`/cars/${car.id}`)}
-                >
-                  {/* ✅ FIX: USE NORMAL IMG */}
-                  <img
-                    src={`${API_BASE_URL.replace("/api", "")}${car.featured_image}`}
-                    alt={`${car.year} ${car.brand?.name} ${car.model}`}
-                    className="img"
-                  />
+    {!isLoading &&
+      cars.map((car) => {
+        // ✅ DEFINE hasLoan PROPERLY
+        const hasLoan = car.loan?.available === true;
+
+        const loanData = car.loan?.precomputed;
+
+        const firstTenure =
+          loanData?.tenures &&
+          (Array.isArray(loanData.tenures)
+            ? loanData.tenures[0]
+            : loanData.tenures[Object.keys(loanData.tenures)[0]]);
+
+        return (
+          <div className="card" key={car.id}>
+            <div
+              className="imgWrap"
+              onClick={() => router.push(`/cars/${car.id}`)}
+            >
+              <img
+                src={`${API_BASE_URL.replace("/api", "")}${car.featured_image}`}
+                alt={`${car.year} ${car.brand?.name} ${car.model}`}
+                className="img"
+              />
+
+              {/* ✅ LOAN TAG */}
+              {hasLoan && (
+                <span className="loanTag">Car Loan Available</span>
+              )}
+            </div>
+
+            <div className="body">
+              <h3 onClick={() => router.push(`/cars/${car.id}`)}>
+                {car.year} {car.brand?.name} {car.model}
+              </h3>
+
+              <div className="meta metaRow">
+                <div className="metaLeft">
+                  <span>
+                    {car.condition === "foreign_used" ? "Foreign" : "Local"}
+                  </span>
+                  <span>{car.mileage}kms</span>
+                  <span>{car.engine_specs || "—"}</span>
                 </div>
 
-                <div className="body">
-                  <h3 onClick={() => router.push(`/cars/${car.id}`)}>
-                    {car.year} {car.brand?.name} {car.model}
-                  </h3>
-
-                  <div className="meta">
-                    <span>
-                      {car.condition === "foreign_used" ? "Foreign" : "Local"}
-                    </span>
-                    <span>{car.mileage}kms</span>
-                    <span>{car.engine_specs || "—"}</span>
-                    <span className="rating">⭐ 6.0</span>
-                  </div>
-
-                  <div className="priceRow">
-                    <div>
-                      <p className="price">
-                        ₦{Number(car.price).toLocaleString()}
-                      </p>
-                      <small>{car.location}</small>
-                    </div>
-
-                    {car.loan_available && (
-                      <div>
-                        <p className="monthly">
-                          ₦
-                          {Number(
-                            car.estimated_monthly_repayment
-                          ).toLocaleString()}{" "}
-                          / Mo
-                        </p>
-                        <small>
-                          {car.min_down_payment_percent}% Down payment
-                        </small>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="actions">
-                    <button
-                      className="outline"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedCar(car);
-                        setShowContact(true);
-                      }}
-                    >
-                      Contact Seller
-                    </button>
-
-                    <button
-                      className="solid"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        router.push(`/cars/${car.id}/loan`);
-                      }}
-                    >
-                      Apply For Loan
-                    </button>
-                  </div>
-                </div>
+                <span className="rating">⭐ 3.0</span>
               </div>
-            ))}
-        </div>
 
-        <div className="center">
-          <a href="/cars" className="seeMore">
-            See More
-          </a>
-        </div>
-      </section>
+              <div className="priceRow">
+                <div>
+                  <p className="price">
+                    ₦{Number(car.price).toLocaleString()}
+                  </p>
+                  <small>{car.location}</small>
+                </div>
+
+                {/* ✅ MONTHLY PAYMENT ONLY IF PRECOMPUTED EXISTS */}
+                {loanData && firstTenure && (
+                  <div>
+                    <p className="monthly">
+                      ₦{Number(firstTenure.monthly_payment).toLocaleString()} / Mo
+                    </p>
+                    <small>{loanData.down_payment_percent}% Down payment</small>
+                  </div>
+                )}
+              </div>
+
+              <div className="actions">
+                <button
+                  className="outline"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedCar(car);
+                    setShowContact(true);
+                  }}
+                >
+                  Contact Seller
+                </button>
+
+                {/* ✅ APPLY FOR LOAN BUTTON */}
+                {hasLoan && (
+                  <button
+                    className="solid"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      router.push(`/cars/${car.id}/loan`);
+                    }}
+                  >
+                    Apply For Loan
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+  </div>
+
+  <div className="center">
+    <a href="/cars" className="seeMore">
+      See More
+    </a>
+  </div>
+</section>
+
 
       {showContact && (
         <SellContact
@@ -134,7 +153,7 @@ export default function HeroProduct() {
         />
       )}
 
-      {/* STYLES — COMPLETELY UNCHANGED */}
+      {/* STYLES — UNCHANGED + SMALL ADDITIONS */}
       <style>{`
         .wrapper {
           background: #000;
@@ -266,6 +285,28 @@ export default function HeroProduct() {
           .grid {
             grid-template-columns: 1fr;
           }
+        }
+
+        /* === ADDED ONLY === */
+        .metaRow {
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .metaLeft {
+          display: flex;
+          gap: 8px;
+        }
+
+        .loanTag {
+          position: absolute;
+          bottom: 10px;
+          left: 10px;
+          background: #e6f0ff;
+          color: #1a4ed8;
+          padding: 4px 8px;
+          font-size: 11px;
+          border-radius: 10px;
         }
       `}</style>
     </>

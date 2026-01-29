@@ -21,45 +21,66 @@ export default function ContactPage() {
 
   async function submit(e) {
     e.preventDefault();
-    setLoading(true);
 
-    const payload = {
-      name: form.name,
-      email: form.email,
-      phone: form.phone,
-      message: form.message,
-    };
+    /* =========================
+       CLIENT-SIDE VALIDATION
+    ========================= */
+    const errors = [];
+
+    if (!form.name) errors.push("Full name is required");
+    if (!form.email) errors.push("Email address is required");
+    if (!form.phone) errors.push("Phone number is required");
+    if (!form.message) errors.push("Message cannot be empty");
+
+    // simple email sanity check
+    if (
+      form.email &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)
+    ) {
+      errors.push("Please enter a valid email address");
+    }
+
+    // ❌ STOP if any error
+    if (errors.length > 0) {
+      setPopupMessage(errors.join("\n"));
+      setShowPopup(true);
+      return;
+    }
+
+    /* =========================
+       SAFE TO SUBMIT
+    ========================= */
+    setLoading(true);
 
     try {
       const res = await api("/contact", {
         method: "POST",
-        body: JSON.stringify(payload),
+        body: JSON.stringify(form),
       });
 
       if (res?.success) {
-        setPopupMessage(res.message);
-        setShowPopup(true);
+        setPopupMessage(res.message || "Message sent successfully");
         setForm({ name: "", email: "", phone: "", message: "" });
       } else {
         setPopupMessage("Failed to send message. Please try again.");
-        setShowPopup(true);
       }
-    } catch (err) {
-      console.error(err);
+    } catch {
       setPopupMessage("Unable to send message at the moment.");
-      setShowPopup(true);
     } finally {
+      setShowPopup(true);
       setLoading(false);
     }
   }
 
   return (
     <>
-      <section className="wrapper">
+      <section className="contact-wrapper">
         {/* INTRO */}
-        <div className="intro">
-          <h1 className="headline">Contact Excellent Autos Nigeria</h1>
-          <p className="subtext">
+        <div className="contact-intro">
+          <h1 className="contact-headline">
+            Contact Excellent Autos Nigeria
+          </h1>
+          <p className="contact-subtext">
             Have a question, need clarification, or want to learn more about our
             services? Send us a message and our team will respond as soon as
             possible.
@@ -67,28 +88,25 @@ export default function ContactPage() {
         </div>
 
         {/* FORM */}
-        <form className="page" onSubmit={submit}>
-          <h2 className="title">Send Us a Message</h2>
+        <form className="contact-form" onSubmit={submit}>
+          <h2 className="contact-title">Send Us a Message</h2>
 
-          <p className="form-note">
-            This form is for general enquiries only. If you want to sell, swap,
-            or pre-order a car, please use the appropriate service pages.
+          <p className="contact-note">
+            This form is for general enquiries only.
           </p>
 
-          <div className="grid">
+          <div className="contact-grid">
             <input
               placeholder="Your full name"
               value={form.name}
               onChange={(e) => update("name", e.target.value)}
             />
-
             <input
               type="email"
               placeholder="Email address"
               value={form.email}
               onChange={(e) => update("email", e.target.value)}
             />
-
             <input
               placeholder="Phone number"
               value={form.phone}
@@ -97,7 +115,7 @@ export default function ContactPage() {
           </div>
 
           <textarea
-            placeholder="Write your message here. Include as much detail as possible so we can assist you properly."
+            placeholder="Write your message here. Include as much detail as possible."
             value={form.message}
             onChange={(e) => update("message", e.target.value)}
           />
@@ -110,42 +128,46 @@ export default function ContactPage() {
 
       {/* POPUP */}
       {showPopup && (
-        <div className="overlay">
-          <div className="popup">
-            <p>{popupMessage}</p>
+        <div className="contact-overlay">
+          <div className="contact-popup">
+            <pre style={{ whiteSpace: "pre-wrap", textAlign: "left" }}>
+              {popupMessage}
+            </pre>
             <button onClick={() => setShowPopup(false)}>OK</button>
           </div>
         </div>
       )}
 
-      <style >{`
-        .wrapper {
+      <style>{`
+        /* ================= CONTACT PAGE ONLY ================= */
+
+        .contact-wrapper {
           min-height: 100vh;
           background: radial-gradient(circle at top, #111, #000);
           color: #fff;
-          padding: 60px 20px;
+          padding: 90px 20px 70px;
         }
 
-        .intro {
+        .contact-intro {
           max-width: 800px;
           margin: 0 auto 40px;
           text-align: center;
         }
 
-        .headline {
+        .contact-headline {
           font-size: 34px;
           font-weight: 700;
           margin-bottom: 16px;
           color: red;
         }
 
-        .subtext {
+        .contact-subtext {
           font-size: 16px;
           line-height: 1.7;
           color: #ccc;
         }
 
-        .page {
+        .contact-form {
           max-width: 900px;
           margin: 0 auto;
           padding: 40px;
@@ -154,28 +176,27 @@ export default function ContactPage() {
           border: 1px solid #111;
         }
 
-        .title {
+        .contact-title {
           font-size: 22px;
           margin-bottom: 10px;
         }
 
-        .form-note {
+        .contact-note {
           font-size: 14px;
           color: #aaa;
           margin-bottom: 25px;
         }
 
-        .grid {
+        .contact-grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           gap: 16px;
           margin-bottom: 16px;
         }
 
-        input,
-        textarea {
+        .contact-form input,
+        .contact-form textarea {
           width: 100%;
-          box-sizing: border-box;
           padding: 14px;
           border-radius: 10px;
           border: 1px solid #111;
@@ -183,13 +204,13 @@ export default function ContactPage() {
           color: #fff;
         }
 
-        textarea {
+        .contact-form textarea {
           min-height: 140px;
           margin-bottom: 20px;
           resize: vertical;
         }
 
-        button {
+        .contact-form button {
           background: red;
           border: none;
           padding: 16px;
@@ -200,36 +221,58 @@ export default function ContactPage() {
           color: #fff;
         }
 
-        button:disabled {
+        .contact-form button:disabled {
           opacity: 0.6;
         }
 
-        .overlay {
-          position: fixed;
-          inset: 0;
-          background: rgba(0, 0, 0, 0.75);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 9999;
-        }
+        /* POPUP */
+       .contact-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
 
-        .popup {
-          background: #0b0b0b;
-          border: 1px solid #222;
-          padding: 30px;
-          border-radius: 16px;
-          text-align: center;
-          max-width: 400px;
-          width: 90%;
-        }
+.contact-popup {
+  background: #0b0b0b;
+  border: 1px solid #222;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 420px;
+  text-align: center;
+}
+
+.contact-popup p,
+.contact-popup pre {
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  white-space: pre-wrap;
+}
+
+.contact-popup button {
+  background: red;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  width: 100%;
+}
+
 
         @media (max-width: 900px) {
-          .grid {
+          .contact-grid {
             grid-template-columns: 1fr;
           }
 
-          .headline {
+          .contact-headline {
             font-size: 28px;
           }
         }

@@ -1,26 +1,81 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { API_BASE_URL } from "@/lib/api";
 
 export default function SellContact({ car, onClose }) {
   if (!car) return null;
 
-  const WHATSAPP_NUMBER = "2348148738910"; // your number
+  const [whatsappNumber, setWhatsappNumber] = useState("");
 
+  /* =========================
+     NORMALIZE WHATSAPP NUMBER
+     (NEVER ADDS 234 TWICE)
+  ========================= */
+  function normalizeWhatsappNumber(input) {
+    if (!input) return "";
+
+    // remove +, spaces, dashes, etc.
+    let number = input.replace(/\D/g, "");
+
+    // already correct
+    if (number.startsWith("234")) return number;
+
+    // local Nigerian number
+    if (number.startsWith("0")) {
+      return "234" + number.slice(1);
+    }
+
+    return number;
+  }
+
+  /* =========================
+     LOAD WHATSAPP FROM API
+  ========================= */
+  useEffect(() => {
+    async function loadWhatsapp() {
+      try {
+        const res = await fetch(
+          "https://system.excellentautosnigeria.com/api/site-settings"
+        );
+        const json = await res.json();
+
+        const raw = json?.data?.admin_whatsapp;
+        const normalized = normalizeWhatsappNumber(raw);
+
+        setWhatsappNumber(normalized);
+      } catch (err) {
+        console.error("Failed to load WhatsApp number", err);
+      }
+    }
+
+    loadWhatsapp();
+  }, []);
+
+  // API base for images (unchanged)
+  const baseUrl = API_BASE_URL.replace("/api", "");
+
+  // current site
+  const siteOrigin =
+    typeof window !== "undefined" ? window.location.origin : "";
+
+  // WhatsApp message (UNCHANGED)
   const message = `Hi Excellent Autos Nigeria,
 I am interested in this car:
 
 ${car.brand.name} ${car.model} (${car.year})
+Ref: ${car.reference_code}
 Price: ₦${Number(car.price).toLocaleString()}
 Location: ${car.location}
 
-${window.location.href}`;
+View car: ${siteOrigin}/cars/${car.id}`;
 
-  const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+  // do not render button until number is ready
+  if (!whatsappNumber) return null;
+
+  const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
     message
   )}`;
-
-  const baseUrl = API_BASE_URL.replace("/api", "");
 
   return (
     <div className="overlay">
@@ -70,7 +125,8 @@ ${window.location.href}`;
         </p>
       </div>
 
-      <style >{`
+      {/* STYLES — COMPLETELY UNCHANGED */}
+      <style>{`
         .overlay {
           position: fixed;
           inset: 0;

@@ -1,117 +1,120 @@
 "use client";
 
-import Image from "next/image";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { api } from "@/lib/api";
 
 export default function Footer() {
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    async function loadSettings() {
+      try {
+        const res = await api("/site-settings", {
+          headers: {
+            Accept: "application/json",
+            "Cache-Control": "no-store",
+          },
+        });
+
+        if (res?.data) {
+          setSettings(res.data);
+        }
+      } catch (err) {
+        console.error("Failed to load site settings", err);
+      }
+    }
+
+    loadSettings();
+  }, []);
+
   return (
-    <>
-      <footer className="footer">
-        <div className="row">
-          <div className="block">
-            <h4>Useful Links</h4>
-            <div className="links">
-              <Link href="/sell">Sell & Swap</Link>
+    <footer className="footer">
+      {/* ================= MAIN FOOTER ================= */}
+      <div className="container">
+        <div className="footer-main">
+          {/* ABOUT */}
+          <div className="footer-about">
+            {settings?.logo && (
+              <img
+                src={settings.logo}
+                alt={settings.site_name || "Site Logo"}
+                style={{ height: 45 }}
+              />
+            )}
+
+            <p className="footer-tagline">
+              Premium vehicles. Transparent pricing. Exceptional service.
+            </p>
+          </div>
+
+          {/* QUICK LINKS */}
+          <div>
+            <h4 className="footer-title">Quick Links</h4>
+            <div className="footer-links">
+              <Link href="/cars">Browse Cars</Link>
+              <Link href="/sell">Sell Your Car</Link>
+              <Link href="/car-loan">Get Car Loan</Link>
               <Link href="/Preorder">Preorder</Link>
-              <Link href="/about-us">About Us</Link>
               <Link href="/contact">Contact Us</Link>
-              <Link href="/privacy">Privacy Policy</Link>
-              <Link href="/terms">Terms of Service</Link>
-
-
             </div>
           </div>
 
-          <div className="block">
-            <h4>Follow us</h4>
-            <div className="social">
-              <a href="https://www.instagram.com/excellent_jc_autos?igsh=MTgzdm5zZXd2OTkyOA==" target="_blank" rel="noopener noreferrer">
-                <Image src="/insta.png" alt="Facebook" width={26} height={26} />
-              </a>
+          {/* CONTACT INFO (FROM API) */}
+          <div>
+            <h4 className="footer-title">Contact Info</h4>
+            <div className="contact-details">
+              <div className="contact-item">
+                📍 {settings?.address || "Abuja, Nigeria"}
+              </div>
 
-              <a href="https://www.tiktok.com/@excellent_jc_autos?_r=1&_t=ZS-93GlXI9njux" target="_blank" rel="noopener noreferrer">
-                <Image src="/tiktok.png" alt="Telegram" width={26} height={26} />
-              </a>
+              {settings?.support_phone && (
+                <div className="contact-item">
+                  📱 Support {settings.support_phone}
+                </div>
+              )}
 
-              <a href="https://www.facebook.com/share/1KnY1KSKRQ/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">
-                <Image src="/fb.png" alt="X" width={26} height={26} />
+              {settings?.admin_email && (
+                <div className="contact-item">
+                  ✉️ {settings.admin_email}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* SOCIAL */}
+          <div className="footer-social">
+            <h4 className="footer-title">Follow Us</h4>
+            <div className="social-icons">
+              <a href="#" className="social-btn">
+                <img src="/insta.png" alt="Instagram" width={18} />
+              </a>
+              <a href="#" className="social-btn">
+                <img src="/tiktok.png" alt="TikTok" width={18} />
+              </a>
+              <a href="#" className="social-btn">
+                <img src="/fb.png" alt="Facebook" width={18} />
               </a>
             </div>
-
           </div>
         </div>
+      </div>
 
-        <div className="bottom">
-          © 2026 <strong>Excellent J&C Autos</strong> All rights reserved.
+      {/* ================= FOOTER BOTTOM ================= */}
+      <div className="footer-bottom">
+        <div className="container footer-bottom-inner">
+          <div className="legal-links">
+            <Link href="/privacy">Privacy Policy</Link>
+            <span>|</span>
+            <Link href="/terms">Terms of Service</Link>
+          </div>
+
+          <span className="copyright">
+            © {new Date().getFullYear()}{" "}
+            {settings?.site_name || "Excellent JC Autos"}. All Rights Reserved.
+          </span>
         </div>
-      </footer>
-
-      <style >{`
-        .footer {
-          background: #000;
-          border-top: 1px solid red;
-          padding: 25px 30px 15px;
-          color: #fff;
-        }
-
-        .row {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          gap: 20px;
-          flex-wrap: wrap;
-        }
-
-        .block h4 {
-          color: red;
-          font-size: 14px;
-          margin-bottom: 8px;
-        }
-
-        .links {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 14px;
-          font-size: 12px;
-          color: #ccc;
-        }
-
-        .links a {
-          color: #ccc;
-          text-decoration: none;
-        }
-
-        .links a:hover {
-          color: #fff;
-        }
-
-        .social {
-          display: flex;
-          gap: 12px;
-        }
-
-        .bottom {
-          text-align: center;
-          font-size: 12px;
-          color: #aaa;
-          margin-top: 18px;
-          padding-top: 10px;
-          border-top: 1px solid #111;
-        }
-
-        /* MOBILE */
-        @media (max-width: 768px) {
-          .row {
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-          }
-
-          .links {
-            justify-content: center;
-          }
-        }
-      `}</style>
-    </>
+      </div>
+    </footer>
   );
 }

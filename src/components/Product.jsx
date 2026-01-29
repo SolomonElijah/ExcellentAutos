@@ -1,6 +1,7 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import useSWR from "swr";
 import { api, API_BASE_URL } from "@/lib/api";
@@ -13,12 +14,11 @@ import CarsSearchHeader from "@/components/CarsSearchHeader";
 ========================= */
 const fetcher = async (url) => {
   const res = await api(url);
-  return res;
+  return res; // 🔥 return full API response (data + meta)
 };
 
 export default function Product() {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   /* =========================
      STATE
@@ -27,46 +27,70 @@ export default function Product() {
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({});
 
-  /* =========================
-     READ URL PARAMS (HERO)
-  ========================= */
+  const searchParams = useSearchParams();
+
+  
+
   useEffect(() => {
-    const urlSearch = searchParams.get("search");
-    const priceMin = searchParams.get("price_min");
-    const priceMax = searchParams.get("price_max");
+    const params = Object.fromEntries(searchParams.entries());
 
-    if (urlSearch) setSearch(urlSearch);
+    setSearch(params.search || "");
+    setPage(params.page ? Number(params.page) : 1);
 
-    if (priceMin || priceMax) {
-      setFilters((prev) => ({
-        ...prev,
-        ...(priceMin && { price_min: priceMin }),
-        ...(priceMax && { price_max: priceMax }),
-      }));
+    const { search: _, page: __, ...rest } = params;
+
+    // 🔥 FIX FOR YEAR & LOCATION FILTERS
+    if (rest.year_min) {
+      rest.year_min = parseInt(rest.year_min);
+      if (isNaN(rest.year_min)) delete rest.year_min;
+    }
+    if (rest.year_max) {
+      rest.year_max = parseInt(rest.year_max);
+      if (isNaN(rest.year_max)) delete rest.year_max;
     }
 
-    if (urlSearch || priceMin || priceMax) setPage(1);
-  }, []);
+    // Clean empty values
+    Object.keys(rest).forEach(key => {
+      if (rest[key] === '' || rest[key] === null || rest[key] === undefined) {
+        delete rest[key];
+      }
+    });
 
-  /* =========================
-     CONTACT MODAL
-  ========================= */
+
+    console.log('🔧 Filters being sent to API:', rest);
+
+    setFilters(rest);
+  }, [searchParams]);
+
+
+
+  // 🔹 CONTACT MODAL STATE
   const [showContact, setShowContact] = useState(false);
   const [selectedCar, setSelectedCar] = useState(null);
 
   /* =========================
      SWR
   ========================= */
-  const query = new URLSearchParams({
-    search,
+  const params = new URLSearchParams({
     page,
     ...filters,
-  }).toString();
-
-  const { data, isLoading } = useSWR(`/cars?${query}`, fetcher, {
-    refreshInterval: 60000,
-    revalidateOnFocus: false,
   });
+
+  if (search) {
+    params.set("search", search);
+  }
+
+  const query = params.toString();
+
+
+  const { data, isLoading } = useSWR(
+    `/cars?${query}`,
+    fetcher,
+    {
+      refreshInterval: 60000,
+      revalidateOnFocus: false,
+    }
+  );
 
   const cars = data?.data || [];
   const meta = data?.meta;
@@ -94,9 +118,10 @@ export default function Product() {
         }}
       />
 
+
+
       <section className="wrapper">
         <h2 className="title">Find cars</h2>
-
         <div className="grid">
           {isLoading &&
             Array.from({ length: 12 }).map((_, i) => (
@@ -123,12 +148,14 @@ export default function Product() {
 
           {!isLoading &&
             cars.map((car) => {
-              /* =========================
-                 SAFE LOAN DEFAULT (m_6)
-              ========================= */
-              const tenures = car.loan?.precomputed?.tenures || {};
-              const defaultTenure =
-                tenures.m_6 || tenures[Object.keys(tenures)[0]];
+              const hasLoan = car.loan?.available === true;
+
+              const loanData = car.loan?.precomputed ?? null;
+
+              const firstTenure = loanData?.tenures
+                ? loanData.tenures[Object.keys(loanData.tenures)[0]]
+                : null;
+
 
               return (
                 <div className="card" key={car.id}>
@@ -137,13 +164,15 @@ export default function Product() {
                     onClick={() => router.push(`/cars/${car.id}`)}
                   >
                     <img
-                      src={`${API_BASE_URL.replace(
-                        "/api",
-                        ""
-                      )}${car.featured_image}`}
+                      src={`${API_BASE_URL.replace("/api", "")}${car.featured_image}`}
                       alt={`${car.year} ${car.brand.name} ${car.model}`}
                       className="img"
                     />
+
+                    {hasLoan && (
+                      <span className="loanTag">Car Loan Available</span>
+                    )}
+
                   </div>
 
                   <div className="body">
@@ -151,15 +180,19 @@ export default function Product() {
                       {car.year} {car.brand.name} {car.model}
                     </h3>
 
-                    <div className="meta">
-                      <span>
-                        {car.condition === "foreign_used"
-                          ? "Foreign"
-                          : "Local"}
-                      </span>
-                      <span>{car.mileage}kms</span>
-                      <span>{car.engine_specs || "—"}</span>
-                      <span className="rating">⭐ 6.0</span>
+                    {/* META ROW — RATING RIGHT */}
+                    <div className="meta metaRow">
+                      <div className="metaLeft">
+                        <span>
+                          {car.condition === "foreign_used"
+                            ? "Foreign"
+                            : "Local"}
+                        </span>
+                        <span>{car.mileage}kms</span>
+                        <span>{car.engine_specs || "—"}</span>
+                      </div>
+
+                      <span className="rating">⭐ 3.0</span>
                     </div>
 
                     <div className="priceRow">
@@ -170,25 +203,22 @@ export default function Product() {
                         <small>{car.location}</small>
                       </div>
 
-                      {car.loan_available && defaultTenure && (
+                      {hasLoan && loanData && firstTenure ? (
                         <div>
                           <p className="monthly">
-                            ₦
-                            {Number(
-                              defaultTenure.monthly_payment
-                            ).toLocaleString()}{" "}
-                            / Mo
+                            ₦{Number(firstTenure.monthly_payment).toLocaleString()} / Mo
                           </p>
                           <small>
-                            {
-                              car.loan?.precomputed
-                                ?.down_payment_percent
-                            }
-                            % Down payment
+                            {loanData.down_payment_percent}% Down payment
                           </small>
                         </div>
-                      )}
+                      ) : hasLoan ? (
+                        <small className="noCalc">
+
+                        </small>
+                      ) : null}
                     </div>
+
 
                     <div className="actions">
                       <button
@@ -202,15 +232,18 @@ export default function Product() {
                         Contact Seller
                       </button>
 
-                      <button
-                        className="solid"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          router.push(`/cars/${car.id}/loan`);
-                        }}
-                      >
-                        Apply For Loan
-                      </button>
+                      {hasLoan && (
+                        <button
+                          className="solid"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            router.push(`/cars/${car.id}/loan`);
+                          }}
+                        >
+                          Apply For Loan
+                        </button>
+                      )}
+
                     </div>
                   </div>
                 </div>
@@ -218,27 +251,49 @@ export default function Product() {
             })}
         </div>
 
-        {meta && meta.last_page > 1 && (
-          <div className="pagination">
-            <button
-              disabled={meta.current_page === 1}
-              onClick={() => setPage((p) => p - 1)}
-            >
-              Prev
-            </button>
+       
 
-            <span>
-              Page {meta.current_page} of {meta.last_page}
-            </span>
+{meta && meta.last_page > 1 && (
+  <div className="pagination">
+    <button
+      disabled={meta.current_page === 1}
+      onClick={() => {
+        const newPage = meta.current_page - 1;
+        setPage(newPage);
+        // Update URL with page number
+        const params = new URLSearchParams(window.location.search);
+        if (newPage > 1) {
+          params.set("page", newPage.toString());
+        } else {
+          params.delete("page");
+        }
+        const newUrl = params.toString() ? `?${params.toString()}` : "";
+        router.replace(`${window.location.pathname}${newUrl}`, { scroll: false });
+      }}
+    >
+      Prev
+    </button>
 
-            <button
-              disabled={meta.current_page === meta.last_page}
-              onClick={() => setPage((p) => p + 1)}
-            >
-              Next
-            </button>
-          </div>
-        )}
+    <span>
+      Page {meta.current_page} of {meta.last_page}
+    </span>
+
+    <button
+      disabled={meta.current_page === meta.last_page}
+      onClick={() => {
+        const newPage = meta.current_page + 1;
+        setPage(newPage);
+        // Update URL with page number
+        const params = new URLSearchParams(window.location.search);
+        params.set("page", newPage.toString());
+        const newUrl = params.toString() ? `?${params.toString()}` : "";
+        router.replace(`${window.location.pathname}${newUrl}`, { scroll: false });
+      }}
+    >
+      Next
+    </button>
+  </div>
+)}
       </section>
 
       {showContact && (
@@ -248,10 +303,8 @@ export default function Product() {
         />
       )}
 
-    
-
-      {/* STYLES — COMPLETELY UNCHANGED */}
-      <style >{`
+      {/* STYLES — COMPLETELY UNCHANGED + SMALL ADDITIONS */}
+      <style>{`
         .wrapper {
           background: #000;
           color: #fff;
@@ -282,6 +335,7 @@ export default function Product() {
           width: 100%;
           aspect-ratio: 16 / 9;
           background: #111;
+          position: relative;
         }
 
         .img {
@@ -438,6 +492,28 @@ export default function Product() {
           .grid {
             grid-template-columns: 1fr;
           }
+        }
+
+        /* === ADDED ONLY === */
+        .metaRow {
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .metaLeft {
+          display: flex;
+          gap: 8px;
+        }
+
+        .loanTag {
+          position: absolute;
+          bottom: 10px;
+          left: 10px;
+          background: #e6f0ff;
+          color: #1a4ed8;
+          padding: 4px 8px;
+          font-size: 11px;
+          border-radius: 10px;
         }
       `}</style>
     </>

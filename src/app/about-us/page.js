@@ -14,7 +14,7 @@ export default function AboutUsPage() {
             </p>
           </div>
         </div>
-
+<div className="spacer" />
         {/* ABOUT CONTENT */}
         <div className="content">
           <h2>Who We Are</h2>

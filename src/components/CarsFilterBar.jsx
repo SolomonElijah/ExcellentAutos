@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function CarsFilterBar({ onApply }) {
+export default function CarsFilterBar() {
+  const router = useRouter();
   const [open, setOpen] = useState(null);
 
   // FILTER STATE
@@ -13,22 +15,42 @@ export default function CarsFilterBar({ onApply }) {
   const [yearMax, setYearMax] = useState("");
   const [location, setLocation] = useState("");
 
+  /* =========================
+     APPLY FILTERS (CLEAN URL)
+  ========================= */
   const applyFilters = () => {
-    if (!onApply) return;
+    const params = new URLSearchParams();
 
-    onApply({
-      ...(brand && { search: brand }),
-      ...(priceMin && { price_min: priceMin }),
-      ...(priceMax && { price_max: priceMax }),
-      ...(yearMin && { year_min: yearMin }),
-      ...(yearMax && { year_max: yearMax }),
-      ...(location && { location }),
-    });
+    // BRAND
+    if (brand.trim()) {
+      params.set("search", brand.trim());
+    }
 
+    // PRICE
+    if (priceMin) params.set("price_min", priceMin);
+    if (priceMax) params.set("price_max", priceMax);
+
+    // YEAR - THIS WAS THE PROBLEM
+    if (yearMin) params.set("year_min", yearMin);
+    if (yearMax) params.set("year_max", yearMax);
+
+    // LOCATION - THIS WAS THE PROBLEM  
+    if (location.trim()) {
+      params.set("location", location.trim());
+    }
+
+    params.set("page", "1");
+
+    // ✅ This updates the URL which triggers your page to re-fetch
+    router.push(`/cars?${params.toString()}`);
     setOpen(null);
   };
 
+  /* =========================
+     CLEAR FILTERS
+  ========================= */
   const clearFilters = () => {
+    // Clear local state
     setBrand("");
     setPriceMin("");
     setPriceMax("");
@@ -36,10 +58,8 @@ export default function CarsFilterBar({ onApply }) {
     setYearMax("");
     setLocation("");
 
-    if (onApply) {
-      onApply({});
-    }
-
+    // Clear URL
+    router.push("/cars");
     setOpen(null);
   };
 
@@ -60,13 +80,12 @@ export default function CarsFilterBar({ onApply }) {
           Location ▾
         </button>
 
-        {/* ✅ NEW CLEAR BUTTON — TOP RIGHT */}
         <button className="clearTop" onClick={clearFilters}>
           Clear Filters
         </button>
       </div>
 
-      {/* BRAND & MODEL */}
+      {/* BRAND */}
       {open === "brand" && (
         <div className="dropdown">
           <label>Brand or Model</label>
@@ -79,30 +98,10 @@ export default function CarsFilterBar({ onApply }) {
           <h5>SUGGESTED BRANDS</h5>
           <div className="chips">
             {[
-              "Audi",
-              "BMW",
-              "Toyota",
-              "Hyundai",
-              "Jaguar",
-              "KIA",
-              "Land Rover",
-              "Lexus",
-              "Mercedes",
-              "Nissan",
-              "Honda",
-              "Ford",
-              "Volkswagen",
-              "Mazda",
-              "Subaru",
-              "Mitsubishi",
-              "Chevrolet",
-              "Peugeot",
-              "Renault",
-              "Volvo",
-              "Porsche",
-              "Jeep",
-              "Tesla",
-              "Suzuki",
+              "Audi", "BMW", "Toyota", "Hyundai", "Jaguar", "KIA", "Land Rover",
+              "Lexus", "Mercedes", "Nissan", "Honda", "Ford", "Volkswagen", "Mazda",
+              "Subaru", "Mitsubishi", "Chevrolet", "Peugeot", "Renault", "Volvo",
+              "Porsche", "Jeep", "Tesla", "Suzuki",
             ].map((b) => (
               <span key={b} onClick={() => setBrand(b)}>
                 {b}
@@ -110,14 +109,8 @@ export default function CarsFilterBar({ onApply }) {
             ))}
           </div>
 
-
-          <button className="apply" onClick={applyFilters}>
-            Apply
-          </button>
-
-          <button className="clear" onClick={clearFilters}>
-            Clear Filters
-          </button>
+          <button className="apply" onClick={applyFilters}>Apply</button>
+          <button className="clear" onClick={clearFilters}>Clear Filters</button>
         </div>
       )}
 
@@ -142,13 +135,8 @@ export default function CarsFilterBar({ onApply }) {
             />
           </div>
 
-          <button className="apply" onClick={applyFilters}>
-            Apply
-          </button>
-
-          <button className="clear" onClick={clearFilters}>
-            Clear Filters
-          </button>
+          <button className="apply" onClick={applyFilters}>Apply</button>
+          <button className="clear" onClick={clearFilters}>Clear Filters</button>
         </div>
       )}
 
@@ -159,23 +147,22 @@ export default function CarsFilterBar({ onApply }) {
             <input
               placeholder="1990"
               value={yearMin}
-              onChange={(e) => setYearMin(e.target.value)}
+              onChange={(e) =>
+                setYearMin(e.target.value.replace(/\D/g, ""))
+              }
             />
             <span>—</span>
             <input
               placeholder="2026"
               value={yearMax}
-              onChange={(e) => setYearMax(e.target.value)}
+              onChange={(e) =>
+                setYearMax(e.target.value.replace(/\D/g, ""))
+              }
             />
           </div>
 
-          <button className="apply" onClick={applyFilters}>
-            Apply
-          </button>
-
-          <button className="clear" onClick={clearFilters}>
-            Clear Filters
-          </button>
+          <button className="apply" onClick={applyFilters}>Apply</button>
+          <button className="clear" onClick={clearFilters}>Clear Filters</button>
         </div>
       )}
 
@@ -189,37 +176,40 @@ export default function CarsFilterBar({ onApply }) {
             onChange={(e) => setLocation(e.target.value)}
           />
 
+          <h5>POPULAR LOCATIONS</h5>
+          <div className="chips scroll">
+            {[
+              "Lagos",
+              "Ikeja",
+              "Lekki",
+              "Victoria Island",
+              "Abuja",
+              "Gwarinpa",
+              "Maitama",
+              "Port Harcourt",
+              "Ibadan",
+              "Benin City",
+              "Onitsha",
+              "Aba",
+              "Enugu",
+              "Warri",
+              "Uyo",
+            ].map((location) => (
+              <span key={location} onClick={() => setLocation(location)}>
+                {location}
+              </span>
+            ))}
+          </div>
+
+
           <h5>STATES</h5>
           <div className="chips scroll">
             {[
-              "Abia",
-              "Abuja",
-              "Adamawa",
-              "Akwa Ibom",
-              "Anambra",
-              "Bauchi",
-              "Bayelsa",
-              "Benue",
-              "Borno",
-              "Cross River",
-              "Delta",
-              "Ebonyi",
-              "Edo",
-              "Ekiti",
-              "Enugu",
-              "FCT",
-              "Gombe",
-              "Imo",
-              "Jigawa",
-              "Kaduna",
-              "Kano",
-              "Katsina",
-              "Kebbi",
-              "Kogi",
-              "Kwara",
-              "Lagos",
-              "Nasarawa",
-              "Niger",
+              "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", "Borno",
+              "Cross River", "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu", "Abuja", "Gombe",
+              "Imo", "Jigawa", "Kaduna", "Kano", "Katsina", "Kebbi", "Kogi", "Kwara", "Lagos",
+              "Nasarawa", "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers",
+              "Sokoto", "Taraba", "Yobe", "Zamfara",
             ].map((s) => (
               <span key={s} onClick={() => setLocation(s)}>
                 {s}
@@ -227,18 +217,14 @@ export default function CarsFilterBar({ onApply }) {
             ))}
           </div>
 
-          <button className="apply" onClick={applyFilters}>
-            Apply
-          </button>
 
-          <button className="clear" onClick={clearFilters}>
-            Clear Filters
-          </button>
+          <button className="apply" onClick={applyFilters}>Apply</button>
+          <button className="clear" onClick={clearFilters}>Clear Filters</button>
         </div>
       )}
 
-      {/* STYLES */}
-      <style >{`
+      {/* STYLES — UNCHANGED */}
+      <style>{`
         .bar {
           background: #000;
           padding: 14px 30px;
@@ -248,7 +234,6 @@ export default function CarsFilterBar({ onApply }) {
           flex-wrap: wrap;
           align-items: center;
         }
-
         .bar button {
           background: #0b0b0b;
           border: 1px solid #222;
@@ -258,19 +243,14 @@ export default function CarsFilterBar({ onApply }) {
           font-size: 13px;
           cursor: pointer;
         }
-
         .bar button:hover {
           border-color: red;
           color: #fff;
         }
-
-        /* ✅ PUSH CLEAR BUTTON TO THE RIGHT */
         .clearTop {
-         
           border-color: red;
           color: #fff;
         }
-
         .dropdown {
           background: #000;
           max-width: 700px;
@@ -278,11 +258,6 @@ export default function CarsFilterBar({ onApply }) {
           padding: 20px;
           border-radius: 10px;
         }
-
-        label {
-          font-size: 13px;
-        }
-
         input {
           width: 100%;
           padding: 10px;
@@ -290,19 +265,11 @@ export default function CarsFilterBar({ onApply }) {
           border: 1px solid #ddd;
           border-radius: 6px;
         }
-
-        h5 {
-          font-size: 11px;
-          color: #666;
-          margin: 14px 0 6px;
-        }
-
         .chips {
           display: flex;
           flex-wrap: wrap;
           gap: 8px;
         }
-
         .chips span {
           padding: 6px 10px;
           border: 1px solid #ddd;
@@ -310,18 +277,15 @@ export default function CarsFilterBar({ onApply }) {
           font-size: 12px;
           cursor: pointer;
         }
-
         .scroll {
           max-height: 180px;
           overflow-y: auto;
         }
-
         .range {
           display: flex;
           gap: 10px;
           align-items: center;
         }
-
         .apply {
           width: 100%;
           margin-top: 16px;
@@ -332,7 +296,6 @@ export default function CarsFilterBar({ onApply }) {
           font-weight: 600;
           cursor: pointer;
         }
-
         .clear {
           width: 100%;
           margin-top: 8px;
@@ -344,6 +307,9 @@ export default function CarsFilterBar({ onApply }) {
           color: #ccc;
           cursor: pointer;
         }
+
+
+      
       `}</style>
     </>
   );

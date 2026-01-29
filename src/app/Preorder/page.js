@@ -9,21 +9,31 @@ export default function PreOrderLanding() {
     <>
       <section className="wrapper">
         {/* HERO */}
-        <div className="hero">
-          <h1 className="headline">Pre-Order Your Car With Confidence</h1>
-          <p className="subtext">
-            Looking for a specific car? Excellent Autos Nigeria helps you
-            pre-order quality vehicles from trusted sources, inspect them
-            properly, and deliver safely to your destination.
-          </p>
+        <div className="preorder-hero">
+          <div className="preorder-hero-content">
+            <h1 className="preorder-headline">
+              Pre-Order Your Car With Confidence
+            </h1>
 
-          <button
-            className="primary-cta"
-            onClick={() => router.push("/Preorder/apply")}
-          >
-            Start Pre-Order
-          </button>
+            <p className="preorder-subtext">
+              Looking for a specific car? Excellent Autos Nigeria helps you pre-order
+              quality vehicles from trusted sources, inspect them properly, and deliver
+              safely to your destination.
+            </p>
+
+            <button
+              className="primary-cta"
+              onClick={() => router.push("/Preorder/apply")}
+            >
+              Start Pre-Order
+            </button>
+          </div>
+
+          <div className="preorder-hero-image">
+            <img src="/PreOrderPics.png" alt="Pre-order a car" />
+          </div>
         </div>
+
 
         {/* TRUST STRIP */}
         <div className="trust">
@@ -270,6 +280,61 @@ export default function PreOrderLanding() {
             font-size: 28px;
           }
         }
+
+
+        /* ================= PREORDER HERO ================= */
+
+.preorder-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 30px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.preorder-hero-content {
+  max-width: 520px;
+}
+
+.preorder-headline {
+  font-size: 40px;
+  font-weight: 700;
+  color: red;
+  margin-bottom: 16px;
+}
+
+.preorder-subtext {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #ccc;
+  margin-bottom: 24px;
+}
+
+.preorder-hero-image img {
+  max-width: 480px;
+  width: 90%;
+  height: auto;
+  display: block;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 900px) {
+  .preorder-hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .preorder-hero-image {
+    display: none; /* 🔥 hide image on phones */
+  }
+
+  .preorder-headline {
+    font-size: 26px;
+  }
+}
+
       `}</style>
     </>
   );

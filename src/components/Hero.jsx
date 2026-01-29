@@ -12,14 +12,12 @@ export default function Hero() {
   return (
     <>
     <Loader />
-
       <HeroImage />
         <div>
           <CarCarousel />
         </div>
       <HeroSearchSection />
       <Product />
-
     </>
   );
 }

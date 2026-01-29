@@ -3,6 +3,8 @@
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { api, API_BASE_URL } from "@/lib/api";
+import LoanCal from "@/components/LoanCal";
+
 
 export default function CarLoanPage() {
   const { id } = useParams();
@@ -11,25 +13,60 @@ export default function CarLoanPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadCar() {
-      try {
-        const res = await api("/cars"); // 🔒 DO NOT TOUCH
-        const cars = res.data;
-        const found = cars.find(c => String(c.id) === String(id));
-        if (found) setCar(found);
-      } finally {
-        setLoading(false);
-      }
+  async function loadCar() {
+    try {
+      const res = await api(`/cars/${id}`); // ✅ CORRECT
+      setCar(res.data);
+    } catch (err) {
+      console.error("Failed to load loan car", err);
+      router.push("/cars");
+    } finally {
+      setLoading(false);
     }
-    loadCar();
-  }, [id]);
+  }
+
+  loadCar();
+}, [id, router]);
+
 
   const baseUrl = API_BASE_URL.replace("/api", "");
+
+  /* ================= LOAN CALCULATIONS ================= */
+  const hasValidLoan = car?.loan?.available === true;
+  const loanData = car?.loan?.precomputed;
+
+  // Get first available tenure
+  let firstTenure = null;
+  let firstTenureKey = null;
+
+  if (loanData?.tenures) {
+    const tenureKeys = Object.keys(loanData.tenures);
+    if (tenureKeys.length > 0) {
+      firstTenureKey = tenureKeys[0];
+      firstTenure = loanData.tenures[firstTenureKey];
+    }
+  }
+
+  // Calculate loan amounts
+  const downPaymentPercent = loanData?.down_payment_percent || 0;
+  const downPaymentAmount = (downPaymentPercent / 100) * (car?.price || 0);
+  const loanAmount = (car?.price || 0) - downPaymentAmount;
+
+  // Redirect if no valid loan
+  useEffect(() => {
+    if (!loading && car && !hasValidLoan) {
+      router.push(`/cars/${id}`);
+    }
+  }, [loading, car, hasValidLoan, id, router]);
+
+  if (!hasValidLoan && !loading) {
+    return null; // Will redirect
+  }
 
   return (
     <>
       <div className="page">
-        {/* LEFT */}
+        {/* LEFT - CAR INFO WITH LOAN DETAILS */}
         <div className="left">
           {loading ? (
             <>
@@ -50,31 +87,55 @@ export default function CarLoanPage() {
                 {car.year} {car.brand.name} {car.model}
               </h3>
 
-              <div className="priceRow">
-                <div>
-                  <p className="price">
-                    ₦{Number(car.price).toLocaleString()}
-                  </p>
-                  <small className="location">{car.location}</small>
+              {/* LOAN DETAILS INSTEAD OF NORMAL PRICE */}
+              <div className="loanDetails">
+                <div className="loanRow">
+                  <span className="label">Car Price</span>
+                  <span className="value">₦{Number(car.price).toLocaleString()}</span>
                 </div>
 
-                <div className="loanBox">
-                  <p className="monthly">
-                    ₦{Number(car.estimated_monthly_repayment).toLocaleString()} / Mo
-                  </p>
-                  <small>
-                    ₦{(
-                      (car.min_down_payment_percent / 100) *
-                      Number(car.price)
-                    ).toLocaleString()} Down payment
-                  </small>
+                <div className="loanRow">
+                  <span className="label">Down Payment ({downPaymentPercent}%)</span>
+                  <span className="value">₦{Number(downPaymentAmount).toLocaleString()}</span>
                 </div>
+
+                <div className="loanRow">
+                  <span className="label">Loan Amount</span>
+                  <span className="value">₦{Number(loanAmount).toLocaleString()}</span>
+                </div>
+
+                {firstTenure && (
+                  <div className="loanRow highlight">
+                    <span className="label">Monthly Payment ({firstTenureKey?.replace('m_', '')} months)</span>
+                    <span className="value">₦{Number(firstTenure.monthly_payment).toLocaleString()}</span>
+                  </div>
+                )}
+
+                {/* INTEREST RATE */}
+                {loanData?.interest_rate && (
+                  <div className="loanRow">
+                    <span className="label">Interest Rate</span>
+                    <span className="value">{loanData.interest_rate}%</span>
+                  </div>
+                )}
+
+                {/* TOTAL PAYABLE */}
+                {firstTenure?.total_payable && (
+                  <div className="loanRow">
+                    <span className="label">Total Payable</span>
+                    <span className="value">₦{Number(firstTenure.total_payable).toLocaleString()}</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="locationNote">
+                <small>📍 {car.location}</small>
               </div>
             </>
           )}
         </div>
 
-        {/* RIGHT */}
+        {/* RIGHT - LOAN PROCESS INFO */}
         <div className="right">
           <h3 className="title">How Loan Financing Works</h3>
 
@@ -117,6 +178,8 @@ export default function CarLoanPage() {
               </>
             )}
           </div>
+          <LoanCal car={car} />
+
 
           {!loading && (
             <button
@@ -157,31 +220,61 @@ export default function CarLoanPage() {
 
         .carName {
           font-size: 18px;
-          margin-bottom: 14px;
+          margin-bottom: 20px;
         }
 
-        .priceRow {
+        /* LOAN DETAILS STYLING */
+        .loanDetails {
+          margin-bottom: 20px;
+        }
+
+        .loanRow {
           display: flex;
           justify-content: space-between;
-          gap: 20px;
+          align-items: center;
+          padding: 12px 0;
+          border-bottom: 1px solid #222;
+        }
+
+        .loanRow:last-child {
+          border-bottom: none;
+        }
+
+        .loanRow .label {
+          color: #aaa;
           font-size: 14px;
         }
 
-        .price {
-          font-weight: 700;
-          font-size: 18px;
-        }
-
-        .location {
-          color: #aaa;
-        }
-
-        .loanBox {
-          text-align: right;
-        }
-
-        .monthly {
+        .loanRow .value {
           font-weight: 600;
+          font-size: 16px;
+        }
+
+        .loanRow.highlight {
+          background: rgba(255, 0, 0, 0.1);
+          padding: 16px;
+          border-radius: 8px;
+          margin: 10px 0;
+          border: 1px solid rgba(255, 0, 0, 0.3);
+        }
+
+        .loanRow.highlight .label {
+          color: #fff;
+          font-weight: 600;
+        }
+
+        .loanRow.highlight .value {
+          color: red;
+          font-size: 20px;
+          font-weight: 700;
+        }
+
+        .locationNote {
+          margin-top: 20px;
+          padding-top: 15px;
+          border-top: 1px solid #222;
+          color: #aaa;
+          font-size: 14px;
         }
 
         .title {
@@ -227,6 +320,12 @@ export default function CarLoanPage() {
           border-radius: 10px;
           font-weight: 600;
           cursor: pointer;
+          width: 100%;
+          max-width: 300px;
+        }
+
+        .applyBtn:hover {
+          background: #cc0000;
         }
 
         /* SKELETON */
@@ -292,12 +391,25 @@ export default function CarLoanPage() {
             grid-template-columns: 1fr;
           }
 
-          .priceRow {
+          .loanRow {
             flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
           }
 
-          .loanBox {
-            text-align: left;
+          .loanRow .value {
+            align-self: flex-end;
+          }
+        }
+
+        @media (max-width: 600px) {
+          .page {
+            padding: 20px;
+          }
+
+          .left,
+          .right {
+            padding: 20px;
           }
         }
       `}</style>
