@@ -1,124 +1,251 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { api } from "@/lib/api";
+import useSWR from "swr";
+import { useEffect, useRef, useState } from "react";
+import { fetchCarousel } from "@/lib/carouselFetcher";
 
-export default function CarCarousel() {
-  const [slides, setSlides] = useState([]);
-  const [isDesktop, setIsDesktop] = useState(false);
+type Slide = {
+  image: string;
+  fallback?: string;
+  link?: string | null;
+};
 
-  /* ---------------- SCREEN SIZE ---------------- */
+type CarouselResponse = {
+  success: boolean;
+  version: number;
+  data: Slide[];
+};
+
+const AUTO_PLAY_INTERVAL = 5000; // 5 seconds
+const SWIPE_THRESHOLD = 50; // px
+
+export default function HeroCarousel() {
+  const { data, error, isLoading } = useSWR<CarouselResponse>(
+    "carousel",
+    fetchCarousel,
+    {
+      dedupingInterval: 60_000,
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+    }
+  );
+
+  const [slides, setSlides] = useState<Slide[]>([]);
+  const [version, setVersion] = useState<number | null>(null);
+  const [current, setCurrent] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  const touchStartX = useRef<number | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  /* ---------- VERSION-AWARE UPDATE ---------- */
   useEffect(() => {
-    const check = () => setIsDesktop(window.innerWidth >= 769);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
+    if (!data) return;
 
-  /* ---------------- LOAD CAROUSEL (NO CACHE) ---------------- */
+    if (data.version !== version) {
+      setSlides(data.data);
+      setVersion(data.version);
+      setCurrent(0);
+    }
+  }, [data, version]);
+
+  /* ---------- AUTO PLAY ---------- */
   useEffect(() => {
-    async function load() {
-      try {
-        const res = await api("/carousel", {
-          headers: {
-            Accept: "application/json",
-            "Cache-Control": "no-store", // 🚫 no cache
-          },
-        });
+    if (paused || slides.length <= 1) return;
 
-        if (res?.success && Array.isArray(res.data)) {
-          setSlides(res.data);
-        }
-      } catch (err) {
-        console.error("Carousel load failed", err);
+    intervalRef.current = setInterval(() => {
+      setCurrent((i) => (i + 1) % slides.length);
+    }, AUTO_PLAY_INTERVAL);
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
       }
+    };
+  }, [paused, slides]);
+
+  /* ---------- CONTROLS ---------- */
+  const next = () => {
+    if (!slides.length) return;
+    setCurrent((i) => (i + 1) % slides.length);
+  };
+
+  const prev = () => {
+    if (!slides.length) return;
+    setCurrent((i) => (i === 0 ? slides.length - 1 : i - 1));
+  };
+
+  /* ---------- TOUCH HANDLERS ---------- */
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+
+    const diff =
+      touchStartX.current - e.changedTouches[0].clientX;
+
+    if (Math.abs(diff) > SWIPE_THRESHOLD) {
+      diff > 0 ? next() : prev();
     }
 
-    load();
-  }, []);
+    touchStartX.current = null;
+  };
 
-  if (!slides.length) return null;
+  /* ---------- SKELETON ---------- */
+  if (isLoading) {
+    return (
+      <div className="carousel skeleton">
+        <div className="skeleton-img" />
+        <style>{skeletonStyles}</style>
+      </div>
+    );
+  }
 
-  // duplicate for infinite scroll
-  const loopSlides = [...slides, ...slides];
+  if (error || !slides.length) return null;
 
   return (
     <>
-      <div className={`carousel ${isDesktop ? "desktop" : "mobile"}`}>
-        <div className="track">
-          {loopSlides.map((slide, i) => (
-            <div className="slide" key={i}>
-              <img src={slide.image} alt="" />
-            </div>
-          ))}
+      <div
+        className="carousel"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
+        <div className="slide">
+          <img
+  src={slides[current].image}
+  alt=""
+  loading="eager"
+  decoding="async"
+/>
+
         </div>
+
+        {slides.length > 1 && (
+          <>
+            <button className="nav prev" onClick={prev}>
+              ‹
+            </button>
+            <button className="nav next" onClick={next}>
+              ›
+            </button>
+
+            {/* DOTS */}
+            <div className="dots">
+              {slides.map((_, i) => (
+                <button
+                  key={i}
+                  className={`dot ${
+                    i === current ? "active" : ""
+                  }`}
+                  onClick={() => setCurrent(i)}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </div>
 
-      <style>{`
-        /* ---------- CONTAINER ---------- */
-        .carousel {
-          width: 100%;
-          overflow: hidden;
-          margin: 0 auto;
-        }
-
-        /* ---------- DESKTOP AUTO SCROLL ---------- */
-        .desktop {
-          max-width: 1100px;
-        }
-
-        .desktop .track {
-          display: flex;
-          width: max-content;
-          gap: 16px;
-          animation: scrollLeft 30s linear infinite;
-        }
-
-        .desktop .slide {
-          width: 340px;
-          flex-shrink: 0;
-        }
-
-        /* ---------- MOBILE (AUTO SCROLL BUT SMALLER) ---------- */
-.mobile {
-  padding: 12px 0; /* 🔥 reduce top & bottom space */
-}
-
-.mobile .track {
-  display: flex;
-  width: max-content;
-  gap: 12px; 
-  animation: scrollLeft 45s linear infinite;
-}
-
-.mobile .slide {
-  width: 80vw;      
-  max-width: 200px;  
-  flex-shrink: 0;
-  padding: 4px 0;    /* 🔥 reduce vertical padding */
-}
-
-
-
-        /* ---------- IMAGE ---------- */
-        .slide img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-          display: block;
-          border-radius: 16px;
-        }
-
-        /* ---------- ANIMATION ---------- */
-        @keyframes scrollLeft {
-          from {
-            transform: translateX(0);
-          }
-          to {
-            transform: translateX(-50%);
-          }
-        }
-      `}</style>
+      <style>{carouselStyles}</style>
     </>
   );
 }
+
+/* ---------- STYLES ---------- */
+
+const carouselStyles = `
+.carousel {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.slide img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  display: block;
+  border-radius: 16px;
+  transition: opacity 0.3s ease;
+}
+
+/* ---------- NAV ---------- */
+.nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav.prev { left: 12px; }
+.nav.next { right: 12px; }
+
+.nav:hover {
+  background: rgba(0,0,0,0.75);
+}
+
+/* ---------- DOTS ---------- */
+.dots {
+  position: absolute;
+  bottom: 12px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.4);
+  cursor: pointer;
+}
+
+.dot.active {
+  background: #fff;
+}
+`;
+
+const skeletonStyles = `
+.skeleton {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.skeleton-img {
+  width: 100%;
+  height: 260px;
+  border-radius: 16px;
+  background: linear-gradient(
+    90deg,
+    #eee 25%,
+    #f5f5f5 37%,
+    #eee 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+`;
