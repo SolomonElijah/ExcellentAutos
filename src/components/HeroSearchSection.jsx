@@ -204,8 +204,9 @@ export default function HeroSearchSection() {
           background: red;
           border: none;
           border-radius: 8px;
-          font-weight: 600;
+          font-weight: 800;
           cursor: pointer;
+           color: #fff;
         }
 
         .search {
@@ -231,9 +232,12 @@ export default function HeroSearchSection() {
           background: red;
           border: none;
           border-radius: 8px;
-          font-weight: 600;
+          font-weight: 800;
           cursor: pointer;
+           color: #fff;
         }
+
+    
 
         @media (max-width: 900px) {
           .brands {
