@@ -25,6 +25,7 @@ export default function HeroCarousel() {
     fetchCarousel,
     {
       dedupingInterval: 60_000,
+      refreshInterval: 120_000, 
       revalidateOnFocus: true,
       revalidateOnReconnect: true,
     }
