@@ -2,7 +2,7 @@
 
 import useSWR from "swr";
 import { useEffect, useRef, useState } from "react";
-import { fetchCarousel } from "@/lib/carouselFetcher";
+import { fetchCarousel } from "../lib/carouselFetcher";
 
 type Slide = {
   image: string;

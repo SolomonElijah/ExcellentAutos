@@ -1,4 +1,4 @@
-/* ================= ROOT / RESET =================
+/* ================= ROOT / RESET ================= */
 
 :root {
   --background: #ffffff;
@@ -11,7 +11,7 @@
     --foreground: #ededed;
   }
 }
- */ 
+
 html,
 body {
   max-width: 100vw;
@@ -19,7 +19,8 @@ body {
 }
 
 body {
- 
+  color: var(--foreground);
+  background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -34,7 +35,7 @@ html {
   padding: 0;
   margin: 0;
 }
-/* 
+
 a {
   color: inherit;
   text-decoration: none;
@@ -44,7 +45,7 @@ a {
   html {
     color-scheme: dark;
   }
-} */ 
+}
 
 /* ================= NAVBAR (NAMESPACED) ================= */
 

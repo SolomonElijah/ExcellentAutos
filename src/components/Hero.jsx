@@ -11,7 +11,7 @@ import Loader from "@/components/Loader";
 export default function Hero() {
   return (
     <>
-    <Loader />
+    {/* <Loader /> */}
       <HeroImage />
         <div>
           <CarCarousel />
