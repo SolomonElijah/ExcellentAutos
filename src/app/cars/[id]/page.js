@@ -306,20 +306,107 @@ export default function CarDetailsPage() {
           )}
         </div>
 
-        {/* SPECS */}
-        <div className="specFeatureGrid">
+       <tbody>
+  <tr>
+    <td>Brand</td>
+    <td>{car.brand?.name || "—"}</td>
+  </tr>
 
-          <div className="specs card">
-            <h3 className="sectionTitle">Car Specs</h3>
-            <table>
-              <tbody>
-                <tr><td>Fuel Type</td><td>{car.fuel_type}</td></tr>
-                <tr><td>Transmission</td><td>{car.transmission}</td></tr>
-                <tr><td>Interior Color</td><td>{car.interior_color}</td></tr>
-                <tr><td>Exterior Color</td><td>{car.exterior_color}</td></tr>
-                <tr><td>Vehicle ID</td><td>{car.reference_code}</td></tr>
-              </tbody>
-            </table>
+  <tr>
+    <td>Body Type</td>
+    <td>{car.body_type?.name || "—"}</td>
+  </tr>
+
+  <tr>
+    <td>Model</td>
+    <td>{car.model}</td>
+  </tr>
+
+  <tr>
+    <td>Trim</td>
+    <td>{car.trim || "—"}</td>
+  </tr>
+
+  <tr>
+    <td>Year</td>
+    <td>{car.year}</td>
+  </tr>
+
+  <tr>
+    <td>Price</td>
+    <td>₦{Number(car.price).toLocaleString()}</td>
+  </tr>
+
+  <tr>
+    <td>Condition</td>
+    <td>{car.condition.replace("_", " ")}</td>
+  </tr>
+
+  <tr>
+    <td>Mileage</td>
+    <td>
+      {car.mileage
+        ? `${Number(car.mileage).toLocaleString()} km`
+        : "—"}
+    </td>
+  </tr>
+
+  <tr>
+    <td>Transmission</td>
+    <td>{car.transmission}</td>
+  </tr>
+
+  <tr>
+    <td>Fuel Type</td>
+    <td>{car.fuel_type}</td>
+  </tr>
+
+  <tr>
+    <td>Drive Type</td>
+    <td>{car.drive_type?.toUpperCase()}</td>
+  </tr>
+
+  <tr>
+    <td>Engine Specs</td>
+    <td>{car.engine_specs || "—"}</td>
+  </tr>
+
+  <tr>
+    <td>Interior Color</td>
+    <td>{car.interior_color || "—"}</td>
+  </tr>
+
+  <tr>
+    <td>Exterior Color</td>
+    <td>{car.exterior_color || "—"}</td>
+  </tr>
+
+  <tr>
+    <td>Location</td>
+    <td>{car.location}</td>
+  </tr>
+
+  <tr>
+    <td>Verification Status</td>
+    <td>
+      {car.is_verified ? (
+        <span style={{ color: "limegreen", fontWeight: 600 }}>
+          ✔ Verified
+        </span>
+      ) : (
+        <span style={{ color: "#ffb020", fontWeight: 600 }}>
+          Not Verified
+        </span>
+      )}
+    </td>
+  </tr>
+
+  <tr>
+    <td>Vehicle ID</td>
+    <td>{car.reference_code}</td>
+  </tr>
+</tbody>
+
           </div>
 
           <div className="features card">
