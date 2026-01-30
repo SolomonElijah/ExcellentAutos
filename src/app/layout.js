@@ -4,11 +4,11 @@ import "./globals.css";
 
 export const metadata = {
   title: {
-    default: "Carsale – Buy, Sell & Finance Cars in Nigeria",
-    template: "%s | Carsale",
+    default: "Excellent J&C Autos – Buy, Sell & Finance Cars in Nigeria",
+    template: "%s | Excellent J&C Autos",
   },
   description:
-    "Carsale is a trusted platform to buy, sell, preorder, and finance cars in Nigeria. Browse verified cars, apply for car loans, and connect with sellers easily.",
+    "Excellent J&C Autos is a trusted platform to buy, sell, preorder, and finance cars in Nigeria. Browse verified cars, apply for car loans, and connect with sellers easily.",
 
   keywords: [
     "cars for sale in Nigeria",
@@ -33,8 +33,8 @@ export const metadata = {
     type: "website",
     locale: "en_NG",
     url: "https://excellentautosnigeria.com",
-    siteName: "Carsale",
-    title: "Carsale – Buy, Sell & Finance Cars in Nigeria",
+    siteName: "Excellent J&C Autos",
+    title: "Excellent J&C Autos – Buy, Sell & Finance Cars in Nigeria",
     description:
       "Buy, sell, preorder, and finance cars in Nigeria. Explore verified listings and apply for car loans easily.",
     images: [
@@ -42,14 +42,14 @@ export const metadata = {
         url: "/carbg.png", 
         width: 1200,
         height: 630,
-        alt: "Carsale Nigeria",
+        alt: "Excellent J&C Autos Nigeria",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Carsale – Buy, Sell & Finance Cars in Nigeria",
+    title: "Excellent J&C Autos – Buy, Sell & Finance Cars in Nigeria",
     description:
       "Browse cars for sale, apply for car loans, and sell your vehicle easily in Nigeria.",
     images: ["/carbg.png"], 
