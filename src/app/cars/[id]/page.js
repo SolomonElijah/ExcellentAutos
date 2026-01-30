@@ -328,6 +328,7 @@ export default function CarDetailsPage() {
                 <tr><td>Exterior Color</td><td>{car.exterior_color}</td></tr>
                 <tr><td>Location</td><td>{car.location}</td></tr>
                 <tr><td>Vehicle ID</td><td>{car.reference_code}</td></tr>
+                <tr><td>Registered</td><td>{car.is_verified ? "Yes" : "No"}</td></tr>
               </tbody>
             </table>
           </div>
