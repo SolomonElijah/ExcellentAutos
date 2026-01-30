@@ -70,16 +70,20 @@ export default function CarsSearchHeader({ onSearch, onClear }) {
           border: none;
           padding: 12px 18px;
           border-radius: 6px;
-          font-weight: 600;
+          font-weight: 800;
           cursor: pointer;
+           color: #fff;
         }
 
         .clearBtn {
           background: none;
           border: none;
-          color: #666;
+          padding: 12px 18px;
+          border-radius: 6px;
+          font-weight: 600;
           font-size: 13px;
           cursor: pointer;
+           color: #fff;
         }
 
         @media (max-width: 768px) {
