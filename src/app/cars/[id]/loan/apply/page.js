@@ -144,7 +144,17 @@ export default function LoanApplicationForm() {
           <input placeholder="Last name" onChange={(e) => update("last_name", e.target.value)} />
           <input type="email" placeholder="Email" onChange={(e) => update("email", e.target.value)} />
           <input placeholder="Phone number" onChange={(e) => update("phone", e.target.value)} />
-          <input type="date" onChange={(e) => update("date_of_birth", e.target.value)} />
+
+          
+         <div className="field">
+  <label>Date of Birth</label>
+  <input
+    type="date"
+    value={form.date_of_birth}
+    onChange={(e) => update("date_of_birth", e.target.value)}
+  />
+</div>
+
 
           <select onChange={(e) => update("gender", e.target.value)}>
             <option value="">Gender</option>
@@ -338,6 +348,19 @@ export default function LoanApplicationForm() {
             grid-template-columns: 1fr;
           }
         }
+
+        .field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #ccc;
+}
+
       `}</style>
     </>
   );

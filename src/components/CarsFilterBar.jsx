@@ -276,6 +276,8 @@ export default function CarsFilterBar() {
           border-radius: 6px;
           font-size: 12px;
           cursor: pointer;
+           color: #fff;
+
         }
         .scroll {
           max-height: 180px;
@@ -293,8 +295,9 @@ export default function CarsFilterBar() {
           border: none;
           padding: 12px;
           border-radius: 6px;
-          font-weight: 600;
+          font-weight: 800;
           cursor: pointer;
+           color: #fff;
         }
         .clear {
           width: 100%;
@@ -307,6 +310,14 @@ export default function CarsFilterBar() {
           color: #ccc;
           cursor: pointer;
         }
+label {
+  color: #fff;
+}
+
+h5 {
+  color: #fff;
+}
+  
 
 
       
