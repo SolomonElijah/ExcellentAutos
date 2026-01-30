@@ -25,7 +25,7 @@ export default function HeroCarousel() {
     fetchCarousel,
     {
       dedupingInterval: 60_000,
-      refreshInterval: 120_000, 
+      refreshInterval: 120_000,
       revalidateOnFocus: true,
       revalidateOnReconnect: true,
     }
@@ -37,7 +37,7 @@ export default function HeroCarousel() {
   const [paused, setPaused] = useState(false);
 
   const touchStartX = useRef<number | null>(null);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   /* ---------- VERSION-AWARE UPDATE ---------- */
   useEffect(() => {
@@ -64,6 +64,15 @@ export default function HeroCarousel() {
       }
     };
   }, [paused, slides]);
+
+  /* ---------- PRELOAD NEXT IMAGE ---------- */
+  useEffect(() => {
+    if (!slides.length) return;
+
+    const nextIndex = (current + 1) % slides.length;
+    const img = new Image();
+    img.src = slides[nextIndex].image;
+  }, [current, slides]);
 
   /* ---------- CONTROLS ---------- */
   const next = () => {
@@ -117,12 +126,11 @@ export default function HeroCarousel() {
       >
         <div className="slide">
           <img
-  src={slides[current].image}
-  alt=""
-  loading="eager"
-  decoding="async"
-/>
-
+            src={slides[current].image}
+            alt=""
+            loading={current === 0 ? "eager" : "lazy"}
+            decoding="async"
+          />
         </div>
 
         {slides.length > 1 && (
@@ -134,14 +142,11 @@ export default function HeroCarousel() {
               ›
             </button>
 
-            {/* DOTS */}
             <div className="dots">
               {slides.map((_, i) => (
                 <button
                   key={i}
-                  className={`dot ${
-                    i === current ? "active" : ""
-                  }`}
+                  className={`dot ${i === current ? "active" : ""}`}
                   onClick={() => setCurrent(i)}
                 />
               ))}
@@ -170,10 +175,10 @@ const carouselStyles = `
 .slide img {
   width: 100%;
   height: 260px;
-  object-fit: cover;
+  object-fit: contain;
+  background: #000;
   display: block;
   border-radius: 16px;
-  transition: opacity 0.3s ease;
 }
 
 /* ---------- NAV ---------- */
