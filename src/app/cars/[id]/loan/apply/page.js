@@ -360,6 +360,22 @@ export default function LoanApplicationForm() {
   margin-bottom: 6px;
   color: #ccc;
 }
+.field input,
+.field select {
+  font-size: 14px;
+  padding: 14px;
+  border-radius: 10px;
+  background: #0b0b0b;
+  border: 1px solid #111;
+  color: #fff;
+}
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: red;
+  box-shadow: 0 0 0 1px rgba(255, 0, 0, 0.4);
+}
+
 
       `}</style>
     </>
