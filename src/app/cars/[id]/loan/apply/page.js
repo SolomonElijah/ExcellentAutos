@@ -6,16 +6,19 @@ import { api } from "@/lib/api";
 import Link from "next/link";
 
 export default function LoanApplicationForm() {
-  const { id } = useParams(); // car_id
+  const { id } = useParams();
   const [loading, setLoading] = useState(false);
 
   const [showPopup, setShowPopup] = useState(false);
-  const [popupMessage, setPopupMessage] = useState("");
+  const [popup, setPopup] = useState({
+    type: "error", // error | success
+    message: "",
+  });
 
   const [form, setForm] = useState({
     first_name: "",
     last_name: "",
-    email: "",                 // ✅ ADDED
+    email: "",
     phone: "",
     whatsapp: "",
     employment_type: "",
@@ -41,7 +44,7 @@ export default function LoanApplicationForm() {
 
     if (!form.first_name) errors.push("First name is required");
     if (!form.last_name) errors.push("Last name is required");
-    if (!form.email) errors.push("Email address is required"); // ✅
+    if (!form.email) errors.push("Email address is required");
     if (!form.phone) errors.push("Phone number is required");
     if (!form.whatsapp) errors.push("WhatsApp number is required");
     if (!form.employment_type) errors.push("Employment type is required");
@@ -58,40 +61,31 @@ export default function LoanApplicationForm() {
     if (!form.terms_accepted) errors.push("Terms must be accepted");
 
     if (errors.length) {
-      setPopupMessage(errors.join("\n"));
+      setPopup({ type: "error", message: errors });
       setShowPopup(true);
       return;
     }
 
     /* =========================
-       SUBMIT PAYLOAD (BACKEND SAFE)
+       SUBMIT PAYLOAD
     ========================= */
     setLoading(true);
 
     const payload = {
       car_id: Number(id),
-
-      // Applicant
       first_name: form.first_name,
       last_name: form.last_name,
-      email: form.email, // ✅
+      email: form.email,
       phone: form.phone,
       whatsapp_number: form.whatsapp,
       address: form.address,
-
-      // ENUM SAFE
       employment_type:
         form.employment_type === "business"
           ? "business_owner"
           : form.employment_type,
-
       gender: form.gender,
-
-      // Loan
       preferred_deposit: form.preferred_deposit,
       loan_term_months: Number(form.preferred_tenure),
-
-      // Legal
       credit_consent: form.credit_consent,
       terms_accepted: form.terms_accepted,
     };
@@ -102,11 +96,17 @@ export default function LoanApplicationForm() {
         body: JSON.stringify(payload),
       });
 
-      setPopupMessage("Loan application submitted successfully");
+      setPopup({
+        type: "success",
+        message: "Loan application submitted successfully",
+      });
       setShowPopup(true);
     } catch (err) {
       console.error(err);
-      setPopupMessage("Failed to submit application. Please try again.");
+      setPopup({
+        type: "error",
+        message: "Failed to submit application. Please try again.",
+      });
       setShowPopup(true);
     } finally {
       setLoading(false);
@@ -122,14 +122,7 @@ export default function LoanApplicationForm() {
           <div className="grid">
             <input placeholder="First name" onChange={(e) => update("first_name", e.target.value)} />
             <input placeholder="Last name" onChange={(e) => update("last_name", e.target.value)} />
-
-            {/* ✅ EMAIL */}
-            <input
-              type="email"
-              placeholder="Email address"
-              onChange={(e) => update("email", e.target.value)}
-            />
-
+            <input type="email" placeholder="Email address" onChange={(e) => update("email", e.target.value)} />
             <input placeholder="Phone number" onChange={(e) => update("phone", e.target.value)} />
             <input placeholder="WhatsApp number" onChange={(e) => update("whatsapp", e.target.value)} />
 
@@ -171,10 +164,9 @@ export default function LoanApplicationForm() {
               <input type="checkbox" onChange={(e) => update("credit_consent", e.target.checked)} />
               <strong>Credit consent</strong>
             </label>
-            <p className="consent-text">
+            <p>
               I authorize Excellent J&C Autos to access, share, and report my credit
-              information with credit bureaus and banking partners as required to
-              process this loan, and confirm all details provided are accurate.
+              information with credit bureaus and banking partners.
             </p>
           </div>
 
@@ -183,9 +175,8 @@ export default function LoanApplicationForm() {
               <input type="checkbox" onChange={(e) => update("terms_accepted", e.target.checked)} />
               <strong>Accept terms</strong>
             </label>
-            <p className="consent-text">
-              I agree to the{" "}
-              <Link href="/terms">terms of service</Link> and{" "}
+            <p>
+              I agree to the <Link href="/terms">terms of service</Link> and{" "}
               <Link href="/privacy">privacy policy</Link>.
             </p>
           </div>
@@ -197,63 +188,110 @@ export default function LoanApplicationForm() {
 
         {showPopup && (
           <div className="overlay">
-            <div className="popup">
-              <pre style={{ whiteSpace: "pre-wrap", textAlign: "left" }}>
-                {popupMessage}
-              </pre>
-              <button onClick={() => setShowPopup(false)}>OK</button>
+            <div className={`popup ${popup.type}`}>
+              <div className="popup-icon">
+                {popup.type === "success" ? "✓" : "⚠"}
+              </div>
+
+              <h3>{popup.type === "success" ? "Success" : "Please fix the following"}</h3>
+
+              {Array.isArray(popup.message) ? (
+                <ul>
+                  {popup.message.map((err, i) => (
+                    <li key={i}>{err}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p>{popup.message}</p>
+              )}
+
+              <button onClick={() => setShowPopup(false)}>Continue</button>
             </div>
           </div>
         )}
       </div>
 
       <style>{`
-        .loan-application-namespace .page {
-          max-width: 1200px;
-          margin: 40px auto;
-          padding: 40px;
+        .loan-application-namespace { padding: 16px; }
+
+        .page {
+          max-width: 900px;
+          margin: auto;
+          padding: 20px;
           background: #000;
           color: #fff;
-          border-radius: 16px;
+          border-radius: 14px;
         }
 
-        .loan-application-namespace .grid {
+        .grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 16px;
+          grid-template-columns: 1fr;
+          gap: 14px;
         }
 
-        .loan-application-namespace input,
-        .loan-application-namespace select {
+        input, select {
           padding: 14px;
           border-radius: 10px;
           background: #0b0b0b;
-          border: 1px solid #111;
+          border: 1px solid #1a1a1a;
           color: #fff;
         }
 
-        .loan-application-namespace .consent-block {
-          margin-top: 28px;
-          padding: 16px;
-          border: 1px solid #111;
-          border-radius: 12px;
+        .consent-block {
+          margin-top: 20px;
+          padding: 14px;
           background: #0b0b0b;
+          border-radius: 12px;
+          border: 1px solid #1a1a1a;
         }
 
-        .loan-application-namespace button {
-          background: red;
-          border: none;
-          padding: 16px;
+        button {
           width: 100%;
-          border-radius: 10px;
-          color: #fff;
-          margin-top: 16px;
+          padding: 16px;
+          margin-top: 20px;
+          border-radius: 12px;
+          border: none;
+          background: red;
+          color: white;
+          font-weight: 600;
         }
 
-        @media (max-width: 900px) {
-          .loan-application-namespace .grid {
-            grid-template-columns: 1fr;
-          }
+        @media (min-width: 768px) {
+          .grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (min-width: 1024px) {
+          .grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,.75);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 9999;
+        }
+
+        .popup {
+          background: #0b0b0b;
+          padding: 24px;
+          border-radius: 16px;
+          width: 90%;
+          max-width: 420px;
+          text-align: center;
+          animation: pop .25s ease;
+        }
+
+        .popup.success { border: 1px solid #00c853; }
+        .popup.error { border: 1px solid #ff5252; }
+
+        .popup-icon { font-size: 32px; margin-bottom: 10px; }
+
+        @keyframes pop {
+          from { transform: scale(.9); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
         }
       `}</style>
     </>
