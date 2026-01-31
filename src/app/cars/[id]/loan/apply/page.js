@@ -209,7 +209,7 @@ export default function LoanApplicationForm() {
                   rel="noopener noreferrer"
                   className="whatsapp-btn"
                 >
-                  Chat on WhatsApp
+                  Chat us on WhatsApp to continue
                 </a>
               )}
 
