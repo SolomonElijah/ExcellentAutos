@@ -82,22 +82,21 @@ export default function LoanApplicationForm() {
       terms_accepted: form.terms_accepted,
     };
 
-    try {
-      const res = await api("/loan-applications", {
-        method: "POST",
-        body: JSON.stringify(payload),
-      });
+   try {
+  const data = await api("/loan-applications", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
 
-      const data = await res.json();
+  setPopup({
+    type: "success",
+    message: "Loan application submitted successfully",
+    whatsappUrl: data.redirect || null,
+  });
 
-      setPopup({
-        type: "success",
-        message: "Loan application submitted successfully",
-        whatsappUrl: data.redirect || null,
-      });
-
-      setShowPopup(true);
-    } catch (err) {
+  setShowPopup(true);
+}
+ catch (err) {
       console.error(err);
       setPopup({
         type: "error",
