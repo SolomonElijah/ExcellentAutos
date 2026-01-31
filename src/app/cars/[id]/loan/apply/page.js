@@ -290,6 +290,7 @@ export default function LoanApplicationForm() {
           width: 90%;
           max-width: 420px;
           text-align: center;
+          color: #fff;
         }
 
         .popup.success { border: 1px solid #00c853; }
