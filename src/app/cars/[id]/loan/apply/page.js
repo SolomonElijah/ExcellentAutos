@@ -74,10 +74,7 @@ export default function LoanApplicationForm() {
       phone: form.phone,
       whatsapp_number: form.whatsapp,
       address: form.address,
-      employment_type:
-        form.employment_type === "business"
-          ? "business_owner"
-          : form.employment_type,
+      employment_type: form.employment_type,
       gender: form.gender,
       preferred_deposit: form.preferred_deposit,
       loan_term_months: Number(form.preferred_tenure),
@@ -126,12 +123,13 @@ export default function LoanApplicationForm() {
             <input placeholder="Phone number" onChange={(e) => update("phone", e.target.value)} />
             <input placeholder="WhatsApp number" onChange={(e) => update("whatsapp", e.target.value)} />
 
-            <select onChange={(e) => update("employment_type", e.target.value)}>
-              <option value="">Employment type</option>
-              <option value="salary">Salary earner</option>
-              <option value="business">Business owner</option>
-              <option value="self_employed">Self employed</option>
-            </select>
+           <select onChange={(e) => update("employment_type", e.target.value)}>
+  <option value="">Employment type</option>
+  <option value="salary">Salary earner</option>
+  <option value="business">Business owner</option>
+  <option value="self_employed">Self employed</option>
+</select>
+
 
             <select onChange={(e) => update("gender", e.target.value)}>
               <option value="">Gender</option>
