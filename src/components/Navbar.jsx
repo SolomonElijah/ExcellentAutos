@@ -53,7 +53,7 @@ export default function Navbar() {
           {/* DESKTOP MENU */}
           <nav className="nav-menu">
             <Link href="/" className="nav-active">Home</Link>
-            <Link href="/cars">Pick your Car</Link>
+            <Link href="/cars">Buy Car</Link>
             <Link href="/sell">Sell & Swap</Link>
             <Link href="/car-loan">Car Loan</Link>
             <Link href="/Preorder">Preorder</Link>
