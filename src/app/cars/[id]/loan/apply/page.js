@@ -13,6 +13,7 @@ export default function LoanApplicationForm() {
   const [popup, setPopup] = useState({
     type: "error", // error | success
     message: "",
+    whatsappUrl: null,
   });
 
   const [form, setForm] = useState({
@@ -37,9 +38,6 @@ export default function LoanApplicationForm() {
   async function submit(e) {
     e.preventDefault();
 
-    /* =========================
-       CLIENT-SIDE VALIDATION
-    ========================= */
     const errors = [];
 
     if (!form.first_name) errors.push("First name is required");
@@ -61,14 +59,11 @@ export default function LoanApplicationForm() {
     if (!form.terms_accepted) errors.push("Terms must be accepted");
 
     if (errors.length) {
-      setPopup({ type: "error", message: errors });
+      setPopup({ type: "error", message: errors, whatsappUrl: null });
       setShowPopup(true);
       return;
     }
 
-    /* =========================
-       SUBMIT PAYLOAD
-    ========================= */
     setLoading(true);
 
     const payload = {
@@ -91,21 +86,26 @@ export default function LoanApplicationForm() {
     };
 
     try {
-      await api("/loan-applications", {
+      const res = await api("/loan-applications", {
         method: "POST",
         body: JSON.stringify(payload),
       });
 
+      const data = await res.json();
+
       setPopup({
         type: "success",
         message: "Loan application submitted successfully",
+        whatsappUrl: data.redirect || null,
       });
+
       setShowPopup(true);
     } catch (err) {
       console.error(err);
       setPopup({
         type: "error",
         message: "Failed to submit application. Please try again.",
+        whatsappUrl: null,
       });
       setShowPopup(true);
     } finally {
@@ -193,7 +193,7 @@ export default function LoanApplicationForm() {
                 {popup.type === "success" ? "✓" : "⚠"}
               </div>
 
-              <h3>{popup.type === "success" ? "Success" : "Please fix the following"}</h3>
+              <h3>{popup.type === "success" ? "Application Submitted" : "Please fix the following"}</h3>
 
               {Array.isArray(popup.message) ? (
                 <ul>
@@ -205,14 +205,30 @@ export default function LoanApplicationForm() {
                 <p>{popup.message}</p>
               )}
 
-              <button onClick={() => setShowPopup(false)}>Continue</button>
+              {popup.type === "success" && popup.whatsappUrl && (
+                <a
+                  href={popup.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="whatsapp-btn"
+                >
+                  Chat on WhatsApp
+                </a>
+              )}
+
+              <button onClick={() => setShowPopup(false)}>Close</button>
             </div>
           </div>
         )}
       </div>
 
       <style>{`
-        .loan-application-namespace { padding: 16px; }
+        .loan-application-namespace {
+          padding: 16px;
+          padding-top: 96px; /* FIX header overlap */
+          min-height: 100dvh;
+          scroll-margin-top: 96px;
+        }
 
         .page {
           max-width: 900px;
@@ -235,6 +251,7 @@ export default function LoanApplicationForm() {
           background: #0b0b0b;
           border: 1px solid #1a1a1a;
           color: #fff;
+          font-size: 16px; /* FIX iOS zoom + shifting */
         }
 
         .consent-block {
@@ -256,14 +273,6 @@ export default function LoanApplicationForm() {
           font-weight: 600;
         }
 
-        @media (min-width: 768px) {
-          .grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        @media (min-width: 1024px) {
-          .grid { grid-template-columns: repeat(3, 1fr); }
-        }
-
         .overlay {
           position: fixed;
           inset: 0;
@@ -281,17 +290,33 @@ export default function LoanApplicationForm() {
           width: 90%;
           max-width: 420px;
           text-align: center;
-          animation: pop .25s ease;
         }
 
         .popup.success { border: 1px solid #00c853; }
         .popup.error { border: 1px solid #ff5252; }
 
-        .popup-icon { font-size: 32px; margin-bottom: 10px; }
+        .popup-icon {
+          font-size: 32px;
+          margin-bottom: 10px;
+        }
 
-        @keyframes pop {
-          from { transform: scale(.9); opacity: 0; }
-          to { transform: scale(1); opacity: 1; }
+        .whatsapp-btn {
+          display: block;
+          margin-top: 16px;
+          padding: 14px;
+          border-radius: 12px;
+          background: #25D366;
+          color: #000;
+          font-weight: 700;
+          text-decoration: none;
+        }
+
+        @media (min-width: 768px) {
+          .grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (min-width: 1024px) {
+          .grid { grid-template-columns: repeat(3, 1fr); }
         }
       `}</style>
     </>
