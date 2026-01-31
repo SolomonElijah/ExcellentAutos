@@ -53,7 +53,7 @@ export default function Navbar() {
           {/* DESKTOP MENU */}
           <nav className="nav-menu">
             <Link href="/" className="nav-active">Home</Link>
-            <Link href="/cars">Cars</Link>
+            <Link href="/cars">Pick your Car</Link>
             <Link href="/sell">Sell & Swap</Link>
             <Link href="/car-loan">Car Loan</Link>
             <Link href="/Preorder">Preorder</Link>
@@ -64,9 +64,32 @@ export default function Navbar() {
           {/* ACTIONS */}
           <div className="nav-actions">
             <div className="nav-social">
-              <img src="/insta.png" alt="Instagram" width={26} />
-              <img src="/tiktok.png" alt="TikTok" width={26} />
-              <img src="/fb.png" alt="Facebook" width={26} />
+              <a
+                href="https://www.instagram.com/excellent_jc_autos?igsh=MTgzdm5zZXd2OTkyOA=="
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+              >
+                <img src="/insta.png" alt="Instagram" width={26} />
+              </a>
+
+              <a
+                href="https://www.tiktok.com/@excellent_jc_autos?_r=1&_t=ZS-93GlXI9njux"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TikTok"
+              >
+                <img src="/tiktok.png" alt="TikTok" width={26} />
+              </a>
+
+              <a
+                href="https://www.facebook.com/share/1KnY1KSKRQ/?mibextid=wwXIfr"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+              >
+                <img src="/fb.png" alt="Facebook" width={26} />
+              </a>
             </div>
 
             <button className="nav-toggle" onClick={() => setOpen(!open)}>

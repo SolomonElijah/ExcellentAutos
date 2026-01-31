@@ -85,18 +85,40 @@ export default function Footer() {
           {/* SOCIAL */}
           <div className="footer-social">
             <h4 className="footer-title">Follow Us</h4>
+
             <div className="social-icons">
-              <a href="#" className="social-btn">
+              <a
+                href="https://www.instagram.com/excellent_jc_autos?igsh=MTgzdm5zZXd2OTkyOA=="
+                className="social-btn"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+              >
                 <img src="/insta.png" alt="Instagram" width={18} />
               </a>
-              <a href="#" className="social-btn">
+
+              <a
+                href="https://www.tiktok.com/@excellent_jc_autos?_r=1&_t=ZS-93GlXI9njux"
+                className="social-btn"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TikTok"
+              >
                 <img src="/tiktok.png" alt="TikTok" width={18} />
               </a>
-              <a href="#" className="social-btn">
+
+              <a
+                href="https://www.facebook.com/share/1KnY1KSKRQ/?mibextid=wwXIfr"
+                className="social-btn"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+              >
                 <img src="/fb.png" alt="Facebook" width={18} />
               </a>
             </div>
           </div>
+
         </div>
       </div>
 

@@ -60,7 +60,7 @@ export default function SellContact({ car, onClose }) {
     typeof window !== "undefined" ? window.location.origin : "";
 
   // WhatsApp message (UNCHANGED)
-  const message = `Hi Excellent Autos Nigeria,
+  const message = `Hi Excellent J&C Autos,
 I am interested in this car:
 
 ${car.brand.name} ${car.model} (${car.year})
@@ -85,7 +85,7 @@ View car: ${siteOrigin}/cars/${car.id}`;
 
         {/* HEADER */}
         <h3 className="title">Contact</h3>
-        <p className="company">Excellent Autos Nigeria</p>
+        <p className="company">Excellent J&C Autos</p>
 
         {/* CAR IMAGE */}
         <img

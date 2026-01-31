@@ -38,26 +38,26 @@ export default function SellSwapForm() {
 
   function handleImageUpload(position, file) {
     if (!file) return;
-    
+
     const errors = [];
-    
+
     if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
       errors.push(`${file.name} is not a supported image`);
     }
     if (file.size > 2 * 1024 * 1024) {
       errors.push(`${file.name} exceeds 2MB limit`);
     }
-    
+
     if (errors.length > 0) {
       setPopupMessage(errors.join("\n"));
       setShowPopup(true);
       return;
     }
-    
+
     const newImages = [...images];
     newImages[position] = file;
     setImages(newImages);
-    
+
     const reader = new FileReader();
     reader.onloadend = () => {
       const newPreviews = [...imagePreviews];
@@ -70,10 +70,10 @@ export default function SellSwapForm() {
   function removeImage(position) {
     const newImages = [...images];
     const newPreviews = [...imagePreviews];
-    
+
     newImages[position] = null;
     newPreviews[position] = null;
-    
+
     setImages(newImages);
     setImagePreviews(newPreviews);
   }
@@ -81,7 +81,7 @@ export default function SellSwapForm() {
   function handleDrop(position, e) {
     e.preventDefault();
     e.stopPropagation();
-    
+
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       handleImageUpload(position, e.dataTransfer.files[0]);
     }
@@ -179,7 +179,7 @@ export default function SellSwapForm() {
       console.error("Submit error:", err);
       setPopupMessage(
         err?.message ||
-          "An unexpected server error occurred. Please try again later."
+        "An unexpected server error occurred. Please try again later."
       );
       setShowPopup(true);
     } finally {
@@ -217,10 +217,10 @@ export default function SellSwapForm() {
         <div className="sell-swap-form__image-section">
           <h3 className="sell-swap-form__section-title">Upload Car Images (Minimum 3)</h3>
           <p className="sell-swap-form__section-subtitle">Front, Back, Interior views recommended. Max 2MB per image</p>
-          
+
           <div className="sell-swap-form__image-grid">
             {/* Box 1: Front View */}
-            <div 
+            <div
               className={`sell-swap-form__image-box ${imagePreviews[0] ? 'sell-swap-form__image-box--has-image' : ''}`}
               onDrop={(e) => handleDrop(0, e)}
               onDragOver={(e) => e.preventDefault()}
@@ -232,12 +232,12 @@ export default function SellSwapForm() {
                 onChange={(e) => handleImageUpload(0, e.target.files[0])}
                 className="sell-swap-form__file-input"
               />
-              
+
               {imagePreviews[0] ? (
                 <div className="sell-swap-form__preview">
                   <img src={imagePreviews[0]} alt="Car view 1" />
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     className="sell-swap-form__remove-btn"
                     onClick={() => removeImage(0)}
                   >
@@ -255,7 +255,7 @@ export default function SellSwapForm() {
             </div>
 
             {/* Box 2: Back View */}
-            <div 
+            <div
               className={`sell-swap-form__image-box ${imagePreviews[1] ? 'sell-swap-form__image-box--has-image' : ''}`}
               onDrop={(e) => handleDrop(1, e)}
               onDragOver={(e) => e.preventDefault()}
@@ -267,12 +267,12 @@ export default function SellSwapForm() {
                 onChange={(e) => handleImageUpload(1, e.target.files[0])}
                 className="sell-swap-form__file-input"
               />
-              
+
               {imagePreviews[1] ? (
                 <div className="sell-swap-form__preview">
                   <img src={imagePreviews[1]} alt="Car view 2" />
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     className="sell-swap-form__remove-btn"
                     onClick={() => removeImage(1)}
                   >
@@ -290,7 +290,7 @@ export default function SellSwapForm() {
             </div>
 
             {/* Box 3: Interior View */}
-            <div 
+            <div
               className={`sell-swap-form__image-box ${imagePreviews[2] ? 'sell-swap-form__image-box--has-image' : ''}`}
               onDrop={(e) => handleDrop(2, e)}
               onDragOver={(e) => e.preventDefault()}
@@ -302,12 +302,12 @@ export default function SellSwapForm() {
                 onChange={(e) => handleImageUpload(2, e.target.files[0])}
                 className="sell-swap-form__file-input"
               />
-              
+
               {imagePreviews[2] ? (
                 <div className="sell-swap-form__preview">
                   <img src={imagePreviews[2]} alt="Car view 3" />
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     className="sell-swap-form__remove-btn"
                     onClick={() => removeImage(2)}
                   >
@@ -325,7 +325,7 @@ export default function SellSwapForm() {
             </div>
 
             {/* Box 4: Optional */}
-            <div 
+            <div
               className={`sell-swap-form__image-box ${imagePreviews[3] ? 'sell-swap-form__image-box--has-image' : ''}`}
               onDrop={(e) => handleDrop(3, e)}
               onDragOver={(e) => e.preventDefault()}
@@ -337,12 +337,12 @@ export default function SellSwapForm() {
                 onChange={(e) => handleImageUpload(3, e.target.files[0])}
                 className="sell-swap-form__file-input"
               />
-              
+
               {imagePreviews[3] ? (
                 <div className="sell-swap-form__preview">
                   <img src={imagePreviews[3]} alt="Car view 4" />
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     className="sell-swap-form__remove-btn"
                     onClick={() => removeImage(3)}
                   >
@@ -360,7 +360,7 @@ export default function SellSwapForm() {
             </div>
 
             {/* Box 5: Optional */}
-            <div 
+            <div
               className={`sell-swap-form__image-box ${imagePreviews[4] ? 'sell-swap-form__image-box--has-image' : ''}`}
               onDrop={(e) => handleDrop(4, e)}
               onDragOver={(e) => e.preventDefault()}
@@ -372,12 +372,12 @@ export default function SellSwapForm() {
                 onChange={(e) => handleImageUpload(4, e.target.files[0])}
                 className="sell-swap-form__file-input"
               />
-              
+
               {imagePreviews[4] ? (
                 <div className="sell-swap-form__preview">
                   <img src={imagePreviews[4]} alt="Car view 5" />
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     className="sell-swap-form__remove-btn"
                     onClick={() => removeImage(4)}
                   >
@@ -394,7 +394,7 @@ export default function SellSwapForm() {
               )}
             </div>
           </div>
-          
+
           <div className="sell-swap-form__image-status">
             Uploaded: {images.filter(img => img !== null).length}/5 images
             {images.filter(img => img !== null).length < 3 && (
@@ -410,7 +410,10 @@ export default function SellSwapForm() {
         )}
 
         <div className="sell-swap-form__grid">
-          <input type="date" value={form.inspection_date} onChange={(e) => update("inspection_date", e.target.value)} />
+          <div className="field">
+            <label>inspection Date</label>
+            <input type="date" value={form.inspection_date} onChange={(e) => update("inspection_date", e.target.value)} />
+          </div>
           <input value={form.inspection_address} placeholder="Inspection address" onChange={(e) => update("inspection_address", e.target.value)} />
         </div>
 
@@ -720,6 +723,34 @@ export default function SellSwapForm() {
             grid-template-columns: 1fr;
           }
         }
+
+
+         .field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #ccc;
+}
+.field input,
+.field select {
+  font-size: 14px;
+  padding: 14px;
+  border-radius: 10px;
+  background: #0b0b0b;
+  border: 1px solid #111;
+  color: #fff;
+}
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: red;
+  box-shadow: 0 0 0 1px rgba(255, 0, 0, 0.4);
+}    
       `}</style>
     </div>
   );

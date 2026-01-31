@@ -130,6 +130,15 @@ a {
   }
 }
 
+.nav-social a {
+  display: inline-flex;
+  align-items: center;
+}
+
+.nav-social a:hover img {
+  opacity: 0.8;
+}
+
 /* MOBILE MENU */
 .nav-mobile-menu {
   position: fixed;

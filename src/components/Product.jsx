@@ -29,7 +29,7 @@ export default function Product() {
 
   const searchParams = useSearchParams();
 
-  
+
 
   useEffect(() => {
     const params = Object.fromEntries(searchParams.entries());
@@ -146,7 +146,27 @@ export default function Product() {
               </div>
             ))}
 
-          {!isLoading &&
+          {/* ADDED: No results message */}
+          {!isLoading && cars.length === 0 && (
+            <div className="no-results">
+              <h3>No cars found</h3>
+              <p>Try adjusting your filters or search term</p>
+              <button
+                className="clear-btn"
+                onClick={() => {
+                  setSearch("");
+                  setFilters({});
+                  setPage(1);
+                  router.replace(window.location.pathname);
+                }}
+              >
+                Clear all filters
+              </button>
+            </div>
+          )}
+
+          {/* MODIFIED: Added cars.length > 0 condition */}
+          {!isLoading && cars.length > 0 &&
             cars.map((car) => {
               const hasLoan = car.loan?.available === true;
 
@@ -251,49 +271,49 @@ export default function Product() {
             })}
         </div>
 
-       
 
-{meta && meta.last_page > 1 && (
-  <div className="pagination">
-    <button
-      disabled={meta.current_page === 1}
-      onClick={() => {
-        const newPage = meta.current_page - 1;
-        setPage(newPage);
-        // Update URL with page number
-        const params = new URLSearchParams(window.location.search);
-        if (newPage > 1) {
-          params.set("page", newPage.toString());
-        } else {
-          params.delete("page");
-        }
-        const newUrl = params.toString() ? `?${params.toString()}` : "";
-        router.replace(`${window.location.pathname}${newUrl}`, { scroll: false });
-      }}
-    >
-      Prev
-    </button>
 
-    <span>
-      Page {meta.current_page} of {meta.last_page}
-    </span>
+        {meta && meta.last_page > 1 && (
+          <div className="pagination">
+            <button
+              disabled={meta.current_page === 1}
+              onClick={() => {
+                const newPage = meta.current_page - 1;
+                setPage(newPage);
+                // Update URL with page number
+                const params = new URLSearchParams(window.location.search);
+                if (newPage > 1) {
+                  params.set("page", newPage.toString());
+                } else {
+                  params.delete("page");
+                }
+                const newUrl = params.toString() ? `?${params.toString()}` : "";
+                router.replace(`${window.location.pathname}${newUrl}`, { scroll: false });
+              }}
+            >
+              Prev
+            </button>
 
-    <button
-      disabled={meta.current_page === meta.last_page}
-      onClick={() => {
-        const newPage = meta.current_page + 1;
-        setPage(newPage);
-        // Update URL with page number
-        const params = new URLSearchParams(window.location.search);
-        params.set("page", newPage.toString());
-        const newUrl = params.toString() ? `?${params.toString()}` : "";
-        router.replace(`${window.location.pathname}${newUrl}`, { scroll: false });
-      }}
-    >
-      Next
-    </button>
-  </div>
-)}
+            <span>
+              Page {meta.current_page} of {meta.last_page}
+            </span>
+
+            <button
+              disabled={meta.current_page === meta.last_page}
+              onClick={() => {
+                const newPage = meta.current_page + 1;
+                setPage(newPage);
+                // Update URL with page number
+                const params = new URLSearchParams(window.location.search);
+                params.set("page", newPage.toString());
+                const newUrl = params.toString() ? `?${params.toString()}` : "";
+                router.replace(`${window.location.pathname}${newUrl}`, { scroll: false });
+              }}
+            >
+              Next
+            </button>
+          </div>
+        )}
       </section>
 
       {showContact && (
@@ -514,6 +534,39 @@ export default function Product() {
           padding: 4px 8px;
           font-size: 11px;
           border-radius: 10px;
+        }
+
+        /* NEW: No results styles */
+        .no-results {
+          grid-column: 1 / -1;
+          text-align: center;
+          padding: 60px 20px;
+          background: #0b0b0b;
+          border-radius: 16px;
+          border: 1px solid #222;
+        }
+
+        .no-results h3 {
+          font-size: 20px;
+          margin-bottom: 10px;
+        }
+
+        .no-results p {
+          color: #888;
+          margin-bottom: 20px;
+        }
+
+        .clear-btn {
+          background: #111;
+          border: 1px solid #333;
+          color: #fff;
+          padding: 10px 20px;
+          border-radius: 8px;
+          cursor: pointer;
+        }
+
+        .clear-btn:hover {
+          background: #222;
         }
       `}</style>
     </>
