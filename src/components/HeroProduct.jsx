@@ -131,6 +131,15 @@ export default function HeroProduct() {
                     Apply For Loan
                   </button>
                 )}
+
+              <button
+  className="solid"
+  onClick={() => router.push(`/preorder/${car.id}`)}
+>
+  Pre-Order This Car at 5% discount
+</button>
+
+
               </div>
             </div>
           </div>
