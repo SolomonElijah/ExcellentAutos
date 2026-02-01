@@ -155,9 +155,9 @@ export default function PreOrderForm() {
   return (
     <div className="preorder-form-namespace">
       <form className="preorder-form" onSubmit={submit} autoComplete="off">
-        <h2 className="preorder-form__title">Car Pre-Order Form</h2>
+        <h2 className="title">Car Pre-Order Form</h2>
 
-        <div className="preorder-form__grid">
+        <div className="grid">
           <Field label="First Name">
             <input className="input" {...noAutoFill} onChange={(e) => update("first_name", e.target.value)} />
           </Field>
@@ -242,6 +242,116 @@ export default function PreOrderForm() {
           </div>
         </div>
       )}
+
+      <style jsx>{`
+        .preorder-form {
+          max-width: 1100px;
+          margin: 40px auto;
+          padding: 40px;
+          background: #000;
+          color: #fff;
+          border-radius: 16px;
+          border: 1px solid #111;
+        }
+
+        .title {
+          margin-bottom: 24px;
+        }
+
+        .grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 18px;
+        }
+
+        .field {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+
+        .field__label {
+          font-size: 13px;
+          color: #aaa;
+        }
+
+        .locked-badge {
+          margin-left: 6px;
+          font-size: 11px;
+          color: #facc15;
+        }
+
+        .input,
+        .textarea {
+          padding: 14px;
+          border-radius: 10px;
+          border: 1px solid #111;
+          background: #0b0b0b;
+          color: #fff;
+          font-size: 16px;
+        }
+
+        .locked {
+          background: #111;
+          color: #bbb;
+        }
+
+        .textarea {
+          min-height: 100px;
+        }
+
+        .submit-btn {
+          margin-top: 22px;
+          background: red;
+          padding: 16px;
+          width: 100%;
+          border-radius: 10px;
+          font-weight: 600;
+          color: #fff;
+        }
+
+        .overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,.75);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .popup {
+          background: #0b0b0b;
+          padding: 30px;
+          border-radius: 16px;
+          width: 90%;
+          max-width: 400px;
+        }
+
+        .whatsapp-btn {
+          background: #25d366;
+          padding: 16px;
+          width: 100%;
+          border-radius: 10px;
+          margin-top: 12px;
+          color: #fff;
+          font-weight: 600;
+        }
+
+        .close-btn {
+          background: #333;
+          padding: 16px;
+          width: 100%;
+          border-radius: 10px;
+          margin-top: 10px;
+          color: #fff;
+        }
+
+        @media (max-width: 900px) {
+          .grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
     </div>
   );
 }
