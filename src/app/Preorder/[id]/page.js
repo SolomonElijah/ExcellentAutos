@@ -119,9 +119,9 @@ export default function PreOrderForm() {
       });
 
       setPopupMessage("Pre-order submitted successfully");
-      setWhatsappUrl(res?.redirect || null); // ✅ from backend
+      setWhatsappUrl(res?.redirect || null);
       setShowPopup(true);
-    } catch (err) {
+    } catch {
       setPopupMessage("Failed to submit pre-order.");
       setShowPopup(true);
     } finally {
@@ -129,8 +129,7 @@ export default function PreOrderForm() {
     }
   }
 
-  /* ================= FIELD WRAPPER ================= */
-  const Field = ({ label, locked, children }) => (
+  const Field = ({ label, children, locked }) => (
     <div className="field">
       <label className="field__label">
         {label}
@@ -142,10 +141,10 @@ export default function PreOrderForm() {
 
   return (
     <div className="preorder-form-namespace">
-      <form className="preorder-form" onSubmit={submit} autoComplete="off">
-        <h2 className="title">Car Pre-Order Form</h2>
+      <form className="preorder-form" onSubmit={submit}>
+        <h2>Car Pre-Order Form</h2>
 
-        <div className="grid">
+        <div className="preorder-form__grid">
           <Field label="First Name">
             <input className="input" onChange={(e) => update("first_name", e.target.value)} />
           </Field>
@@ -213,28 +212,6 @@ export default function PreOrderForm() {
         </button>
       </form>
 
-      {/* ===== SUCCESS POPUP ===== */}
-      {showPopup && (
-        <div className="overlay">
-          <div className="popup">
-            <pre>{popupMessage}</pre>
-
-            {whatsappUrl && (
-              <button
-                className="whatsapp-btn"
-                onClick={() => window.open(whatsappUrl, "_blank")}
-              >
-                Chat Admin on WhatsApp to continue
-              </button>
-            )}
-
-            <button className="close-btn" onClick={() => router.push("/")}>
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-
       <style jsx>{`
         .preorder-form {
           max-width: 1100px;
@@ -246,11 +223,7 @@ export default function PreOrderForm() {
           border: 1px solid #111;
         }
 
-        .title {
-          margin-bottom: 24px;
-        }
-
-        .grid {
+        .preorder-form__grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           gap: 18px;
@@ -288,58 +261,18 @@ export default function PreOrderForm() {
           color: #bbb;
         }
 
-        .textarea {
-          min-height: 100px;
-        }
-
         .submit-btn {
           margin-top: 22px;
           background: red;
           padding: 16px;
           width: 100%;
           border-radius: 10px;
-          font-weight: 600;
-          color: #fff;
-        }
-
-        .overlay {
-          position: fixed;
-          inset: 0;
-          background: rgba(0,0,0,.75);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .popup {
-          background: #0b0b0b;
-          padding: 30px;
-          border-radius: 16px;
-          width: 90%;
-          max-width: 400px;
-        }
-
-        .whatsapp-btn {
-          background: #25d366;
-          padding: 16px;
-          width: 100%;
-          border-radius: 10px;
-          margin-top: 12px;
           color: #fff;
           font-weight: 600;
-        }
-
-        .close-btn {
-          background: #333;
-          padding: 16px;
-          width: 100%;
-          border-radius: 10px;
-          margin-top: 10px;
-          color: #fff;
         }
 
         @media (max-width: 900px) {
-          .grid {
+          .preorder-form__grid {
             grid-template-columns: 1fr;
           }
         }
