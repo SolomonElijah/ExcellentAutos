@@ -218,75 +218,98 @@ export default function PreOrderForm() {
       </form>
 
       <style jsx>{`
-        .preorder-form {
-          max-width: 1100px;
-          margin: 40px auto;
-          padding: 40px;
-          background: #000;
-          color: #fff;
-          border-radius: 16px;
-          border: 1px solid #111;
-        }
+  .preorder-form {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 40px;
+    background: #000;
+    color: #fff;
+    border-radius: 16px;
+    border: 1px solid #111;
+  }
 
-        .preorder-form__grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 16px;
-        }
+  .preorder-form__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
 
-        .field {
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-        }
+  /* ===== FIELD (LABEL ON TOP) ===== */
+  .field {
+    display: flex;
+    flex-direction: column;   /* label above input */
+    gap: 6px;
+  }
 
-        .field__label {
-          font-size: 13px;
-          color: #aaa;
-        }
+  .field__label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #aaa;
+    line-height: 1.2;
+  }
 
-        .locked-badge {
-          margin-left: 6px;
-          font-size: 11px;
-          color: #facc15;
-        }
+  .locked-badge {
+    margin-left: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #facc15;
+  }
 
-        .input,
-        .textarea {
-          padding: 14px;
-          border-radius: 10px;
-          border: 1px solid #111;
-          background: #0b0b0b;
-          color: #fff;
-          font-size: 16px;
-        }
+  /* ===== INPUTS ===== */
+  .input,
+  .textarea {
+    padding: 14px;
+    border-radius: 10px;
+    border: 1px solid #111;
+    background: #0b0b0b;
+    color: #fff;
+    width: 100%;
+    font-size: 16px;      /* prevents mobile zoom */
+    line-height: 1.4;
+  }
 
-        .locked {
-          background: #111;
-          color: #bbb;
-          cursor: not-allowed;
-        }
+  .input:focus,
+  .textarea:focus {
+    outline: none;
+    border-color: red;
+  }
 
-        .textarea {
-          min-height: 100px;
-        }
+  .locked {
+    background: #111;
+    color: #bbb;
+    cursor: not-allowed;
+  }
 
-        .submit-btn {
-          margin-top: 20px;
-          background: red;
-          padding: 16px;
-          width: 100%;
-          border-radius: 10px;
-          font-weight: 600;
-          color: #fff;
-        }
+  .textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
 
-        @media (max-width: 900px) {
-          .preorder-form__grid {
-            grid-template-columns: 1fr;
-          }
-        }
-      `}</style>
+  /* ===== SUBMIT BUTTON ===== */
+  .submit-btn {
+    margin-top: 22px;
+    background: red;
+    padding: 16px;
+    width: 100%;
+    border-radius: 10px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* ===== MOBILE ===== */
+  @media (max-width: 900px) {
+    .preorder-form__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+`}</style>
+
     </div>
   );
 }
