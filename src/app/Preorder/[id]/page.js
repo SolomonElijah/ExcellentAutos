@@ -150,7 +150,7 @@ export default function PreOrderForm() {
             <input
               className="input"
               name="first_name_field"
-              autoComplete="new-first-name"
+              autoComplete="off"
               value={form.first_name}
               onChange={(e) => update("first_name", e.target.value)}
             />
@@ -160,7 +160,7 @@ export default function PreOrderForm() {
             <input
               className="input"
               name="last_name_field"
-              autoComplete="new-last-name"
+              autoComplete="off"
               value={form.last_name}
               onChange={(e) => update("last_name", e.target.value)}
             />
@@ -171,7 +171,7 @@ export default function PreOrderForm() {
               className="input"
               type="email"
               name="email_field"
-              autoComplete="new-email"
+              autoComplete="off"
               value={form.email}
               onChange={(e) => update("email", e.target.value)}
             />
@@ -182,33 +182,33 @@ export default function PreOrderForm() {
               className="input"
               type="tel"
               name="phone_field"
-              autoComplete="new-phone"
+              autoComplete="off"
               value={form.phone}
               onChange={(e) => update("phone", e.target.value)}
             />
           </Field>
 
-          <Field label="Brand" locked>
+          <Field label="Brand" >
             <input className="input locked" readOnly value={form.brand} />
           </Field>
 
-          <Field label="Model" locked>
+          <Field label="Model" >
             <input className="input locked" readOnly value={form.model} />
           </Field>
 
-          <Field label="Year" locked>
+          <Field label="Year" >
             <input className="input locked" readOnly value={form.year} />
           </Field>
 
-          <Field label="Trim" locked>
+          <Field label="Trim" >
             <input className="input locked" readOnly value={form.trim} />
           </Field>
 
-          <Field label="Fuel Type" locked>
+          <Field label="Fuel Type" >
             <input className="input locked" readOnly value={form.fuel_type} />
           </Field>
 
-          <Field label="Transmission" locked>
+          <Field label="Transmission" >
             <input className="input locked" readOnly value={form.transmission} />
           </Field>
 
