@@ -24,9 +24,9 @@ export const metadata = {
   metadataBase: new URL("https://excellentautosnigeria.com"),
 
   icons: {
-    icon: "/logo.png",
-    shortcut: "/logo.png",
-    apple: "/logo.png",
+    icon: "/carbg.png",
+    shortcut: "/carbg.png",
+    apple: "/carbg.png",
   },
 
   openGraph: {
