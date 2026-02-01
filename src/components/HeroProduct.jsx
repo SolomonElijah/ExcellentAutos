@@ -325,9 +325,10 @@ export default function HeroProduct() {
         }
 
         .preorder-cta {
-  margin-top: 12px;
+  margin-top: 16px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;   /* ✅ center horizontally */
+  align-items: center;
 }
 
 .preorder-btn {
@@ -335,11 +336,11 @@ export default function HeroProduct() {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 22px;
+  padding: 14px 24px;
   background: linear-gradient(135deg, #e11d48, #b91c1c);
   color: #fff;
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -352,23 +353,13 @@ export default function HeroProduct() {
   box-shadow: 0 12px 32px rgba(225, 29, 72, 0.45);
 }
 
-.preorder-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 6px 18px rgba(225, 29, 72, 0.35);
-}
-
-.preorder-btn__main {
-  white-space: nowrap;
-}
-
 .preorder-btn__badge {
   background: #fff;
   color: #b91c1c;
-  padding: 4px 8px;
+  padding: 4px 10px;
   border-radius: 999px;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.3px;
 }
 
       `}</style>
