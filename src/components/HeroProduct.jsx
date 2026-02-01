@@ -136,13 +136,17 @@ export default function HeroProduct() {
 
 
               </div>
-              
-                                   <button
-  className="solid"
-  onClick={() => router.push(`/preorder/${car.id}`)}
->
-  Pre-Order This Car at 5% discount
-</button>
+              <div className="preorder-cta">
+  <button
+    className="preorder-btn"
+    onClick={() => router.push(`/preorder/${car.id}`)}
+  >
+    <span className="preorder-btn__main">Pre-Order This Car</span>
+    <span className="preorder-btn__badge">5% OFF</span>
+  </button>
+</div>
+
+
             </div>
           </div>
         );
@@ -319,6 +323,54 @@ export default function HeroProduct() {
           font-size: 11px;
           border-radius: 10px;
         }
+
+        .preorder-cta {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.preorder-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 22px;
+  background: linear-gradient(135deg, #e11d48, #b91c1c);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 8px 24px rgba(225, 29, 72, 0.35);
+}
+
+.preorder-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 32px rgba(225, 29, 72, 0.45);
+}
+
+.preorder-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 18px rgba(225, 29, 72, 0.35);
+}
+
+.preorder-btn__main {
+  white-space: nowrap;
+}
+
+.preorder-btn__badge {
+  background: #fff;
+  color: #b91c1c;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
       `}</style>
     </>
   );
