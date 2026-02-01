@@ -142,7 +142,7 @@ export default function HeroProduct() {
     onClick={() => router.push(`/preorder/${car.id}`)}
   >
     <span className="preorder-btn__main">Pre-Order This Car</span>
-    <span className="preorder-btn__badge">5% OFF</span>
+    <span className="preorder-btn__badge">10% OFF</span>
   </button>
 </div>
 
