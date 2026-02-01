@@ -119,7 +119,7 @@ export default function PreOrderForm() {
       });
 
       setPopupMessage("Pre-order submitted successfully");
-      setWhatsappUrl(res?.redirect || null);
+      setWhatsappUrl(res?.redirect || null); // ✅ from backend
       setShowPopup(true);
     } catch (err) {
       setPopupMessage("Failed to submit pre-order.");
@@ -129,7 +129,8 @@ export default function PreOrderForm() {
     }
   }
 
-  const Field = ({ label, children, locked }) => (
+  /* ================= FIELD WRAPPER ================= */
+  const Field = ({ label, locked, children }) => (
     <div className="field">
       <label className="field__label">
         {label}
@@ -139,63 +140,26 @@ export default function PreOrderForm() {
     </div>
   );
 
-  const commonInputProps = {
-    autoComplete: "new-password",
-    autoCorrect: "off",
-    autoCapitalize: "none",
-    spellCheck: false,
-  };
-
   return (
     <div className="preorder-form-namespace">
-      <form
-        className="preorder-form"
-        onSubmit={submit}
-        autoComplete="off"
-      >
-        <h2 className="preorder-form__title">Car Pre-Order Form</h2>
+      <form className="preorder-form" onSubmit={submit} autoComplete="off">
+        <h2 className="title">Car Pre-Order Form</h2>
 
-        <div className="preorder-form__grid">
+        <div className="grid">
           <Field label="First Name">
-            <input
-              className="input"
-              inputMode="text"
-              {...commonInputProps}
-              value={form.first_name}
-              onChange={(e) => update("first_name", e.target.value)}
-            />
+            <input className="input" onChange={(e) => update("first_name", e.target.value)} />
           </Field>
 
           <Field label="Last Name">
-            <input
-              className="input"
-              inputMode="text"
-              {...commonInputProps}
-              value={form.last_name}
-              onChange={(e) => update("last_name", e.target.value)}
-            />
+            <input className="input" onChange={(e) => update("last_name", e.target.value)} />
           </Field>
 
           <Field label="Email">
-            <input
-              className="input"
-              type="email"
-              inputMode="email"
-              {...commonInputProps}
-              value={form.email}
-              onChange={(e) => update("email", e.target.value)}
-            />
+            <input type="email" className="input" onChange={(e) => update("email", e.target.value)} />
           </Field>
 
           <Field label="Phone Number">
-            <input
-              className="input"
-              type="tel"
-              inputMode="tel"
-              {...commonInputProps}
-              value={form.phone}
-              onChange={(e) => update("phone", e.target.value)}
-            />
+            <input type="tel" className="input" onChange={(e) => update("phone", e.target.value)} />
           </Field>
 
           <Field label="Brand" locked>
@@ -223,60 +187,53 @@ export default function PreOrderForm() {
           </Field>
 
           <Field label="Minimum Budget (₦)">
-            <input
-              className="input"
-              inputMode="numeric"
-              {...commonInputProps}
-              value={form.budget_min}
-              onChange={(e) => update("budget_min", e.target.value)}
-            />
+            <input className="input" onChange={(e) => update("budget_min", e.target.value)} />
           </Field>
 
           <Field label="Maximum Budget (₦)">
-            <input
-              className="input"
-              inputMode="numeric"
-              {...commonInputProps}
-              value={form.budget_max}
-              onChange={(e) => update("budget_max", e.target.value)}
-            />
+            <input className="input" onChange={(e) => update("budget_max", e.target.value)} />
           </Field>
 
           <Field label="Destination Country">
-            <input
-              className="input"
-              inputMode="text"
-              {...commonInputProps}
-              value={form.destination_country}
-              onChange={(e) => update("destination_country", e.target.value)}
-            />
+            <input className="input" onChange={(e) => update("destination_country", e.target.value)} />
           </Field>
 
           <Field label="Destination Port">
-            <input
-              className="input"
-              inputMode="text"
-              {...commonInputProps}
-              value={form.destination_port}
-              onChange={(e) => update("destination_port", e.target.value)}
-            />
+            <input className="input" onChange={(e) => update("destination_port", e.target.value)} />
           </Field>
         </div>
 
         <div className="field">
           <label className="field__label">Additional Notes</label>
-          <textarea
-            className="textarea"
-            {...commonInputProps}
-            value={form.additional_notes}
-            onChange={(e) => update("additional_notes", e.target.value)}
-          />
+          <textarea className="textarea" onChange={(e) => update("additional_notes", e.target.value)} />
         </div>
 
         <button className="submit-btn" disabled={loading}>
           {loading ? "Submitting..." : "Submit Pre-Order"}
         </button>
       </form>
+
+      {/* ===== SUCCESS POPUP ===== */}
+      {showPopup && (
+        <div className="overlay">
+          <div className="popup">
+            <pre>{popupMessage}</pre>
+
+            {whatsappUrl && (
+              <button
+                className="whatsapp-btn"
+                onClick={() => window.open(whatsappUrl, "_blank")}
+              >
+                Chat Admin on WhatsApp to continue
+              </button>
+            )}
+
+            <button className="close-btn" onClick={() => router.push("/")}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 
       <style jsx>{`
         .preorder-form {
@@ -289,7 +246,11 @@ export default function PreOrderForm() {
           border: 1px solid #111;
         }
 
-        .preorder-form__grid {
+        .title {
+          margin-bottom: 24px;
+        }
+
+        .grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           gap: 18px;
@@ -303,7 +264,6 @@ export default function PreOrderForm() {
 
         .field__label {
           font-size: 13px;
-          font-weight: 500;
           color: #aaa;
         }
 
@@ -326,7 +286,6 @@ export default function PreOrderForm() {
         .locked {
           background: #111;
           color: #bbb;
-          cursor: not-allowed;
         }
 
         .textarea {
@@ -343,8 +302,44 @@ export default function PreOrderForm() {
           color: #fff;
         }
 
+        .overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,.75);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .popup {
+          background: #0b0b0b;
+          padding: 30px;
+          border-radius: 16px;
+          width: 90%;
+          max-width: 400px;
+        }
+
+        .whatsapp-btn {
+          background: #25d366;
+          padding: 16px;
+          width: 100%;
+          border-radius: 10px;
+          margin-top: 12px;
+          color: #fff;
+          font-weight: 600;
+        }
+
+        .close-btn {
+          background: #333;
+          padding: 16px;
+          width: 100%;
+          border-radius: 10px;
+          margin-top: 10px;
+          color: #fff;
+        }
+
         @media (max-width: 900px) {
-          .preorder-form__grid {
+          .grid {
             grid-template-columns: 1fr;
           }
         }
