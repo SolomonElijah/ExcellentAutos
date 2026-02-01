@@ -6,7 +6,7 @@ import { api } from "@/lib/api";
 
 export default function PreOrderForm() {
   const router = useRouter();
-  const { id } = useParams(); // ✅ car ID from route
+  const { id } = useParams();
 
   const [loading, setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -70,17 +70,7 @@ export default function PreOrderForm() {
     if (!form.last_name) errors.push("Last name is required");
     if (!form.email) errors.push("Email is required");
     if (!form.phone) errors.push("Phone number is required");
-    if (!form.brand) errors.push("Brand is required");
-    if (!form.model) errors.push("Model is required");
     if (!form.destination_country) errors.push("Destination country is required");
-
-    if (form.budget_min && Number(form.budget_min) <= 0) {
-      errors.push("Minimum budget must be greater than 0");
-    }
-
-    if (form.budget_max && Number(form.budget_max) <= 0) {
-      errors.push("Maximum budget must be greater than 0");
-    }
 
     if (
       form.budget_min &&
@@ -90,7 +80,7 @@ export default function PreOrderForm() {
       errors.push("Minimum budget cannot be higher than maximum budget");
     }
 
-    if (errors.length > 0) {
+    if (errors.length) {
       setPopupMessage(errors.join("\n"));
       setShowPopup(true);
       return;
@@ -103,18 +93,24 @@ export default function PreOrderForm() {
       last_name: form.last_name,
       email: form.email,
       phone: form.phone,
+
+      vehicle_type: "car",
+
       brand: form.brand,
       model: form.model,
-      year: form.year ? Number(form.year) : undefined,
+      year: form.year || undefined,
       trim: form.trim || undefined,
       fuel_type: form.fuel_type || undefined,
       transmission: form.transmission || undefined,
+
       budget_min: form.budget_min ? Number(form.budget_min) : undefined,
       budget_max: form.budget_max ? Number(form.budget_max) : undefined,
+
       destination_country: form.destination_country,
       destination_port: form.destination_port || undefined,
       additional_notes: form.additional_notes || undefined,
-      car_id: id, // ✅ link preorder to car
+
+      car_id: id,
     };
 
     try {
@@ -127,13 +123,22 @@ export default function PreOrderForm() {
       setWhatsappUrl(res?.redirect || null);
       setShowPopup(true);
     } catch (err) {
-      console.error(err);
-      setPopupMessage("Failed to submit pre-order. Please try again.");
+      setPopupMessage("Failed to submit pre-order.");
       setShowPopup(true);
     } finally {
       setLoading(false);
     }
   }
+
+  const Field = ({ label, children, locked }) => (
+    <div className="field">
+      <label className="field__label">
+        {label}
+        {locked && <span className="locked-badge">Locked</span>}
+      </label>
+      {children}
+    </div>
+  );
 
   return (
     <div className="preorder-form-namespace">
@@ -141,63 +146,76 @@ export default function PreOrderForm() {
         <h2 className="preorder-form__title">Car Pre-Order Form</h2>
 
         <div className="preorder-form__grid">
-          <input className="preorder-form__input" placeholder="First name*" value={form.first_name} onChange={(e) => update("first_name", e.target.value)} />
-          <input className="preorder-form__input" placeholder="Last name*" value={form.last_name} onChange={(e) => update("last_name", e.target.value)} />
-          <input className="preorder-form__input" type="email" placeholder="Email*" value={form.email} onChange={(e) => update("email", e.target.value)} />
-          <input className="preorder-form__input" type="tel" placeholder="Phone number*" value={form.phone} onChange={(e) => update("phone", e.target.value)} />
+          <Field label="First Name">
+            <input className="input" value={form.first_name} onChange={(e) => update("first_name", e.target.value)} />
+          </Field>
 
-          <input className="preorder-form__input" placeholder="Brand*" value={form.brand} onChange={(e) => update("brand", e.target.value)} />
-          <input className="preorder-form__input" placeholder="Model*" value={form.model} onChange={(e) => update("model", e.target.value)} />
-          <input className="preorder-form__input" placeholder="Year (optional)" value={form.year} onChange={(e) => update("year", e.target.value)} />
-          <input className="preorder-form__input" placeholder="Trim (optional)" value={form.trim} onChange={(e) => update("trim", e.target.value)} />
-          <input className="preorder-form__input" placeholder="Fuel type (optional)" value={form.fuel_type} onChange={(e) => update("fuel_type", e.target.value)} />
-          <input className="preorder-form__input" placeholder="Transmission (optional)" value={form.transmission} onChange={(e) => update("transmission", e.target.value)} />
+          <Field label="Last Name">
+            <input className="input" value={form.last_name} onChange={(e) => update("last_name", e.target.value)} />
+          </Field>
 
-          <input className="preorder-form__input" placeholder="Minimum budget (₦)" value={form.budget_min} onChange={(e) => update("budget_min", e.target.value)} />
-          <input className="preorder-form__input" placeholder="Maximum budget (₦)" value={form.budget_max} onChange={(e) => update("budget_max", e.target.value)} />
+          <Field label="Email">
+            <input className="input" type="email" value={form.email} onChange={(e) => update("email", e.target.value)} />
+          </Field>
 
-          <input className="preorder-form__input" placeholder="Destination country*" value={form.destination_country} onChange={(e) => update("destination_country", e.target.value)} />
-          <input className="preorder-form__input" placeholder="Destination port (optional)" value={form.destination_port} onChange={(e) => update("destination_port", e.target.value)} />
+          <Field label="Phone Number">
+            <input className="input" type="tel" value={form.phone} onChange={(e) => update("phone", e.target.value)} />
+          </Field>
+
+          <Field label="Brand" locked>
+            <input className="input locked" readOnly value={form.brand} />
+          </Field>
+
+          <Field label="Model" locked>
+            <input className="input locked" readOnly value={form.model} />
+          </Field>
+
+          <Field label="Year" locked>
+            <input className="input locked" readOnly value={form.year} />
+          </Field>
+
+          <Field label="Trim" locked>
+            <input className="input locked" readOnly value={form.trim} />
+          </Field>
+
+          <Field label="Fuel Type" locked>
+            <input className="input locked" readOnly value={form.fuel_type} />
+          </Field>
+
+          <Field label="Transmission" locked>
+            <input className="input locked" readOnly value={form.transmission} />
+          </Field>
+
+          <Field label="Minimum Budget (₦)">
+            <input className="input" value={form.budget_min} onChange={(e) => update("budget_min", e.target.value)} />
+          </Field>
+
+          <Field label="Maximum Budget (₦)">
+            <input className="input" value={form.budget_max} onChange={(e) => update("budget_max", e.target.value)} />
+          </Field>
+
+          <Field label="Destination Country">
+            <input className="input" value={form.destination_country} onChange={(e) => update("destination_country", e.target.value)} />
+          </Field>
+
+          <Field label="Destination Port">
+            <input className="input" value={form.destination_port} onChange={(e) => update("destination_port", e.target.value)} />
+          </Field>
         </div>
 
-        <textarea
-          className="preorder-form__textarea"
-          placeholder="Additional notes (optional)"
-          value={form.additional_notes}
-          onChange={(e) => update("additional_notes", e.target.value)}
-        />
+        <div className="field">
+          <label className="field__label">Additional Notes</label>
+          <textarea
+            className="textarea"
+            value={form.additional_notes}
+            onChange={(e) => update("additional_notes", e.target.value)}
+          />
+        </div>
 
-        <button className="preorder-form__submit-btn" disabled={loading}>
+        <button className="submit-btn" disabled={loading}>
           {loading ? "Submitting..." : "Submit Pre-Order"}
         </button>
       </form>
-
-      {showPopup && (
-        <div className="preorder-form__overlay">
-          <div className="preorder-form__popup">
-            <pre>{popupMessage}</pre>
-
-            {whatsappUrl && (
-              <button
-                className="preorder-form__whatsapp-btn"
-                onClick={() => (window.location.href = whatsappUrl)}
-              >
-                Chat Admin on WhatsApp
-              </button>
-            )}
-
-            <button
-              className="preorder-form__close-btn"
-              onClick={() => {
-                setShowPopup(false);
-                router.push("/");
-              }}
-            >
-              Dismiss
-            </button>
-          </div>
-        </div>
-      )}
 
       <style jsx>{`
         .preorder-form {
@@ -210,80 +228,57 @@ export default function PreOrderForm() {
           border: 1px solid #111;
         }
 
-        .preorder-form__title {
-          font-size: 22px;
-          margin-bottom: 28px;
-        }
-
         .preorder-form__grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           gap: 16px;
         }
 
-       .preorder-form__input,
-.preorder-form__textarea {
-  padding: 14px;
-  border-radius: 10px;
-  border: 1px solid #111;
-  background: #0b0b0b;
-  color: #fff;
-  width: 100%;
+        .field {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
 
-  font-size: 16px;          /* ✅ STOP mobile zoom */
-  line-height: 1.4;
-}
+        .field__label {
+          font-size: 13px;
+          color: #aaa;
+        }
 
+        .locked-badge {
+          margin-left: 6px;
+          font-size: 11px;
+          color: #facc15;
+        }
 
-        .preorder-form__textarea {
-          margin-top: 16px;
+        .input,
+        .textarea {
+          padding: 14px;
+          border-radius: 10px;
+          border: 1px solid #111;
+          background: #0b0b0b;
+          color: #fff;
+          font-size: 16px;
+        }
+
+        .locked {
+          background: #111;
+          color: #bbb;
+          cursor: not-allowed;
+        }
+
+        .textarea {
           min-height: 100px;
         }
 
-        .preorder-form__submit-btn {
+        .submit-btn {
+          margin-top: 20px;
           background: red;
           padding: 16px;
           width: 100%;
           border-radius: 10px;
-          margin-top: 12px;
           font-weight: 600;
-          cursor: pointer;
-           color: #fff;
-        }
-
-        .preorder-form__overlay {
-          position: fixed;
-          inset: 0;
-          background: rgba(0, 0, 0, 0.75);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .preorder-form__popup {
-          background: #0b0b0b;
-          padding: 30px;
-          border-radius: 16px;
-          max-width: 400px;
-          width: 90%;
-        }
-
-        .preorder-form__whatsapp-btn {
-          background: #25d366;
-          padding: 16px;
-          width: 100%;
-          border-radius: 10px;
-          margin-top: 10px;
-          cursor: pointer;
-        }
-
-        .preorder-form__close-btn {
-          background: #333;
-          padding: 16px;
-          width: 100%;
-          border-radius: 10px;
-          margin-top: 10px;
-          cursor: pointer;
+          color: #fff;
         }
 
         @media (max-width: 900px) {
