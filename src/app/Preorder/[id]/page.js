@@ -65,7 +65,6 @@ export default function PreOrderForm() {
     e.preventDefault();
 
     const errors = [];
-
     if (!form.first_name) errors.push("First name is required");
     if (!form.last_name) errors.push("Last name is required");
     if (!form.email) errors.push("Email is required");
@@ -140,17 +139,28 @@ export default function PreOrderForm() {
     </div>
   );
 
+  const commonInputProps = {
+    autoComplete: "new-password",
+    autoCorrect: "off",
+    autoCapitalize: "none",
+    spellCheck: false,
+  };
+
   return (
     <div className="preorder-form-namespace">
-      <form className="preorder-form" onSubmit={submit}>
+      <form
+        className="preorder-form"
+        onSubmit={submit}
+        autoComplete="off"
+      >
         <h2 className="preorder-form__title">Car Pre-Order Form</h2>
 
         <div className="preorder-form__grid">
           <Field label="First Name">
             <input
               className="input"
-              name="first_name_field"
-              autoComplete="off"
+              inputMode="text"
+              {...commonInputProps}
               value={form.first_name}
               onChange={(e) => update("first_name", e.target.value)}
             />
@@ -159,8 +169,8 @@ export default function PreOrderForm() {
           <Field label="Last Name">
             <input
               className="input"
-              name="last_name_field"
-              autoComplete="off"
+              inputMode="text"
+              {...commonInputProps}
               value={form.last_name}
               onChange={(e) => update("last_name", e.target.value)}
             />
@@ -170,8 +180,8 @@ export default function PreOrderForm() {
             <input
               className="input"
               type="email"
-              name="email_field"
-              autoComplete="off"
+              inputMode="email"
+              {...commonInputProps}
               value={form.email}
               onChange={(e) => update("email", e.target.value)}
             />
@@ -181,41 +191,42 @@ export default function PreOrderForm() {
             <input
               className="input"
               type="tel"
-              name="phone_field"
-              autoComplete="off"
+              inputMode="tel"
+              {...commonInputProps}
               value={form.phone}
               onChange={(e) => update("phone", e.target.value)}
             />
           </Field>
 
-          <Field label="Brand" >
+          <Field label="Brand" locked>
             <input className="input locked" readOnly value={form.brand} />
           </Field>
 
-          <Field label="Model" >
+          <Field label="Model" locked>
             <input className="input locked" readOnly value={form.model} />
           </Field>
 
-          <Field label="Year" >
+          <Field label="Year" locked>
             <input className="input locked" readOnly value={form.year} />
           </Field>
 
-          <Field label="Trim" >
+          <Field label="Trim" locked>
             <input className="input locked" readOnly value={form.trim} />
           </Field>
 
-          <Field label="Fuel Type" >
+          <Field label="Fuel Type" locked>
             <input className="input locked" readOnly value={form.fuel_type} />
           </Field>
 
-          <Field label="Transmission" >
+          <Field label="Transmission" locked>
             <input className="input locked" readOnly value={form.transmission} />
           </Field>
 
           <Field label="Minimum Budget (₦)">
             <input
               className="input"
-              autoComplete="off"
+              inputMode="numeric"
+              {...commonInputProps}
               value={form.budget_min}
               onChange={(e) => update("budget_min", e.target.value)}
             />
@@ -224,7 +235,8 @@ export default function PreOrderForm() {
           <Field label="Maximum Budget (₦)">
             <input
               className="input"
-              autoComplete="off"
+              inputMode="numeric"
+              {...commonInputProps}
               value={form.budget_max}
               onChange={(e) => update("budget_max", e.target.value)}
             />
@@ -233,7 +245,8 @@ export default function PreOrderForm() {
           <Field label="Destination Country">
             <input
               className="input"
-              autoComplete="off"
+              inputMode="text"
+              {...commonInputProps}
               value={form.destination_country}
               onChange={(e) => update("destination_country", e.target.value)}
             />
@@ -242,7 +255,8 @@ export default function PreOrderForm() {
           <Field label="Destination Port">
             <input
               className="input"
-              autoComplete="off"
+              inputMode="text"
+              {...commonInputProps}
               value={form.destination_port}
               onChange={(e) => update("destination_port", e.target.value)}
             />
@@ -253,12 +267,11 @@ export default function PreOrderForm() {
           <label className="field__label">Additional Notes</label>
           <textarea
             className="textarea"
-            autoComplete="off"
+            {...commonInputProps}
             value={form.additional_notes}
             onChange={(e) => update("additional_notes", e.target.value)}
           />
         </div>
-
 
         <button className="submit-btn" disabled={loading}>
           {loading ? "Submitting..." : "Submit Pre-Order"}
@@ -266,98 +279,76 @@ export default function PreOrderForm() {
       </form>
 
       <style jsx>{`
-  .preorder-form {
-    max-width: 1100px;
-    margin: 40px auto;
-    padding: 40px;
-    background: #000;
-    color: #fff;
-    border-radius: 16px;
-    border: 1px solid #111;
-  }
+        .preorder-form {
+          max-width: 1100px;
+          margin: 40px auto;
+          padding: 40px;
+          background: #000;
+          color: #fff;
+          border-radius: 16px;
+          border: 1px solid #111;
+        }
 
-  .preorder-form__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-  }
+        .preorder-form__grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 18px;
+        }
 
-  /* ===== FIELD (LABEL ON TOP) ===== */
-  .field {
-    display: flex;
-    flex-direction: column;   /* label above input */
-    gap: 6px;
-  }
+        .field {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
 
-  .field__label {
-    font-size: 13px;
-    font-weight: 500;
-    color: #aaa;
-    line-height: 1.2;
-  }
+        .field__label {
+          font-size: 13px;
+          font-weight: 500;
+          color: #aaa;
+        }
 
-  .locked-badge {
-    margin-left: 6px;
-    font-size: 11px;
-    font-weight: 600;
-    color: #facc15;
-  }
+        .locked-badge {
+          margin-left: 6px;
+          font-size: 11px;
+          color: #facc15;
+        }
 
-  /* ===== INPUTS ===== */
-  .input,
-  .textarea {
-    padding: 14px;
-    border-radius: 10px;
-    border: 1px solid #111;
-    background: #0b0b0b;
-    color: #fff;
-    width: 100%;
-    font-size: 16px;      /* prevents mobile zoom */
-    line-height: 1.4;
-  }
+        .input,
+        .textarea {
+          padding: 14px;
+          border-radius: 10px;
+          border: 1px solid #111;
+          background: #0b0b0b;
+          color: #fff;
+          font-size: 16px;
+        }
 
-  .input:focus,
-  .textarea:focus {
-    outline: none;
-    border-color: red;
-  }
+        .locked {
+          background: #111;
+          color: #bbb;
+          cursor: not-allowed;
+        }
 
-  .locked {
-    background: #111;
-    color: #bbb;
-    cursor: not-allowed;
-  }
+        .textarea {
+          min-height: 100px;
+        }
 
-  .textarea {
-    min-height: 100px;
-    resize: vertical;
-  }
+        .submit-btn {
+          margin-top: 22px;
+          background: red;
+          padding: 16px;
+          width: 100%;
+          border-radius: 10px;
+          font-weight: 600;
+          color: #fff;
+        }
 
-  /* ===== SUBMIT BUTTON ===== */
-  .submit-btn {
-    margin-top: 22px;
-    background: red;
-    padding: 16px;
-    width: 100%;
-    border-radius: 10px;
-    font-weight: 600;
-    color: #fff;
-    cursor: pointer;
-  }
-
-  .submit-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-
-  /* ===== MOBILE ===== */
-  @media (max-width: 900px) {
-    .preorder-form__grid {
-      grid-template-columns: 1fr;
-    }
-  }
-`}</style>
-
+        @media (max-width: 900px) {
+          .preorder-form__grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
     </div>
   );
 }
