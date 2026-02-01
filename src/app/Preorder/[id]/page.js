@@ -147,19 +147,45 @@ export default function PreOrderForm() {
 
         <div className="preorder-form__grid">
           <Field label="First Name">
-            <input className="input" value={form.first_name} onChange={(e) => update("first_name", e.target.value)} />
+            <input
+              className="input"
+              name="first_name_field"
+              autoComplete="new-first-name"
+              value={form.first_name}
+              onChange={(e) => update("first_name", e.target.value)}
+            />
           </Field>
 
           <Field label="Last Name">
-            <input className="input" value={form.last_name} onChange={(e) => update("last_name", e.target.value)} />
+            <input
+              className="input"
+              name="last_name_field"
+              autoComplete="new-last-name"
+              value={form.last_name}
+              onChange={(e) => update("last_name", e.target.value)}
+            />
           </Field>
 
           <Field label="Email">
-            <input className="input" type="email" value={form.email} onChange={(e) => update("email", e.target.value)} />
+            <input
+              className="input"
+              type="email"
+              name="email_field"
+              autoComplete="new-email"
+              value={form.email}
+              onChange={(e) => update("email", e.target.value)}
+            />
           </Field>
 
           <Field label="Phone Number">
-            <input className="input" type="tel" value={form.phone} onChange={(e) => update("phone", e.target.value)} />
+            <input
+              className="input"
+              type="tel"
+              name="phone_field"
+              autoComplete="new-phone"
+              value={form.phone}
+              onChange={(e) => update("phone", e.target.value)}
+            />
           </Field>
 
           <Field label="Brand" locked>
@@ -187,19 +213,39 @@ export default function PreOrderForm() {
           </Field>
 
           <Field label="Minimum Budget (₦)">
-            <input className="input" value={form.budget_min} onChange={(e) => update("budget_min", e.target.value)} />
+            <input
+              className="input"
+              autoComplete="off"
+              value={form.budget_min}
+              onChange={(e) => update("budget_min", e.target.value)}
+            />
           </Field>
 
           <Field label="Maximum Budget (₦)">
-            <input className="input" value={form.budget_max} onChange={(e) => update("budget_max", e.target.value)} />
+            <input
+              className="input"
+              autoComplete="off"
+              value={form.budget_max}
+              onChange={(e) => update("budget_max", e.target.value)}
+            />
           </Field>
 
           <Field label="Destination Country">
-            <input className="input" value={form.destination_country} onChange={(e) => update("destination_country", e.target.value)} />
+            <input
+              className="input"
+              autoComplete="off"
+              value={form.destination_country}
+              onChange={(e) => update("destination_country", e.target.value)}
+            />
           </Field>
 
           <Field label="Destination Port">
-            <input className="input" value={form.destination_port} onChange={(e) => update("destination_port", e.target.value)} />
+            <input
+              className="input"
+              autoComplete="off"
+              value={form.destination_port}
+              onChange={(e) => update("destination_port", e.target.value)}
+            />
           </Field>
         </div>
 
@@ -207,10 +253,12 @@ export default function PreOrderForm() {
           <label className="field__label">Additional Notes</label>
           <textarea
             className="textarea"
+            autoComplete="off"
             value={form.additional_notes}
             onChange={(e) => update("additional_notes", e.target.value)}
           />
         </div>
+
 
         <button className="submit-btn" disabled={loading}>
           {loading ? "Submitting..." : "Submit Pre-Order"}
