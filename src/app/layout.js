@@ -24,7 +24,7 @@ export const metadata = {
   metadataBase: new URL("https://excellentautosnigeria.com"),
 
   icons: {
-    icon: "/logo.png",        
+    icon: "/logo.png",
     shortcut: "/logo.png",
     apple: "/logo.png",
   },
@@ -39,7 +39,7 @@ export const metadata = {
       "Buy, sell, preorder, and finance cars in Nigeria. Explore verified listings and apply for car loans easily.",
     images: [
       {
-        url: "/carbg.png", 
+        url: "/carbg.png",
         width: 1200,
         height: 630,
         alt: "Excellent J&C Autos Nigeria",
@@ -52,13 +52,21 @@ export const metadata = {
     title: "Excellent J&C Autos – Buy, Sell & Finance Cars in Nigeria",
     description:
       "Browse cars for sale, apply for car loans, and sell your vehicle easily in Nigeria.",
-    images: ["/carbg.png"], 
+    images: ["/carbg.png"],
   },
 
   robots: {
     index: true,
     follow: true,
   },
+};
+
+/* ✅ THIS IS THE MISSING PIECE */
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({ children }) {

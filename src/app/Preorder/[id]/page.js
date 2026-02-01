@@ -221,15 +221,19 @@ export default function PreOrderForm() {
           gap: 16px;
         }
 
-        .preorder-form__input,
-        .preorder-form__textarea {
-          padding: 14px;
-          border-radius: 10px;
-          border: 1px solid #111;
-          background: #0b0b0b;
-          color: #fff;
-          width: 100%;
-        }
+       .preorder-form__input,
+.preorder-form__textarea {
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #111;
+  background: #0b0b0b;
+  color: #fff;
+  width: 100%;
+
+  font-size: 16px;          /* ✅ STOP mobile zoom */
+  line-height: 1.4;
+}
+
 
         .preorder-form__textarea {
           margin-top: 16px;
@@ -244,6 +248,7 @@ export default function PreOrderForm() {
           margin-top: 12px;
           font-weight: 600;
           cursor: pointer;
+           color: #fff;
         }
 
         .preorder-form__overlay {
