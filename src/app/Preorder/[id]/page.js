@@ -74,7 +74,8 @@ export default function PreOrderForm() {
     if (!form.last_name) errors.push("Last name is required");
     if (!form.email) errors.push("Email is required");
     if (!form.phone) errors.push("Phone number is required");
-    if (!form.destination_country) errors.push("Destination country is required");
+    if (!form.destination_country)
+      errors.push("Destination country is required");
 
     if (
       form.budget_min &&
@@ -145,13 +146,6 @@ export default function PreOrderForm() {
     </div>
   );
 
-  const noAutoFill = {
-    autoComplete: "off",
-    autoCorrect: "off",
-    autoCapitalize: "none",
-    spellCheck: false,
-  };
-
   return (
     <div className="preorder-form-namespace">
       <form className="preorder-form" onSubmit={submit} autoComplete="off">
@@ -159,65 +153,135 @@ export default function PreOrderForm() {
 
         <div className="grid">
           <Field label="First Name">
-            <input className="input" {...noAutoFill} onChange={(e) => update("first_name", e.target.value)} />
+            <input
+              className="input"
+              value={form.first_name}
+              onChange={(e) => update("first_name", e.target.value)}
+            />
           </Field>
 
           <Field label="Last Name">
-            <input className="input" {...noAutoFill} onChange={(e) => update("last_name", e.target.value)} />
+            <input
+              className="input"
+              value={form.last_name}
+              onChange={(e) => update("last_name", e.target.value)}
+            />
           </Field>
 
           <Field label="Email">
-            <input type="email" className="input" {...noAutoFill} onChange={(e) => update("email", e.target.value)} />
+            <input
+              type="email"
+              className="input"
+              value={form.email}
+              onChange={(e) => update("email", e.target.value)}
+            />
           </Field>
 
           <Field label="Phone Number">
-            <input type="tel" className="input" {...noAutoFill} onChange={(e) => update("phone", e.target.value)} />
+            <input
+              type="tel"
+              className="input"
+              value={form.phone}
+              onChange={(e) => update("phone", e.target.value)}
+            />
           </Field>
 
           <Field label="Brand" locked>
-            <input className="input locked" readOnly defaultValue={carData.brand} />
+            <input
+              className="input locked"
+              readOnly
+              value={carData.brand}
+            />
           </Field>
 
           <Field label="Model" locked>
-            <input className="input locked" readOnly defaultValue={carData.model} />
+            <input
+              className="input locked"
+              readOnly
+              value={carData.model}
+            />
           </Field>
 
           <Field label="Year" locked>
-            <input className="input locked" readOnly defaultValue={carData.year} />
+            <input
+              className="input locked"
+              readOnly
+              value={carData.year}
+            />
           </Field>
 
           <Field label="Trim" locked>
-            <input className="input locked" readOnly defaultValue={carData.trim} />
+            <input
+              className="input locked"
+              readOnly
+              value={carData.trim}
+            />
           </Field>
 
           <Field label="Fuel Type" locked>
-            <input className="input locked" readOnly defaultValue={carData.fuel_type} />
+            <input
+              className="input locked"
+              readOnly
+              value={carData.fuel_type}
+            />
           </Field>
 
           <Field label="Transmission" locked>
-            <input className="input locked" readOnly defaultValue={carData.transmission} />
+            <input
+              className="input locked"
+              readOnly
+              value={carData.transmission}
+            />
           </Field>
 
           <Field label="Minimum Budget (₦)">
-            <input className="input" inputMode="numeric" {...noAutoFill} onChange={(e) => update("budget_min", e.target.value)} />
+            <input
+              className="input"
+              inputMode="numeric"
+              value={form.budget_min}
+              onChange={(e) => update("budget_min", e.target.value)}
+            />
           </Field>
 
           <Field label="Maximum Budget (₦)">
-            <input className="input" inputMode="numeric" {...noAutoFill} onChange={(e) => update("budget_max", e.target.value)} />
+            <input
+              className="input"
+              inputMode="numeric"
+              value={form.budget_max}
+              onChange={(e) => update("budget_max", e.target.value)}
+            />
           </Field>
 
           <Field label="Destination Country">
-            <input className="input" {...noAutoFill} onChange={(e) => update("destination_country", e.target.value)} />
+            <input
+              className="input"
+              value={form.destination_country}
+              onChange={(e) =>
+                update("destination_country", e.target.value)
+              }
+            />
           </Field>
 
           <Field label="Destination Port">
-            <input className="input" {...noAutoFill} onChange={(e) => update("destination_port", e.target.value)} />
+            <input
+              className="input"
+              value={form.destination_port}
+              onChange={(e) =>
+                update("destination_port", e.target.value)
+              }
+            />
           </Field>
         </div>
 
         <div className="field">
           <label className="field__label">Additional Notes</label>
-          <textarea className="textarea" {...noAutoFill} onChange={(e) => update("additional_notes", e.target.value)} />
+          <textarea
+            className="textarea"
+            value={form.additional_notes}
+            onChange={(e) =>
+              update("additional_notes", e.target.value)
+            }
+          />
         </div>
 
         <button className="submit-btn" disabled={loading}>
@@ -231,12 +295,20 @@ export default function PreOrderForm() {
             <pre>{popupMessage}</pre>
 
             {whatsappUrl && (
-              <button className="whatsapp-btn" onClick={() => (window.location.href = whatsappUrl)}>
+              <button
+                className="whatsapp-btn"
+                onClick={() =>
+                  (window.location.href = whatsappUrl)
+                }
+              >
                 Chat Admin on WhatsApp
               </button>
             )}
 
-            <button className="close-btn" onClick={() => router.push("/")}>
+            <button
+              className="close-btn"
+              onClick={() => router.push("/")}
+            >
               Dismiss
             </button>
           </div>
@@ -267,10 +339,12 @@ export default function PreOrderForm() {
         .field {
           display: flex;
           flex-direction: column;
+          align-items: stretch;
           gap: 6px;
         }
 
         .field__label {
+          display: block;
           font-size: 13px;
           color: #aaa;
         }
@@ -313,7 +387,7 @@ export default function PreOrderForm() {
         .overlay {
           position: fixed;
           inset: 0;
-          background: rgba(0,0,0,.75);
+          background: rgba(0, 0, 0, 0.75);
           display: flex;
           align-items: center;
           justify-content: center;
