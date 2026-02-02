@@ -248,7 +248,7 @@ export default function PreOrderForm() {
                 className="whatsapp"
                 onClick={() => (window.location.href = popup.whatsapp)}
               >
-                Chat admin on WhatsApp
+                Chat admin on WhatsApp to continue
               </button>
             )}
             <button onClick={() => router.push("/")}>Close</button>
