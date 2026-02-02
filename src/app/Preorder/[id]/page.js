@@ -1,8 +1,10 @@
 "use client";
 
 import { useRouter, useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api";
+
+const currencyFormatter = new Intl.NumberFormat("en-NG");
 
 export default function PreOrderForm() {
   const router = useRouter();
@@ -20,6 +22,9 @@ export default function PreOrderForm() {
     destination_port: "",
     additional_notes: "",
   });
+
+  const [errors, setErrors] = useState({});
+  const debounceTimers = useRef({});
 
   const [car, setCar] = useState({
     brand: "",
@@ -56,32 +61,77 @@ export default function PreOrderForm() {
     })();
   }, [id]);
 
-  /* ================= HANDLERS ================= */
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+  /* ================= DEBOUNCED VALIDATION ================= */
+  function validateField(name, value) {
+    let message = "";
+
+    if (name === "email" && value) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        message = "Invalid email address";
+      }
+    }
+
+    if (name === "phone" && value) {
+      if (!/^\+?\d{7,15}$/.test(value)) {
+        message = "Invalid phone number";
+      }
+    }
+
+    setErrors((prev) => ({ ...prev, [name]: message }));
   }
 
+  function handleChange(e) {
+    const { name, value } = e.target;
+
+    setForm((prev) => ({ ...prev, [name]: value }));
+
+    if (debounceTimers.current[name]) {
+      clearTimeout(debounceTimers.current[name]);
+    }
+
+    debounceTimers.current[name] = setTimeout(() => {
+      validateField(name, value);
+    }, 500);
+  }
+
+  /* ================= CURRENCY INPUT ================= */
+  function handleBudgetChange(e) {
+    const { name, value } = e.target;
+
+    const raw = value.replace(/[^\d]/g, "");
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: raw,
+    }));
+  }
+
+  function formatCurrency(value) {
+    if (!value) return "";
+    return `₦${currencyFormatter.format(Number(value))}`;
+  }
+
+  /* ================= SUBMIT ================= */
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const errors = [];
-    if (!form.first_name) errors.push("First name required");
-    if (!form.last_name) errors.push("Last name required");
-    if (!form.email) errors.push("Email required");
-    if (!form.phone) errors.push("Phone required");
-    if (!form.destination_country) errors.push("Destination country required");
+    const submitErrors = {};
+    ["first_name", "last_name", "email", "phone", "destination_country"].forEach(
+      (field) => {
+        if (!form[field]) submitErrors[field] = "This field is required";
+      }
+    );
 
     if (
       form.budget_min &&
       form.budget_max &&
       Number(form.budget_min) > Number(form.budget_max)
     ) {
-      errors.push("Min budget cannot exceed max budget");
+      submitErrors.budget_max = "Maximum must be greater than minimum";
     }
 
-    if (errors.length) {
-      setPopup({ show: true, message: errors.join("\n"), whatsapp: null });
+    if (Object.keys(submitErrors).length) {
+      setErrors(submitErrors);
       return;
     }
 
@@ -122,18 +172,17 @@ export default function PreOrderForm() {
           {[
             ["First Name", "first_name"],
             ["Last Name", "last_name"],
-            ["Email", "email", "email"],
-            ["Phone Number", "phone", "tel"],
-          ].map(([label, name, type = "text"]) => (
+            ["Email", "email"],
+            ["Phone Number", "phone"],
+          ].map(([label, name]) => (
             <div className="field" key={name}>
-              <label htmlFor={name}>{label}</label>
+              <label>{label}</label>
               <input
-                id={name}
                 name={name}
-                type={type}
                 value={form[name]}
                 onChange={handleChange}
               />
+              {errors[name] && <span className="error">{errors[name]}</span>}
             </div>
           ))}
 
@@ -147,25 +196,36 @@ export default function PreOrderForm() {
           {[
             ["Minimum Budget (₦)", "budget_min"],
             ["Maximum Budget (₦)", "budget_max"],
+          ].map(([label, name]) => (
+            <div className="field" key={name}>
+              <label>{label}</label>
+              <input
+                value={formatCurrency(form[name])}
+                onChange={handleBudgetChange}
+              />
+              {errors[name] && <span className="error">{errors[name]}</span>}
+            </div>
+          ))}
+
+          {[
             ["Destination Country", "destination_country"],
             ["Destination Port", "destination_port"],
           ].map(([label, name]) => (
             <div className="field" key={name}>
-              <label htmlFor={name}>{label}</label>
+              <label>{label}</label>
               <input
-                id={name}
                 name={name}
                 value={form[name]}
                 onChange={handleChange}
               />
+              {errors[name] && <span className="error">{errors[name]}</span>}
             </div>
           ))}
         </div>
 
         <div className="field">
-          <label htmlFor="notes">Additional Notes</label>
+          <label>Additional Notes</label>
           <textarea
-            id="notes"
             name="additional_notes"
             value={form.additional_notes}
             onChange={handleChange}
@@ -187,7 +247,7 @@ export default function PreOrderForm() {
                 className="whatsapp"
                 onClick={() => (window.location.href = popup.whatsapp)}
               >
-                Chat admin on WhatsApp to continue
+                Chat admin on WhatsApp
               </button>
             )}
 
@@ -208,10 +268,6 @@ export default function PreOrderForm() {
           color: #fff;
           padding: 40px;
           border-radius: 16px;
-        }
-
-        h2 {
-          margin-bottom: 24px;
         }
 
         .grid {
@@ -238,16 +294,17 @@ export default function PreOrderForm() {
           background: #0b0b0b;
           border: 1px solid #111;
           color: #fff;
-          font-size: 16px;
         }
 
         .locked {
           background: #111;
-          color: #888;
+          color: #777;
         }
 
-        textarea {
-          min-height: 120px;
+        .error {
+          margin-top: 4px;
+          font-size: 12px;
+          color: #f87171;
         }
 
         button {
@@ -274,10 +331,6 @@ export default function PreOrderForm() {
           border-radius: 16px;
           width: 90%;
           max-width: 400px;
-          color: #fff;
-          display: flex;
-          flex-direction: column;
-          align-items: stretch;
         }
 
         .whatsapp {
