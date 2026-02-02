@@ -61,20 +61,16 @@ export default function PreOrderForm() {
     })();
   }, [id]);
 
-  /* ================= DEBOUNCED VALIDATION ================= */
+  /* ================= VALIDATION ================= */
   function validateField(name, value) {
     let message = "";
 
-    if (name === "email" && value) {
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-        message = "Invalid email address";
-      }
+    if (name === "email" && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      message = "Invalid email address";
     }
 
-    if (name === "phone" && value) {
-      if (!/^\+?\d{7,15}$/.test(value)) {
-        message = "Invalid phone number";
-      }
+    if (name === "phone" && value && !/^\+?\d{7,15}$/.test(value)) {
+      message = "Invalid phone number";
     }
 
     setErrors((prev) => ({ ...prev, [name]: message }));
@@ -85,27 +81,14 @@ export default function PreOrderForm() {
 
     setForm((prev) => ({ ...prev, [name]: value }));
 
-    if (debounceTimers.current[name]) {
-      clearTimeout(debounceTimers.current[name]);
-    }
-
-    debounceTimers.current[name] = setTimeout(() => {
-      validateField(name, value);
-    }, 500);
+    clearTimeout(debounceTimers.current[name]);
+    debounceTimers.current[name] = setTimeout(
+      () => validateField(name, value),
+      500
+    );
   }
 
-  /* ================= CURRENCY INPUT ================= */
-  function handleBudgetChange(e) {
-    const { name, value } = e.target;
-
-    const raw = value.replace(/[^\d]/g, "");
-
-    setForm((prev) => ({
-      ...prev,
-      [name]: raw,
-    }));
-  }
-
+  /* ================= BUDGET INPUT ================= */
   function formatCurrency(value) {
     if (!value) return "";
     return `₦${currencyFormatter.format(Number(value))}`;
@@ -117,8 +100,8 @@ export default function PreOrderForm() {
 
     const submitErrors = {};
     ["first_name", "last_name", "email", "phone", "destination_country"].forEach(
-      (field) => {
-        if (!form[field]) submitErrors[field] = "This field is required";
+      (f) => {
+        if (!form[f]) submitErrors[f] = "This field is required";
       }
     );
 
@@ -144,8 +127,8 @@ export default function PreOrderForm() {
           ...form,
           vehicle_type: "car",
           ...car,
-          budget_min: form.budget_min ? Number(form.budget_min) : undefined,
-          budget_max: form.budget_max ? Number(form.budget_max) : undefined,
+          budget_min: Number(form.budget_min),
+          budget_max: Number(form.budget_max),
           car_id: id,
         }),
       });
@@ -168,6 +151,8 @@ export default function PreOrderForm() {
       <form className="form" onSubmit={handleSubmit} noValidate>
         <h2>Car Pre-Order Form</h2>
 
+        {/* ===== CUSTOMER DETAILS ===== */}
+        <h3 className="section">Customer Details</h3>
         <div className="grid">
           {[
             ["First Name", "first_name"],
@@ -177,50 +162,52 @@ export default function PreOrderForm() {
           ].map(([label, name]) => (
             <div className="field" key={name}>
               <label>{label}</label>
-              <input
-                name={name}
-                value={form[name]}
-                onChange={handleChange}
-              />
+              <input name={name} value={form[name]} onChange={handleChange} />
               {errors[name] && <span className="error">{errors[name]}</span>}
             </div>
           ))}
+        </div>
 
+        {/* ===== CAR DETAILS ===== */}
+        <h3 className="section">Car Details</h3>
+        <div className="grid">
           {Object.entries(car).map(([key, value]) => (
             <div className="field" key={key}>
               <label>{key.replace("_", " ").toUpperCase()}</label>
               <input value={value} readOnly className="locked" />
             </div>
           ))}
+        </div>
 
-    {[
-  ["Minimum Budget (₦)", "budget_min"],
-  ["Maximum Budget (₦)", "budget_max"],
-].map(([label, name]) => (
-  <div className="field" key={name}>
-    <label>{label}</label>
-
-    <input
-      name={name}
-      value={form[name]}
-      inputMode="numeric"
-      placeholder="e.g. 1000000"
-      onChange={(e) => {
-        const raw = e.target.value.replace(/[^\d]/g, "");
-        setForm((prev) => ({ ...prev, [name]: raw }));
-      }}
-      onBlur={(e) => {
-        if (!e.target.value) return;
-        e.target.value = formatCurrency(e.target.value);
-      }}
-      onFocus={(e) => {
-        e.target.value = form[name];
-      }}
-    />
-
-    {errors[name] && <span className="error">{errors[name]}</span>}
-  </div>
-))}
+        {/* ===== BUDGET & DELIVERY ===== */}
+        <h3 className="section">Budget & Delivery</h3>
+        <div className="grid">
+          {[
+            ["Minimum Budget (₦)", "budget_min"],
+            ["Maximum Budget (₦)", "budget_max"],
+          ].map(([label, name]) => (
+            <div className="field" key={name}>
+              <label>{label}</label>
+              <input
+                name={name}
+                value={form[name]}
+                inputMode="numeric"
+                placeholder="e.g. 1000000"
+                onChange={(e) => {
+                  const raw = e.target.value.replace(/[^\d]/g, "");
+                  setForm((p) => ({ ...p, [name]: raw }));
+                }}
+                onBlur={(e) => {
+                  if (e.target.value)
+                    e.target.value = formatCurrency(e.target.value);
+                }}
+                onFocus={(e) => {
+                  e.target.value = form[name];
+                }}
+              />
+              {errors[name] && <span className="error">{errors[name]}</span>}
+            </div>
+          ))}
 
           {[
             ["Destination Country", "destination_country"],
@@ -228,18 +215,15 @@ export default function PreOrderForm() {
           ].map(([label, name]) => (
             <div className="field" key={name}>
               <label>{label}</label>
-              <input
-                name={name}
-                value={form[name]}
-                onChange={handleChange}
-              />
-              {errors[name] && <span className="error">{errors[name]}</span>}
+              <input name={name} value={form[name]} onChange={handleChange} />
             </div>
           ))}
         </div>
 
+        {/* ===== NOTES ===== */}
+        <h3 className="section">Additional Notes</h3>
         <div className="field">
-          <label>Additional Notes</label>
+          <label>Notes</label>
           <textarea
             name="additional_notes"
             value={form.additional_notes}
@@ -256,7 +240,6 @@ export default function PreOrderForm() {
         <div className="overlay">
           <div className="popup">
             <pre>{popup.message}</pre>
-
             {popup.whatsapp && (
               <button
                 className="whatsapp"
@@ -265,7 +248,6 @@ export default function PreOrderForm() {
                 Chat admin on WhatsApp
               </button>
             )}
-
             <button onClick={() => router.push("/")}>Close</button>
           </div>
         </div>
@@ -275,7 +257,6 @@ export default function PreOrderForm() {
         .wrapper {
           padding: 40px;
         }
-
         .form {
           max-width: 1100px;
           margin: auto;
@@ -284,24 +265,26 @@ export default function PreOrderForm() {
           padding: 40px;
           border-radius: 16px;
         }
-
+        .section {
+          margin: 32px 0 16px;
+          font-size: 18px;
+          border-bottom: 1px solid #111;
+          padding-bottom: 8px;
+        }
         .grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           gap: 20px;
         }
-
         .field {
           display: flex;
           flex-direction: column;
         }
-
         label {
           font-size: 13px;
           margin-bottom: 6px;
           color: #aaa;
         }
-
         input,
         textarea {
           padding: 14px;
@@ -310,27 +293,26 @@ export default function PreOrderForm() {
           border: 1px solid #111;
           color: #fff;
         }
-
         .locked {
           background: #111;
           color: #777;
         }
-
+        textarea {
+          min-height: 120px;
+        }
         .error {
-          margin-top: 4px;
           font-size: 12px;
           color: #f87171;
+          margin-top: 4px;
         }
-
         button {
-          margin-top: 24px;
+          margin-top: 32px;
           padding: 16px;
           border-radius: 10px;
           background: red;
           color: #fff;
           font-weight: 600;
         }
-
         .overlay {
           position: fixed;
           inset: 0;
@@ -339,7 +321,6 @@ export default function PreOrderForm() {
           align-items: center;
           justify-content: center;
         }
-
         .popup {
           background: #0b0b0b;
           padding: 30px;
@@ -347,12 +328,10 @@ export default function PreOrderForm() {
           width: 90%;
           max-width: 400px;
         }
-
         .whatsapp {
           background: #25d366;
           margin-top: 12px;
         }
-
         @media (max-width: 900px) {
           .grid {
             grid-template-columns: 1fr;
