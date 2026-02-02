@@ -133,11 +133,13 @@ export default function PreOrderForm() {
         }),
       });
 
-      setPopup({
-        show: true,
-        message: "Pre-order submitted successfully",
-        whatsapp: res?.redirect || null,
-      });
+     setPopup({
+  show: true,
+  message: "Pre-order submitted successfully",
+  type: "success",
+  whatsapp: res?.redirect || null,
+});
+
     } catch {
       setPopup({ show: true, message: "Submission failed", whatsapp: null });
     } finally {
@@ -239,7 +241,8 @@ export default function PreOrderForm() {
       {popup.show && (
         <div className="overlay">
           <div className="popup">
-            <pre>{popup.message}</pre>
+           <pre className={popup.type}>{popup.message}</pre>
+
             {popup.whatsapp && (
               <button
                 className="whatsapp"
@@ -328,6 +331,14 @@ export default function PreOrderForm() {
           width: 90%;
           max-width: 400px;
         }
+          .success {
+  color: #22c55e; /* green */
+}
+
+.error {
+  color: #f87171; /* red */
+}
+
         .whatsapp {
           background: #25d366;
           margin-top: 12px;
