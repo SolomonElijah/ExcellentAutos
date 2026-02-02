@@ -193,19 +193,34 @@ export default function PreOrderForm() {
             </div>
           ))}
 
-          {[
-            ["Minimum Budget (₦)", "budget_min"],
-            ["Maximum Budget (₦)", "budget_max"],
-          ].map(([label, name]) => (
-            <div className="field" key={name}>
-              <label>{label}</label>
-              <input
-                value={formatCurrency(form[name])}
-                onChange={handleBudgetChange}
-              />
-              {errors[name] && <span className="error">{errors[name]}</span>}
-            </div>
-          ))}
+    {[
+  ["Minimum Budget (₦)", "budget_min"],
+  ["Maximum Budget (₦)", "budget_max"],
+].map(([label, name]) => (
+  <div className="field" key={name}>
+    <label>{label}</label>
+
+    <input
+      name={name}
+      value={form[name]}
+      inputMode="numeric"
+      placeholder="e.g. 1000000"
+      onChange={(e) => {
+        const raw = e.target.value.replace(/[^\d]/g, "");
+        setForm((prev) => ({ ...prev, [name]: raw }));
+      }}
+      onBlur={(e) => {
+        if (!e.target.value) return;
+        e.target.value = formatCurrency(e.target.value);
+      }}
+      onFocus={(e) => {
+        e.target.value = form[name];
+      }}
+    />
+
+    {errors[name] && <span className="error">{errors[name]}</span>}
+  </div>
+))}
 
           {[
             ["Destination Country", "destination_country"],
