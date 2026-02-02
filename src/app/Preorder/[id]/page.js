@@ -187,7 +187,7 @@ export default function PreOrderForm() {
                 className="whatsapp"
                 onClick={() => (window.location.href = popup.whatsapp)}
               >
-                Chat on WhatsApp
+                Chat admin on WhatsApp to continue
               </button>
             )}
 
@@ -274,6 +274,10 @@ export default function PreOrderForm() {
           border-radius: 16px;
           width: 90%;
           max-width: 400px;
+          color: #fff;
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
         }
 
         .whatsapp {
