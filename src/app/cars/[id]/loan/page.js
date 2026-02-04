@@ -135,6 +135,7 @@ export default function CarLoanPage() {
           )}
         </div>
 
+ <LoanCal car={car} />
         {/* RIGHT - LOAN PROCESS INFO */}
         <div className="right">
           <h3 className="title">How Loan Financing Works</h3>
@@ -178,7 +179,7 @@ export default function CarLoanPage() {
               </>
             )}
           </div>
-          <LoanCal car={car} />
+         
 
 
           {!loading && (
