@@ -160,7 +160,7 @@ export default function Navbar() {
   height: 40px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 4px;
   background: rgba(0, 0, 0, 0.04);
   border-radius: 12px;
