@@ -244,7 +244,7 @@ export default function HeroProduct() {
 
 /* ================= CARD ================= */
 .card {
-  background: var(--card-bg, #ffffff);
+  background: var(--card-bg);
   color: var(--card-text, #111);
   border-radius: 16px;
   overflow: hidden;
