@@ -73,7 +73,7 @@ export default function HeroSearchSection() {
           </div>
 
           {/* BY BRAND */}
-          <div className="group">
+          {/* <div className="group">
             <p>By Top Brand</p>
             <div className="brands">
               {[
@@ -98,12 +98,12 @@ export default function HeroSearchSection() {
                   {b}
                 </div>
               ))}
-            </div>
+            </div> */}
 
-            <button className="applyBtn" onClick={applyBrand}>
+            {/* <button className="applyBtn" onClick={applyBrand}>
               Apply
             </button>
-          </div>
+          </div> */}
 
           {/* SEARCH */}
           <div className="search">

@@ -65,13 +65,13 @@ export default function Navbar() {
           <div className="nav-actions">
             <div className="nav-social">
               <a href="https://www.instagram.com/excellent_jc_autos" target="_blank" rel="noreferrer">
-                <img src="/insta.png" alt="" />
+                <img src="/insta.png" alt="Instagram" />
               </a>
               <a href="https://www.tiktok.com/@excellent_jc_autos" target="_blank" rel="noreferrer">
-                <img src="/tiktok.png" alt="" />
+                <img src="/tiktok.png" alt="TikTok" />
               </a>
               <a href="https://www.facebook.com" target="_blank" rel="noreferrer">
-                <img src="/fb.png" alt="" />
+                <img src="/fb.png" alt="Facebook" />
               </a>
             </div>
 
@@ -130,16 +130,15 @@ export default function Navbar() {
         /* ================= NAVBAR ================= */
         .nav-bar {
           position: sticky;
-          top: 12px; /* FLOATING FEEL */
+          top: 12px;
           z-index: 1000;
           background: var(--nav-bg);
           border: 1px solid var(--nav-border);
           border-radius: 18px;
           margin: 0 14px;
-          transition: box-shadow 0.25s ease, transform 0.25s ease;
+          transition: box-shadow 0.25s ease;
         }
 
-        /* FLOAT ELEVATION */
         .nav-bar.scrolled {
           box-shadow:
             0 20px 40px rgba(0, 0, 0, 0.18),
@@ -154,13 +153,44 @@ export default function Navbar() {
           align-items: center;
         }
 
-        .nav-logo img {
+        /* ================= LOGO (FIXED SIZE – CMS SAFE) ================= */
+        .nav-logo {
+          width: 140px;
           height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+        }
+
+        .nav-logo img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          display: block;
         }
 
         .logo-placeholder {
-          height: 40px;
           width: 140px;
+          height: 40px;
+        }
+
+        /* Tablet */
+        @media (max-width: 900px) {
+          .nav-logo,
+          .logo-placeholder {
+            width: 120px;
+            height: 36px;
+          }
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+          .nav-logo,
+          .logo-placeholder {
+            width: 110px;
+            height: 32px;
+          }
         }
 
         /* ================= MENU ================= */
@@ -178,7 +208,6 @@ export default function Navbar() {
           color: var(--nav-muted);
           position: relative;
           padding: 6px 2px;
-          transition: color 0.2s ease;
         }
 
         .nav-menu a::after {
@@ -231,17 +260,16 @@ export default function Navbar() {
           color: var(--nav-text);
         }
 
-        /* ================= MOBILE ================= */
         @media (max-width: 900px) {
           .nav-menu {
             display: none;
           }
-
           .nav-toggle {
             display: block;
           }
         }
 
+        /* ================= MOBILE MENU ================= */
         .nav-mobile-menu {
           position: fixed;
           top: 88px;
@@ -267,24 +295,22 @@ export default function Navbar() {
           color: red;
         }
 
+        /* ================= SPACER ================= */
         .nav-spacer {
-  height: 84px; /* desktop default */
-}
+          height: 84px;
+        }
 
-/* Tablet */
-@media (max-width: 900px) {
-  .nav-spacer {
-    height: 72px;
-  }
-}
+        @media (max-width: 900px) {
+          .nav-spacer {
+            height: 72px;
+          }
+        }
 
-/* Mobile */
-@media (max-width: 600px) {
-  .nav-spacer {
-    height: 60px;
-  }
-}
-
+        @media (max-width: 600px) {
+          .nav-spacer {
+            height: 60px;
+          }
+        }
       `}</style>
     </>
   );
