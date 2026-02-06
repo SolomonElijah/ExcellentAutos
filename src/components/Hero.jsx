@@ -12,7 +12,7 @@ export default function Hero() {
   return (
     <>
     <Loader />
-      <HeroImage />
+      {/* <HeroImage /> */}
         <div>
           <CarCarousel />
         </div>

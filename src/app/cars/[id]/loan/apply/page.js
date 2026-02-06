@@ -220,102 +220,229 @@ export default function LoanApplicationForm() {
       </div>
 
       <style>{`
-        .loan-application-namespace {
-          padding: 16px;
-          padding-top: 96px; /* FIX header overlap */
-          min-height: 100dvh;
-          scroll-margin-top: 96px;
-        }
+       /* ================= THEME ================= */
+.loan-application-namespace {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --card: #f9fafb;
+  --border: #e5e7eb;
 
-        .page {
-          max-width: 900px;
-          margin: auto;
-          padding: 20px;
-          background: #000;
-          color: #fff;
-          border-radius: 14px;
-        }
+  --text: #111827;
+  --muted: #6b7280;
 
-        .grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 14px;
-        }
+  --accent: #ef4444;
+  --success: #22c55e;
+  --error: #ef4444;
 
-        input, select {
-          padding: 14px;
-          border-radius: 10px;
-          background: #0b0b0b;
-          border: 1px solid #1a1a1a;
-          color: #fff;
-          font-size: 16px; /* FIX iOS zoom + shifting */
-        }
+  padding: 16px;
+  padding-top: 96px;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--text);
+}
 
-        .consent-block {
-          margin-top: 20px;
-          padding: 14px;
-          background: #0b0b0b;
-          border-radius: 12px;
-          border: 1px solid #1a1a1a;
-        }
+[data-theme="dark"] .loan-application-namespace {
+  --bg: #000000;
+  --surface: #0b0b0b;
+  --card: #0b0b0b;
+  --border: #1f2937;
 
-        button {
-          width: 100%;
-          padding: 16px;
-          margin-top: 20px;
-          border-radius: 12px;
-          border: none;
-          background: red;
-          color: white;
-          font-weight: 600;
-        }
+  --text: #ffffff;
+  --muted: #9ca3af;
+}
 
-        .overlay {
-          position: fixed;
-          inset: 0;
-          background: rgba(0,0,0,.75);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          z-index: 9999;
-        }
+/* ================= FORM CARD ================= */
+.page {
+  max-width: 980px;
+  margin: auto;
+  padding: 28px;
+  background: var(--card);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+}
 
-        .popup {
-          background: #0b0b0b;
-          padding: 24px;
-          border-radius: 16px;
-          width: 90%;
-          max-width: 420px;
-          text-align: center;
-          color: #fff;
-        }
+.title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
 
-        .popup.success { border: 1px solid #00c853; }
-        .popup.error { border: 1px solid #ff5252; }
+/* ================= GRID ================= */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
 
-        .popup-icon {
-          font-size: 32px;
-          margin-bottom: 10px;
-        }
+/* ================= INPUTS ================= */
+input,
+select {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 16px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
 
-        .whatsapp-btn {
-          display: block;
-          margin-top: 16px;
-          padding: 14px;
-          border-radius: 12px;
-          background: #25D366;
-          color: #000;
-          font-weight: 700;
-          text-decoration: none;
-        }
+input::placeholder {
+  color: var(--muted);
+}
 
-        @media (min-width: 768px) {
-          .grid { grid-template-columns: repeat(2, 1fr); }
-        }
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
 
-        @media (min-width: 1024px) {
-          .grid { grid-template-columns: repeat(3, 1fr); }
-        }
+/* ================= CONSENT BLOCK (FIXED) ================= */
+.consent-block {
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--surface);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+}
+
+.consent-title {
+  display: inline-flex;          /* 🔥 FIX: no full-width flex */
+  align-items: center;
+  gap: 6px;                      /* tighter spacing */
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.consent-title input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;                     /* remove browser spacing */
+  accent-color: var(--accent);
+}
+
+.consent-block p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.consent-block a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+/* ================= SUBMIT ================= */
+button {
+  width: 100%;
+  padding: 16px;
+  margin-top: 24px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+button:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgba(239, 68, 68, 0.35);
+}
+
+/* ================= POPUP ================= */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popup {
+  background: var(--surface);
+  padding: 26px;
+  border-radius: 20px;
+  width: 92%;
+  max-width: 440px;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+
+.popup.success {
+  border-color: var(--success);
+}
+
+.popup.error {
+  border-color: var(--error);
+}
+
+.popup-icon {
+  font-size: 36px;
+  margin-bottom: 12px;
+}
+
+.popup h3 {
+  margin-bottom: 12px;
+  font-size: 18px;
+}
+
+.popup ul {
+  text-align: left;
+  margin: 12px 0;
+  padding-left: 18px;
+  color: var(--muted);
+}
+
+.popup p {
+  color: var(--muted);
+}
+
+.popup button {
+  margin-top: 16px;
+}
+
+/* ================= WHATSAPP ================= */
+.whatsapp-btn {
+  display: block;
+  margin-top: 16px;
+  padding: 14px;
+  border-radius: 14px;
+  background: #25d366;
+  color: #000;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .page {
+    padding: 36px;
+  }
+}
+
       `}</style>
     </>
   );

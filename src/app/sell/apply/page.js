@@ -437,19 +437,78 @@ export default function SellSwapForm() {
       )}
 
       <style >{`
-        .sell-swap-form-namespace {
-          /* All styles are now namespaced within this class */
-        }
-        
-        .sell-swap-form-namespace .sell-swap-form {
-          max-width: 1100px;
-          margin: 40px auto;
-          padding: 40px;
-          background: #000;
-          color: #fff;
-          border-radius: 16px;
-          border: 1px solid #111;
-        }
+    
+        /* ================= LIGHT MODE OVERRIDES ONLY ================= */
+/* Dark mode remains your original CSS */
+
+[data-theme="light"] .sell-swap-form-namespace .sell-swap-form {
+  background: #ffffff;
+  color: #111;
+  border: 1px solid #e5e7eb;
+}
+
+[data-theme="light"] .sell-swap-form-namespace .sell-swap-form input {
+  background: #f3f4f6;
+  color: #111;
+  border: 1px solid #e5e7eb;
+}
+
+[data-theme="light"] .sell-swap-form-namespace .sell-swap-form__toggle-btn {
+  background: #f3f4f6;
+  color: #111;
+  border: 1px solid #e5e7eb;
+}
+
+[data-theme="light"] .sell-swap-form-namespace .sell-swap-form__popup {
+  background: #ffffff;
+  color: #111;
+  border: 1px solid #e5e7eb;
+}
+
+[data-theme="light"] .sell-swap-form-namespace .sell-swap-form__image-section {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+}
+
+[data-theme="light"] .sell-swap-form-namespace .sell-swap-form__image-box {
+  background: #f3f4f6;
+  border-color: #ccc;
+}
+
+[data-theme="light"] .sell-swap-form-namespace .sell-swap-form__image-box:hover {
+  background: #e5e7eb;
+}
+
+[data-theme="light"] .sell-swap-form-namespace .sell-swap-form__section-subtitle,
+[data-theme="light"] .sell-swap-form-namespace .sell-swap-form__image-status,
+[data-theme="light"] .field label {
+  color: #555;
+}
+
+[data-theme="light"] .sell-swap-form-namespace .sell-swap-form__image-status {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+}
+
+[data-theme="light"] .field input,
+[data-theme="light"] .field select {
+  background: #f3f4f6;
+  color: #111;
+  border: 1px solid #e5e7eb;
+}
+
+/* ================= YOUR ORIGINAL CSS (UNCHANGED) ================= */
+
+.sell-swap-form-namespace .sell-swap-form {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 40px;
+  background: #000;
+  color: #fff;
+  border-radius: 16px;
+  border: 1px solid #111;
+}
+
 
         .sell-swap-form-namespace .sell-swap-form__title {
           font-size: 22px;

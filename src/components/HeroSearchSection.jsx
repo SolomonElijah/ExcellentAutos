@@ -124,127 +124,160 @@ export default function HeroSearchSection() {
       </section>
 
       <style jsx>{`
-        .wrapper {
-          background: #000;
-          color: #fff;
-          padding: 60px 20px;
-          display: flex;
-          justify-content: center;
-        }
+  .wrapper {
+    background: var(--background);
+    color: var(--foreground);
+    padding: 60px 20px;
+    display: flex;
+    justify-content: center;
+  }
 
-        .content {
-          width: 100%;
-          max-width: 700px;
-        }
+  .content {
+    width: 100%;
+    max-width: 700px;
+  }
 
-        h3 {
-          font-size: 22px;
-          margin-bottom: 20px;
-          text-align: center;
-        }
+  h3 {
+    font-size: 22px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
 
-        .group {
-          margin-bottom: 25px;
-        }
+  .group {
+    margin-bottom: 25px;
+  }
 
-        .group p {
-          margin-bottom: 10px;
-          font-size: 14px;
-        }
+  .group p {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
 
-        .chips {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-        }
+  /* ===== PRICE CHIPS ===== */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 
-        .chips span {
-          border: 1px solid #333;
-          padding: 6px 12px;
-          border-radius: 6px;
-          font-size: 12px;
-          cursor: pointer;
-          background: #111;
-        }
+  .chips span {
+    background: var(--surface);
+    border: 1px solid var(--surface-border);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    color: var(--foreground);
+    transition: all 0.2s ease;
+  }
 
-        .chips .active {
-          background: #fff;
-          color: #000;
-          font-weight: 600;
-        }
+  .chips span:hover {
+    border-color: var(--accent);
+  }
 
-        .brands {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 10px;
-        }
+  .chips .active {
+    background: var(--foreground);
+    color: var(--background);
+    border-color: var(--foreground);
+    font-weight: 600;
+  }
 
-        .brands div {
-          background: #111;
-          border-radius: 8px;
-          height: 50px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 12px;
-          cursor: pointer;
-          border: 1px solid #222;
-        }
+  /* ===== BRANDS ===== */
+  .brands {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
 
-        .brands .activeBrand {
-          background: #fff;
-          color: #000;
-          font-weight: 600;
-        }
+  .brands div {
+    background: var(--surface);
+    border: 1px solid var(--surface-border);
+    border-radius: 8px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: pointer;
+    color: var(--foreground);
+    transition: all 0.2s ease;
+  }
 
-        .applyBtn {
-          margin-top: 12px;
-          width: 100%;
-          padding: 12px;
-          background: red;
-          border: none;
-          border-radius: 8px;
-          font-weight: 800;
-          cursor: pointer;
-           color: #fff;
-        }
+  .brands div:hover {
+    border-color: var(--accent);
+  }
 
-        .search {
-          margin-top: 10px;
-        }
+  .brands .activeBrand {
+    background: var(--foreground);
+    color: var(--background);
+    border-color: var(--foreground);
+    font-weight: 600;
+  }
 
-        .searchRow {
-          display: flex;
-          gap: 10px;
-        }
+  /* ===== APPLY BUTTON ===== */
+  .applyBtn {
+    margin-top: 12px;
+    width: 100%;
+    padding: 12px;
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    font-weight: 800;
+    cursor: pointer;
+    color: #fff;
+    transition: opacity 0.2s ease;
+  }
 
-        .searchRow input {
-          flex: 1;
-          padding: 12px;
-          border-radius: 8px;
-          border: 1px solid red;
-          background: transparent;
-          color: #fff;
-        }
+  .applyBtn:hover {
+    opacity: 0.9;
+  }
 
-        .searchRow button {
-          padding: 12px 18px;
-          background: red;
-          border: none;
-          border-radius: 8px;
-          font-weight: 800;
-          cursor: pointer;
-           color: #fff;
-        }
+  /* ===== SEARCH ===== */
+  .search {
+    margin-top: 10px;
+  }
 
-    
+  .searchRow {
+    display: flex;
+    gap: 10px;
+  }
 
-        @media (max-width: 900px) {
-          .brands {
-            grid-template-columns: repeat(3, 1fr);
-          }
-        }
-      `}</style>
+  .searchRow input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--surface-border);
+    background: var(--surface);
+    color: var(--foreground);
+    outline: none;
+  }
+
+  .searchRow input:focus {
+    border-color: var(--accent);
+  }
+
+  .searchRow button {
+    padding: 12px 18px;
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    font-weight: 800;
+    cursor: pointer;
+    color: #fff;
+    transition: opacity 0.2s ease;
+  }
+
+  .searchRow button:hover {
+    opacity: 0.9;
+  }
+
+  @media (max-width: 900px) {
+    .brands {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+`}</style>
+
     </>
   );
 }

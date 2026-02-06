@@ -340,462 +340,301 @@ export default function CarLoanPage() {
 
       {/* STYLES */}
       <style>{`
-        /* Existing styles remain the same... */
-        .wrapper {
-          background: #000;
-          color: #fff;
-          padding: 50px 40px;
-          min-height: 100vh;
-        }
+       /* ================= THEME VARIABLES ================= */
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --card: #f8f9fb;
+  --border: #e5e7eb;
 
-        .title {
-          font-size: 22px;
-          margin-bottom: 10px;
-        }
+  --text: #111827;
+  --muted: #6b7280;
 
-        .subtitle {
-          color: #aaa;
-          margin-bottom: 25px;
-          font-size: 14px;
-        }
+  --accent: #ef4444;
+  --accent-hover: #cc0000;
 
-        .grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 25px;
-        }
+  --chip-bg: #f1f5f9;
+  --chip-text: #334155;
 
-        .card {
-          background: #0b0b0b;
-          border-radius: 16px;
-          overflow: hidden;
-          border: 1px solid #111;
-          cursor: pointer;
-        }
+  --hero-bg: linear-gradient(135deg, #fff, #f9fafb);
 
-        .imgWrap {
-          width: 100%;
-          aspect-ratio: 16 / 9;
-          background: #111;
-          position: relative;
-        }
+  --skeleton-1: #e5e7eb;
+  --skeleton-2: #f3f4f6;
+}
 
-        .img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
+[data-theme="dark"] {
+  --bg: #000000;
+  --surface: #0b0b0b;
+  --card: #0b0b0b;
+  --border: #1f2937;
 
-        .body {
-          padding: 16px;
-        }
+  --text: #ffffff;
+  --muted: #9ca3af;
 
-        .body h3 {
-          font-size: 16px;
-          margin-bottom: 10px;
-        }
+  --chip-bg: #111;
+  --chip-text: #ffffff;
 
-        /* ===== FILTERS SECTION ===== */
-        .filters-section {
-          background: #000;
-          padding: 20px 40px 0;
-        }
+  --hero-bg: linear-gradient(135deg, #000, #0b0b0b);
 
-        .filters-container {
-          display: flex;
-          flex-direction: column;
-          gap: 15px;
-          max-width: 1200px;
-          margin: 0 auto;
-        }
+  --skeleton-1: #111;
+  --skeleton-2: #1a1a1a;
+}
 
-        .search-filter {
-          width: 100%;
-        }
+/* ================= PAGE BASE ================= */
+body {
+  background: var(--bg);
+  color: var(--text);
+}
 
-        .search-input {
-          width: 100%;
-          padding: 12px 16px;
-          background: #0b0b0b;
-          border: 1px solid #222;
-          border-radius: 8px;
-          color: #fff;
-          font-size: 14px;
-        }
+/* ================= HERO ================= */
+.budget-hero {
+  background: var(--hero-bg);
+  padding: 40px 20px;
+}
 
-        .search-input::placeholder {
-          color: #666;
-        }
+.budget-hero-inner {
+  max-width: 1200px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: 40px;
+}
 
-        .price-filters {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          flex-wrap: wrap;
-        }
+.budget-title {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
 
-        .price-input {
-          width: 150px;
-          padding: 10px 12px;
-          background: #0b0b0b;
-          border: 1px solid #222;
-          border-radius: 6px;
-          color: #fff;
-          font-size: 14px;
-        }
+.budget-description {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin-bottom: 22px;
+  max-width: 520px;
+}
 
-        .price-separator {
-          color: #666;
-          font-size: 14px;
-        }
+.budget-cta {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 14px 26px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
 
-        .clear-price {
-          background: #333;
-          color: #fff;
-          border: none;
-          padding: 8px 12px;
-          border-radius: 6px;
-          cursor: pointer;
-          font-size: 12px;
-        }
+.budget-image img {
+  max-width: 100%;
+  height: auto;
+}
 
-        .clear-price:hover {
-          background: #444;
-        }
+/* ================= WRAPPER ================= */
+.wrapper {
+  background: var(--bg);
+  padding: 50px 40px;
+  min-height: 100vh;
+}
 
-        /* ===== LOAN HERO ===== */
-        .budget-hero {
-          width: 100%;
-          padding: 30px 20px 40px;
-        }
+.title {
+  font-size: 22px;
+  margin-bottom: 16px;
+}
 
-        .budget-hero-inner {
-          max-width: 1200px;
-          margin: 0 auto;
-          display: grid;
-          grid-template-columns: 1.1fr 0.9fr;
-          align-items: center;
-          gap: 40px;
-        }
+/* ================= GRID ================= */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
 
-        .budget-text {
-          color: #fff;
-        }
+/* ================= CARD ================= */
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
 
-        .budget-title {
-          font-size: 36px;
-          font-weight: 700;
-          line-height: 1.3;
-          color: red;
-          margin-bottom: 16px;
-        }
+/* ================= IMAGE ================= */
+.imgWrap {
+  aspect-ratio: 16 / 9;
+  background: var(--surface);
+  position: relative;
+}
 
-        .budget-description {
-          font-size: 15px;
-          line-height: 1.7;
-          color: #ccc;
-          margin-bottom: 22px;
-          max-width: 520px;
-        }
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-        .budget-cta {
-          background: grey;
-          color: #fff;
-          border: none;
-          padding: 14px 26px;
-          border-radius: 10px;
-          font-size: 14px;
-          font-weight: 600;
-          cursor: pointer;
-        }
+/* ================= LOAN BADGE ================= */
+.loanTag {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(230, 240, 255, 0.95);
+  color: #1a4ed8;
+  padding: 4px 8px;
+  font-size: 11px;
+  border-radius: 999px;
+  font-weight: 600;
+}
 
-        .budget-image {
-          display: flex;
-          justify-content: center;
-        }
+/* ================= BODY ================= */
+.body {
+  padding: 16px;
+}
 
-        .budget-image img {
-          max-width: 90%;
-          height: auto;
-          object-fit: contain;
-        }
+.body h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
 
-        .meta {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-          font-size: 11px;
-          margin-bottom: 12px;
-        }
+/* ================= META ================= */
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 11px;
+  margin-bottom: 12px;
+}
 
-        .meta span {
-          background: #111;
-          padding: 4px 8px;
-          border-radius: 6px;
-        }
+.meta span {
+  background: var(--chip-bg);
+  color: var(--chip-text);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
 
-        .rating {
-          background: #222;
-        }
+.metaRow {
+  justify-content: space-between;
+  align-items: center;
+}
 
-        .priceRow {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 14px;
-        }
+.rating {
+  background: rgba(253, 230, 138, 0.9);
+  color: #92400e;
+}
 
-        .price,
-        .monthly {
-          font-weight: 600;
-        }
+/* ================= PRICE ================= */
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
 
-        .actions {
-          display: flex;
-          gap: 10px;
-        }
+.price,
+.monthly {
+  font-weight: 700;
+}
 
-        .actions button {
-          flex: 1;
-          padding: 10px;
-          font-size: 12px;
-          border-radius: 8px;
-          cursor: pointer;
-        }
+/* ================= ACTIONS ================= */
+.actions {
+  display: flex;
+  gap: 10px;
+}
 
-        .outline {
-          background: transparent;
-          border: 1px solid red;
-          color: #fff;
-        }
+.actions button {
+  flex: 1;
+  padding: 10px;
+  font-size: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
 
-        .solid {
-          background: red;
-          border: none;
-          color: #fff;
-        }
+.outline {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.solid {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+}
+
+/* ================= SKELETON ================= */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-1) 25%,
+    var(--skeleton-2) 37%,
+    var(--skeleton-1) 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+/* ================= NO RESULTS ================= */
+.noResults {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  background: var(--card);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+}
+
+.noResults p {
+  color: var(--muted);
+}
+
+/* ================= PAGINATION ================= */
 .pagination {
   display: flex;
   justify-content: center;
-  align-items: center;
   gap: 16px;
   margin-top: 40px;
-  width: 100%;
 }
 
 .pagination-btn {
-  background: #1a1a1a;
-  border: 1px solid #333;
-  color: #fff;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
   padding: 8px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  min-width: 80px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
+  border-radius: 8px;
 }
 
-.pagination-btn:hover:not(:disabled) {
-  background: #222;
-  border-color: #444;
+/* ================= RESPONSIVE ================= */
+@media (max-width: 900px) {
+  .budget-hero-inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
 }
 
-.pagination-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  background: #111;
-  border-color: #222;
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .budget-image {
+    display: none;
+  }
 }
 
-        .pagination-btn:hover:not(:disabled) {
-          background: #222;
-        }
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
 
-        .page-info {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 4px;
-        }
+  .wrapper {
+    padding: 30px 20px;
+  }
+}
 
-        .page-info span {
-          font-size: 16px;
-          font-weight: 500;
-        }
-
-        .page-info small {
-          font-size: 12px;
-          color: #aaa;
-        }
-
-        .skeleton {
-          pointer-events: none;
-        }
-
-        .shimmer {
-          background: linear-gradient(
-            90deg,
-            #111 25%,
-            #1a1a1a 37%,
-            #111 63%
-          );
-          background-size: 400% 100%;
-          animation: shimmer 1.4s ease infinite;
-        }
-
-        .line {
-          height: 12px;
-          border-radius: 6px;
-          margin-bottom: 10px;
-        }
-
-        .w80 {
-          width: 80%;
-        }
-
-        .w60 {
-          width: 60%;
-        }
-
-        .w40 {
-          width: 40%;
-        }
-
-        .tag {
-          width: 50px;
-          height: 16px;
-          border-radius: 6px;
-        }
-
-        .btn {
-          height: 32px;
-          border-radius: 8px;
-          flex: 1;
-        }
-
-        @keyframes shimmer {
-          0% {
-            background-position: -400px 0;
-          }
-          100% {
-            background-position: 400px 0;
-          }
-        }
-
-        /* === LOAN PAGE STYLES === */
-        .metaRow {
-          justify-content: space-between;
-          align-items: center;
-        }
-
-        .metaLeft {
-          display: flex;
-          gap: 8px;
-        }
-
-        .loanTag {
-          position: absolute;
-          bottom: 10px;
-          left: 10px;
-          background: #e6f0ff;
-          color: #1a4ed8;
-          padding: 4px 8px;
-          font-size: 11px;
-          border-radius: 10px;
-          font-weight: 600;
-        }
-
-        .noResults {
-          grid-column: 1 / -1;
-          text-align: center;
-          padding: 60px 20px;
-          background: #0b0b0b;
-          border-radius: 16px;
-          border: 1px solid #222;
-        }
-
-        .noResults h3 {
-          font-size: 20px;
-          margin-bottom: 10px;
-        }
-
-        .noResults p {
-          color: #aaa;
-          margin-bottom: 20px;
-        }
-
-        .backBtn {
-          background: red;
-          color: #fff;
-          border: none;
-          padding: 12px 24px;
-          border-radius: 8px;
-          cursor: pointer;
-          font-size: 14px;
-        }
-
-        .backBtn:hover {
-          background: #cc0000;
-        }
-
-        @media (max-width: 900px) {
-          .budget-hero-inner {
-            grid-template-columns: 1fr;
-            text-align: center;
-          }
-
-          .budget-description {
-            margin-left: auto;
-            margin-right: auto;
-          }
-
-          .budget-image {
-            margin-top: 30px;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .budget-image {
-            display: none;
-          }
-          
-          .grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-          
-          .filters-section {
-            padding: 20px 20px 0;
-          }
-          
-          .price-filters {
-            flex-direction: column;
-            align-items: flex-start;
-          }
-          
-          .price-input {
-            width: 100%;
-          }
-        }
-
-        @media (max-width: 700px) {
-          .grid {
-            grid-template-columns: 1fr;
-          }
-          
-          .wrapper {
-            padding: 30px 20px;
-          }
-          
-          .pagination {
-            flex-direction: column;
-            gap: 15px;
-            text-align: center;
-          }
-        }
       `}</style>
     </>
   );

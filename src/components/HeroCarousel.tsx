@@ -59,16 +59,13 @@ export default function HeroCarousel() {
     }, AUTO_PLAY_INTERVAL);
 
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
+      if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [paused, slides]);
 
   /* ---------- PRELOAD NEXT IMAGE ---------- */
   useEffect(() => {
     if (!slides.length) return;
-
     const nextIndex = (current + 1) % slides.length;
     const img = new Image();
     img.src = slides[nextIndex].image;
@@ -92,9 +89,7 @@ export default function HeroCarousel() {
 
   const onTouchEnd = (e: React.TouchEvent) => {
     if (touchStartX.current === null) return;
-
-    const diff =
-      touchStartX.current - e.changedTouches[0].clientX;
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
 
     if (Math.abs(diff) > SWIPE_THRESHOLD) {
       diff > 0 ? next() : prev();
@@ -135,10 +130,10 @@ export default function HeroCarousel() {
 
         {slides.length > 1 && (
           <>
-            <button className="nav prev" onClick={prev}>
+            <button className="nav prev" onClick={prev} aria-label="Previous slide">
               ‹
             </button>
-            <button className="nav next" onClick={next}>
+            <button className="nav next" onClick={next} aria-label="Next slide">
               ›
             </button>
 
@@ -148,6 +143,7 @@ export default function HeroCarousel() {
                   key={i}
                   className={`dot ${i === current ? "active" : ""}`}
                   onClick={() => setCurrent(i)}
+                  aria-label={`Go to slide ${i + 1}`}
                 />
               ))}
             </div>
@@ -160,60 +156,97 @@ export default function HeroCarousel() {
   );
 }
 
-/* ---------- STYLES ---------- */
+/* ================= STYLES ================= */
 
 const carouselStyles = `
+/* ===== THEME TOKENS ===== */
+:root {
+  --carousel-bg: #ffffff;
+  --carousel-border: rgba(0, 0, 0, 0.15);
+  --carousel-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+  --carousel-nav-bg: rgba(255, 255, 255, 0.9);
+  --carousel-nav-text: #000000;
+  --carousel-dot: rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] {
+  --carousel-bg: #000000;
+  --carousel-border: rgba(255, 255, 255, 0.15);
+  --carousel-shadow: 0 22px 55px rgba(0, 0, 0, 0.85);
+  --carousel-nav-bg: rgba(0, 0, 0, 0.8);
+  --carousel-nav-text: #ffffff;
+  --carousel-dot: rgba(255, 255, 255, 0.45);
+}
+
+/* ===== CAROUSEL ===== */
 .carousel {
   position: relative;
   width: 100%;
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
+  background: var(--carousel-bg);
+  border-radius: 20px;
+  border: 1px solid var(--carousel-border);
+  box-shadow: var(--carousel-shadow);
   overflow: hidden;
-  border-radius: 16px;
+}
+
+/* ===== SLIDE ===== */
+.slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .slide img {
   width: 100%;
-  height: 260px;
+  height: 220px;
   object-fit: contain;
-  background: #000;
+  padding: 16px;
   display: block;
-  border-radius: 16px;
+
+  /* ✅ ADD THESE */
+  border-radius: 20px;
+  background: var(--carousel-bg);
 }
 
-/* ---------- NAV ---------- */
+
+/* ===== NAV BUTTONS ===== */
 .nav {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0,0,0,0.5);
-  color: #fff;
-  border: none;
-  width: 42px;
-  height: 42px;
+  background: var(--carousel-nav-bg);
+  color: var(--carousel-nav-text);
+  border: 1px solid var(--carousel-border);
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   cursor: pointer;
   font-size: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
+  backdrop-filter: blur(6px);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.nav.prev { left: 12px; }
-.nav.next { right: 12px; }
+.nav.prev { left: 14px; }
+.nav.next { right: 14px; }
 
 .nav:hover {
-  background: rgba(0,0,0,0.75);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 10px 28px rgba(255, 0, 0, 0.35);
 }
 
-/* ---------- DOTS ---------- */
+/* ===== DOTS ===== */
 .dots {
   position: absolute;
-  bottom: 12px;
+  bottom: 14px;
   width: 100%;
   display: flex;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .dot {
@@ -221,33 +254,77 @@ const carouselStyles = `
   height: 10px;
   border-radius: 50%;
   border: none;
-  background: rgba(255,255,255,0.4);
+  background: var(--carousel-dot);
   cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.dot:hover {
+  transform: scale(1.2);
 }
 
 .dot.active {
-  background: #fff;
+  background: red;
+  transform: scale(1.35);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 768px) {
+  .slide img {
+    height: 300px;
+    padding: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .slide img {
+    height: 360px;
+  }
 }
 `;
 
 const skeletonStyles = `
+/* ===== SKELETON ===== */
 .skeleton {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
 }
 
 .skeleton-img {
   width: 100%;
-  height: 260px;
-  border-radius: 16px;
+  height: 220px;
+  border-radius: 20px;
   background: linear-gradient(
     90deg,
-    #eee 25%,
+    #e6e6e6 25%,
     #f5f5f5 37%,
-    #eee 63%
+    #e6e6e6 63%
   );
   background-size: 400% 100%;
   animation: shimmer 1.4s ease infinite;
+}
+
+[data-theme="dark"] .skeleton-img {
+  background: linear-gradient(
+    90deg,
+    #1a1a1a 25%,
+    #262626 37%,
+    #1a1a1a 63%
+  );
+}
+
+@media (min-width: 768px) {
+  .skeleton-img {
+    height: 300px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .skeleton-img {
+    height: 360px;
+  }
 }
 
 @keyframes shimmer {

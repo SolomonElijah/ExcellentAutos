@@ -205,121 +205,155 @@ export default function AboutUsPage() {
         </div>
       </section>
 
-      <style >{`
-      .wrapper {
+      <style jsx>{`
+/* ================= GLOBAL THEME VARIABLES ================= */
+:global(:root) {
+  --bg-main: #f5f7fb;
+  --bg-card: #ffffff;
+  --border-color: #e5e7eb;
+  --text-main: #111111;
+  --text-muted: #6b7280;
+  --accent: red;
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+:global([data-theme="dark"]) {
+  --bg-main: #000000;
+  --bg-card: #0b0b0b;
+  --border-color: #1f1f1f;
+  --text-main: #ffffff;
+  --text-muted: #cccccc;
+  --accent: red;
+  --shadow-card: 0 14px 45px rgba(0, 0, 0, 0.65);
+}
+
+/* ================= PAGE WRAPPER ================= */
+.wrapper {
   min-height: 100vh;
-  background: radial-gradient(circle at top, #111, #000);
-  color: #fff;
-  padding-top: 80px;   /* ✅ FIX */
+  background: radial-gradient(
+    circle at top,
+    var(--bg-card),
+    var(--bg-main)
+  );
+  color: var(--text-main);
+  padding-top: 80px;
   padding-bottom: 80px;
 }
 
+/* ================= HERO ================= */
+.hero {
+  position: relative;
+}
 
-        .hero {
-          position: relative;
-        }
+.hero-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
 
-        .hero-text {
-          position: absolute;
-          inset: 0;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          padding: 20px;
-        }
+.hero-text h1 {
+  font-size: 36px;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
 
-        .hero-text h1 {
-          font-size: 36px;
-          color: red;
-          margin-bottom: 10px;
-        }
+.hero-text p {
+  color: var(--text-muted);
+}
 
-        .hero-text p {
-          color: #ccc;
-        }
+/* ================= CONTENT ================= */
+.content {
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
 
-        .content {
-          max-width: 1000px;
-          margin: 60px auto;
-          padding: 0 20px;
-        }
+.content h2 {
+  color: var(--accent);
+  margin-bottom: 16px;
+}
 
-        .content h2 {
-          color: red;
-          margin-bottom: 16px;
-        }
+.content p {
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
 
-        .content p {
-          color: #ccc;
-          line-height: 1.7;
-          margin-bottom: 20px;
-        }
+.services {
+  list-style: disc;
+  padding-left: 20px;
+  margin-bottom: 30px;
+  color: var(--text-muted);
+}
 
-        .services {
-          list-style: disc;
-          padding-left: 20px;
-          margin-bottom: 30px;
-          color: #ccc;
-        }
+/* ================= REASONS (CARDS) ================= */
+.reasons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
 
-        .reasons {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 20px;
-        }
+.reason {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow-card);
+  color: var(--text-main);
+}
 
-        .reason {
-          background: #0b0b0b;
-          border: 1px solid #111;
-          border-radius: 14px;
-          padding: 20px;
-        }
+/* ================= FAQ ================= */
+.faq {
+  max-width: 1000px;
+  margin: 80px auto 0;
+  padding: 0 20px;
+}
 
-        .faq {
-          max-width: 1000px;
-          margin: 80px auto 0;
-          padding: 0 20px;
-        }
+.faq-title {
+  text-align: center;
+  color: var(--accent);
+  margin-bottom: 40px;
+  font-size: 26px;
+}
 
-        .faq-title {
-          text-align: center;
-          color: red;
-          margin-bottom: 40px;
-          font-size: 26px;
-        }
+.faq-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
 
-        .faq-list {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 24px;
-        }
+.faq-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow-card);
+}
 
-        .faq-item {
-          background: #0b0b0b;
-          border: 1px solid #111;
-          border-radius: 14px;
-          padding: 20px;
-        }
+.faq-item p {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
 
-        .faq-item p {
-          color: #ccc;
-          font-size: 14px;
-          line-height: 1.6;
-        }
+/* ================= RESPONSIVE ================= */
+@media (max-width: 900px) {
+  .reasons,
+  .faq-list {
+    grid-template-columns: 1fr;
+  }
 
-        @media (max-width: 900px) {
-          .reasons,
-          .faq-list {
-            grid-template-columns: 1fr;
-          }
+  .hero-text h1 {
+    font-size: 26px;
+  }
+}
+`}</style>
 
-          .hero-text h1 {
-            font-size: 26px;
-          }
-        }
-      `}</style>
     </>
   );
 }

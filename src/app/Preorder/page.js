@@ -23,7 +23,7 @@ export default function PreOrderLanding() {
 
             <button
               className="primary-cta"
-              onClick={() => router.push("/Preorder/apply")}
+              onClick={() => router.push("/preorder/apply")}
             >
               Start Pre-Order
             </button>
@@ -335,6 +335,48 @@ export default function PreOrderLanding() {
   }
 }
 
+/* ================= LIGHT MODE OVERRIDES ONLY ================= */
+/* DARK MODE = YOUR ORIGINAL CSS (UNCHANGED) */
+
+[data-theme="light"] .wrapper {
+  background: radial-gradient(circle at top, #f3f4f6, #ffffff);
+  color: #111;
+}
+
+[data-theme="light"] .headline,
+[data-theme="light"] .step h3,
+[data-theme="light"] .value-card h4,
+[data-theme="light"] .final-cta h2,
+[data-theme="light"] .preorder-headline {
+  color: red;
+}
+
+[data-theme="light"] .subtext,
+[data-theme="light"] .text,
+[data-theme="light"] .value-card p,
+[data-theme="light"] .final-cta p,
+[data-theme="light"] .preorder-subtext {
+  color: #555;
+}
+
+[data-theme="light"] .step,
+[data-theme="light"] .value-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+}
+
+[data-theme="light"] .final-cta {
+  border-top: 1px solid #e5e7eb;
+}
+
+[data-theme="light"] .trust {
+  color: #16a34a;
+}
+
+/* preorder hero */
+[data-theme="light"] .preorder-hero {
+  background: transparent;
+}
       `}</style>
     </>
   );

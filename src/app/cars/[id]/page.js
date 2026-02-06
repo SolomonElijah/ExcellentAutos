@@ -175,11 +175,11 @@ export default function CarDetailsPage() {
           <div className="gallery">
             <div className="mainImage">
               {/* FEATURE #5: Image Size Control */}
-              <img
-                src={`${baseUrl}${activeImage}`}
-                alt={car.model}
-                style={{ maxHeight: '500px', objectFit: 'contain' }}
-              />
+             <img
+  src={`${baseUrl}${activeImage}`}
+  alt={car.model}
+  className="mainImg"
+/>
 
               {/* FEATURE #2: Loan Availability Tag - EXACT SAME AS FEATURED CARS */}
               {hasLoan && (
@@ -350,21 +350,74 @@ export default function CarDetailsPage() {
       )}
 
       <style>{`
+/* ================= THEME VARIABLES ================= */
+/* ================= THEME VARIABLES ================= */
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --card-bg: #f8f9fb;
+  --border: #e5e7eb;
 
-      .noCalc {
-  color: #aaa;
-  font-size: 12px;
+  --text: #111827;
+  --muted: #6b7280;
+
+  --accent: #ef4444;
+  --rating-bg: #fde68a;
+  --rating-text: #92400e;
 }
 
-        .page {
-  background: #000;
-  color: #fff;
-  padding: 30px;
+[data-theme="dark"] {
+  --bg: #000000;
+  --surface: #111111;
+  --card-bg: #0b0b0b;
+  --border: #1f2937;
+
+  --text: #ffffff;
+  --muted: #9ca3af;
 }
 
+/* ================= PAGE ================= */
+.page {
+  background: var(--bg);
+  color: var(--text);
+  padding: 24px;
+  max-width: 1400px;
+  margin: auto;
+}
+
+/* ================= TITLES ================= */
 .titleRow h3 {
   margin: 0;
+  font-size: 20px;
+  font-weight: 700;
 }
+
+.subtitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  margin-top: 8px;
+  padding: 6px 12px;
+
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+
+  color: #1a4ed8;
+  background: rgba(230, 240, 255, 0.9);
+
+  border-radius: 999px;
+  border: 1px solid rgba(26, 78, 216, 0.15);
+
+  backdrop-filter: blur(6px);
+}
+[data-theme="dark"] .subtitle {
+  background: rgba(30, 58, 138, 0.25);
+  color: #93c5fd;
+  border-color: rgba(147, 197, 253, 0.25);
+}
+
 
 .verified {
   color: #22c55e;
@@ -372,150 +425,175 @@ export default function CarDetailsPage() {
   font-size: 12px;
 }
 
-.subtitle {
-  color: #aaa;
-  margin-top: 6px;
-}
-
-.sectionTitle {
-  color: red;
-  margin-bottom: 16px;
+.ratingBadge {
+  background: var(--rating-bg);
+  color: var(--rating-text);
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  margin-left: 8px;
 }
 
 /* ================= TOP LAYOUT ================= */
 .top {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+  margin-top: 16px;
 }
-
 
 /* ================= IMAGE ================= */
 .mainImage {
-  flex: 0 0 70%;          /* image takes ~70% width */
-  max-height: 340px;     /* ~30% smaller than before */
-  border-radius: 14px;
-  background: #111;
-  position: relative;
+  width: 100%;
+  background: var(--surface);
+  border-radius: 16px;
   overflow: hidden;
+  position: relative;
 
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-
 .mainImage img {
   width: 100%;
   height: auto;
-  display: block;
+  max-height: 520px;
   object-fit: contain;
 }
 
-.infoPanel {
-  flex: 0 0 50%;     /* info panel takes ~30% width */
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.infoCard {
-  margin-top: 0;
+/* ================= LOAN BADGE ================= */
+.loanTag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 10;
+
+  background: rgba(230, 240, 255, 0.95);
+  color: #1a4ed8;
+  padding: 6px 12px;
+  font-size: 11px;
+  border-radius: 999px;
+  font-weight: 600;
+  backdrop-filter: blur(6px);
 }
 
+/* ================= NAV ARROWS ================= */
+.navArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.55);
+  color: white;
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 10;
+}
 
-/* ================= THUMBS ================= */
+.navArrow.left { left: 12px; }
+.navArrow.right { right: 12px; }
+
+/* ================= THUMBNAILS ================= */
 .thumbs {
   display: flex;
   gap: 10px;
-  margin-top: 12px;
+  margin-top: 14px;
   overflow-x: auto;
+  padding-bottom: 6px;
 }
 
 .thumb {
-  width: 100px;
-  height: 100px;
+  width: 96px;
+  height: 72px;
   object-fit: cover;
-  opacity: 0.7;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  opacity: 0.6;
   cursor: pointer;
-  border-radius: 6px;
 }
 
 .thumb:hover {
   opacity: 1;
 }
 
-/* ================= INFO CARDS ================= */
-.infoCard {
-  padding: 16px;
-  border-radius: 10px;
-  font-size: 16px;
-  margin-top: 1opx;
+/* ================= INFO PANEL ================= */
+.infoPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.dark { background: #1f2350; }
-.light { background: #d7eff7; color: #000; }
-.yellow { background: #ffd27a; color: #000; }
+.infoCard {
+  padding: 16px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.6;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+}
 
-/* ================= PRICE + ACTIONS ================= */
+.infoCard.dark {
+  background: #1f2350;
+  color: #fff;
+}
+
+.infoCard.light {
+  background: #d7eff7;
+  color: #000;
+}
+
+.infoCard.yellow {
+  background: #ffd27a;
+  color: #000;
+}
+
+/* ================= PRICE ================= */
 .priceRow {
   display: flex;
   justify-content: space-between;
-  margin: 32px 0;
   align-items: flex-end;
+  margin: 28px 0;
 }
 
 .price {
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 26px;
+  font-weight: 700;
 }
 
-.page .actions {
+.noCalc {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* ================= ACTIONS ================= */
+.actions {
   display: flex;
   gap: 12px;
-  margin-bottom: 40px;
+  margin-bottom: 36px;
 }
 
 .outline {
-  border: 1px solid red;
+  border: 1px solid var(--accent);
   background: transparent;
-  color: #fff;
+  color: var(--accent);
   padding: 12px;
   flex: 1;
-  border-radius: 8px;
+  border-radius: 12px;
+  font-weight: 600;
 }
 
 .solid {
-  background: red;
+  background: var(--accent);
   border: none;
   color: #fff;
   padding: 12px;
   flex: 1;
-  border-radius: 8px;
-}
-
-/* ================= TABLE ================= */
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-td {
-  padding: 10px 0;
-  border-bottom: 1px solid #111;
-}
-
-/* ================= FEATURES ================= */
-.featureGrid {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.featureGrid span {
-  background: #111;
-  padding: 6px 10px;
-  border-radius: 20px;
-  font-size: 11px;
+  border-radius: 12px;
+  font-weight: 600;
 }
 
 /* ================= SPECS + FEATURES ================= */
@@ -527,92 +605,164 @@ td {
 }
 
 .card {
-  background: #0d0d0d;
-  border: 1px solid #111;
-  border-radius: 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 18px;
   padding: 22px;
 }
 
-/* ================= BADGES ================= */
-.ratingBadge {
-  background: #222;
-  color: #ffd700;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  margin-left: 8px;
+/* ================= TABLE ================= */
+table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.loanTag {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  background: #e6f0ff;
-  color: #1a4ed8;
-  padding: 4px 8px;
-  font-size: 11px;
-  border-radius: 10px;
-  z-index: 10;
+td {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
 }
 
-/* ================= ARROWS ================= */
-.navArrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  font-size: 20px;
-  cursor: pointer;
+/* ================= FEATURES ================= */
+.featureGrid {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-.navArrow.left { left: 10px; }
-.navArrow.right { right: 10px; }
-
-/* ================= VISIBILITY ================= */
-.hidden { display: none; }
-
-@media (min-width: 768px) {
-  .hidden.md\:block { display: block; }
+.featureGrid span {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  color: var(--muted);
 }
 
-@media (max-width: 900px) {
-  .top { grid-template-columns: 1fr; }
-  .specFeatureGrid { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 768px) {
-  .navArrow {
-    width: 32px;
-    height: 32px;
-    font-size: 16px;
-  }
-}
+/* ================= RESPONSIVE ================= */
 @media (max-width: 900px) {
   .top {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 
-  .mainImage,
-  .infoPanel {
-    flex: 1 1 100%;
-    max-height: none;
+  .specFeatureGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .mainImage img {
+    max-height: 60vh;
   }
 }
-  
-/* ===== HIDE INFO PANEL ON MOBILE ===== */
+/* =====================================================
+   📱 MOBILE-ONLY LAYOUT (NEW)
+===================================================== */
 @media (max-width: 768px) {
-  .infoPanel {
-    display: none;
+
+  /* Page padding tighter */
+  .page {
+    padding: 16px;
   }
+
+  /* Stack everything naturally */
+  .top {
+    display: block;
+  }
+
+  /* ================= IMAGE (MOBILE HERO) ================= */
+  .mainImage {
+    width: 100%;
+    aspect-ratio: 4 / 5;       /* 🔥 taller image for cars */
+    border-radius: 16px;
+    margin-bottom: 14px;
+  }
+
+  .mainImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;       /* 🔥 NEVER crop */
+    max-height: none;
+  }
+
+  /* Center arrows better on mobile */
+  .navArrow {
+    width: 34px;
+    height: 34px;
+    font-size: 16px;
+  }
+
+  /* ================= TITLE UNDER IMAGE ================= */
+  .titleRow h3 {
+    font-size: 18px;
+    line-height: 1.3;
+  }
+
+  .subtitle {
+    font-size: 12px;
+  }
+
+  /* ================= PRICE BLOCK ================= */
+  .priceRow {
+    flex-direction: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin: 18px 0;
+  }
+
+  .price {
+    font-size: 22px;
+  }
+
+  /* ================= ACTION BUTTONS ================= */
+  .actions {
+    flex-direction: column;
+    gap: 10px;
+
+    position: sticky;          /* 🔥 sticky CTA */
+    bottom: 0;
+    background: var(--bg);
+    padding: 12px 0;
+    z-index: 20;
+  }
+
+  .actions button {
+    width: 100%;
+    font-size: 14px;
+    padding: 14px;
+  }
+
+  /* ================= THUMBNAILS ================= */
+  .thumbs {
+    margin-top: 12px;
+    padding-bottom: 8px;
+  }
+
+  .thumb {
+    width: 72px;
+    height: 72px;
+  }
+
+  /* ================= SPECS ================= */
+  .specFeatureGrid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  table td {
+    font-size: 13px;
+  }
+
+  /* ================= FEATURES ================= */
+  .featureGrid span {
+    font-size: 10px;
+    padding: 5px 10px;
+  }
+
+  /* ================= INFO PANEL ================= */
+  .infoPanel {
+    display: none; /* already intended */
+  }
+}
+
 }
 
       `}</style>

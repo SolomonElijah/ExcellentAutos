@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import useSWR from "swr";
 import { api, API_BASE_URL } from "@/lib/api";
 import SellContact from "@/components/SellContact";
@@ -16,6 +16,74 @@ const fetcher = async (url) => {
   const res = await api(url);
   return res; // 🔥 return full API response (data + meta)
 };
+
+function CarImageSlider({ car, onClick, children  }) {
+  const images = [
+    car.featured_image,
+    ...(car.images?.map((img) => img.url) || []),
+  ].filter(Boolean);
+
+  const [index, setIndex] = useState(0);
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+
+  const next = () => setIndex((i) => (i + 1) % images.length);
+  const prev = () =>
+    setIndex((i) => (i === 0 ? images.length - 1 : i - 1));
+
+  const onTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const onTouchMove = (e) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const onTouchEnd = () => {
+    const diff = touchStartX.current - touchEndX.current;
+    if (Math.abs(diff) > 50) {
+      diff > 0 ? next() : prev();
+    }
+  };
+
+  return (
+   <div
+  className="imgWrap"
+  onClick={onClick}
+  onTouchStart={onTouchStart}
+  onTouchMove={onTouchMove}
+  onTouchEnd={onTouchEnd}
+>
+  <img
+    src={`${API_BASE_URL.replace("/api", "")}${images[index]}`}
+    alt="Car image"
+    className="img"
+    loading="lazy"
+    decoding="async"
+    fetchPriority="low"
+  />
+
+  {/* 🔥 THIS LINE FIXES EVERYTHING */}
+  {children}
+
+  {images.length > 1 && (
+    <div className="dots">
+      {images.map((_, i) => (
+        <span
+          key={i}
+          className={`dot ${i === index ? "active" : ""}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIndex(i);
+          }}
+        />
+      ))}
+    </div>
+  )}
+</div>
+
+  );
+}
 
 export default function Product() {
   const router = useRouter();
@@ -179,21 +247,15 @@ export default function Product() {
 
               return (
                 <div className="card" key={car.id}>
-                  <div
-                    className="imgWrap"
-                    onClick={() => router.push(`/cars/${car.id}`)}
-                  >
-                    <img
-                      src={`${API_BASE_URL.replace("/api", "")}${car.featured_image}`}
-                      alt={`${car.year} ${car.brand.name} ${car.model}`}
-                      className="img"
-                    />
+     <CarImageSlider
+  car={car}
+  onClick={() => router.push(`/cars/${car.id}`)}
+>
+  {hasLoan && (
+    <span className="loanTag">Car Loan Available</span>
+  )}
+</CarImageSlider>
 
-                    {hasLoan && (
-                      <span className="loanTag">Car Loan Available</span>
-                    )}
-
-                  </div>
 
                   <div className="body">
                     <h3 onClick={() => router.push(`/cars/${car.id}`)}>
@@ -339,258 +401,216 @@ export default function Product() {
 
       {/* STYLES — COMPLETELY UNCHANGED + SMALL ADDITIONS */}
       <style>{`
-        .wrapper {
-          background: #000;
-          color: #fff;
-          padding: 50px 40px;
-          min-height: 100vh;
-        }
+   /* ================= THEME VARIABLES ================= */
+:root {
+  --bg: #ffffff;
+  --card-bg: #f8f9fb;
+  --surface: #ffffff;
+  --border: #e5e7eb;
+  --text: #111827;
+  --muted: #6b7280;
+  --accent: #ef4444;
+}
 
-        .title {
-          font-size: 22px;
-          margin-bottom: 25px;
-        }
+[data-theme="dark"] {
+  --bg: #000000;
+  --card-bg: #0b0b0b;
+  --surface: #111111;
+  --border: #1f2937;
+  --text: #ffffff;
+  --muted: #9ca3af;
+}
 
-        .grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 25px;
-        }
+/* ================= LAYOUT ================= */
+.wrapper {
+  background: var(--bg);
+  color: var(--text);
+  padding: 50px 40px;
+  min-height: 100vh;
+}
 
-        .card {
-          background: #0b0b0b;
-          border-radius: 16px;
-          overflow: hidden;
-          border: 1px solid #111;
-          cursor: pointer;
-        }
+.title {
+  font-size: 22px;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
 
-        .imgWrap {
-          width: 100%;
-          aspect-ratio: 16 / 9;
-          background: #111;
-          position: relative;
-        }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
 
-        .img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
+/* ================= CARD ================= */
+.card {
+  background: var(--card-bg);
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
-        .body {
-          padding: 16px;
-        }
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
 
-        .body h3 {
-          font-size: 16px;
-          margin-bottom: 10px;
-        }
+/* ================= IMAGE ================= */
+.imgWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #111;
+  overflow: hidden;
+   z-index: 1;  
+}
 
-        .meta {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-          font-size: 11px;
-          margin-bottom: 12px;
-        }
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-        .meta span {
-          background: #111;
-          padding: 4px 8px;
-          border-radius: 6px;
-        }
+/* ================= IMAGE DOTS ================= */
+.dots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+}
 
-        .rating {
-          background: #222;
-        }
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+}
 
-        .priceRow {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 14px;
-        }
+.dot.active {
+  background: #ffffff;
+}
 
-        .price,
-        .monthly {
-          font-weight: 600;
-        }
+/* ================= LOAN BADGE (ON IMAGE) ================= */
+.loanTag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
 
-        .actions {
-          display: flex;
-          gap: 10px;
-        }
+  z-index: 10;                 /* 🔥 force above image + dots */
+  pointer-events: none;        /* 🔥 prevents hover dependency */
 
-        .actions button {
-          flex: 1;
-          padding: 10px;
-          font-size: 12px;
-          border-radius: 8px;
-        }
+  background: rgba(230, 240, 255, 0.95);
+  color: #1a4ed8;
+  padding: 6px 12px;
+  font-size: 11px;
+  border-radius: 999px;
+  font-weight: 600;
 
-        .outline {
-          background: transparent;
-          border: 1px solid red;
-          color: #fff;
-        }
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(6px);
 
-        .solid {
-          background: red;
-          border: none;
-          color: #fff;
-        }
+  opacity: 1;                  /* 🔥 force visible */
+  visibility: visible;         /* 🔥 force visible */
+}
 
-        .pagination {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          gap: 15px;
-          margin-top: 40px;
-        }
 
-        .pagination button {
-          background: #111;
-          border: 1px solid #222;
-          color: #fff;
-          padding: 8px 14px;
-          border-radius: 6px;
-          cursor: pointer;
-        }
+/* ================= BODY ================= */
+.body {
+  padding: 16px;
+}
 
-        .pagination button:disabled {
-          opacity: 0.4;
-          cursor: not-allowed;
-        }
+.body h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
 
-        .skeleton {
-          pointer-events: none;
-        }
+/* ================= META ================= */
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 11px;
+  margin-bottom: 12px;
+}
 
-        .shimmer {
-          background: linear-gradient(
-            90deg,
-            #111 25%,
-            #1a1a1a 37%,
-            #111 63%
-          );
-          background-size: 400% 100%;
-          animation: shimmer 1.4s ease infinite;
-        }
+.metaRow {
+  justify-content: space-between;
+  align-items: center;
+}
 
-        .line {
-          height: 12px;
-          border-radius: 6px;
-          margin-bottom: 10px;
-        }
+.metaLeft {
+  display: flex;
+  gap: 8px;
+}
 
-        .w80 {
-          width: 80%;
-        }
+.meta span {
+  background: var(--pill-bg, #eef2ff);
+  color: var(--pill-text, #3730a3);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+}
 
-        .w60 {
-          width: 60%;
-        }
+.rating {
+  background: #fde68a;
+  color: #92400e;
+  font-weight: 600;
+}
 
-        .w40 {
-          width: 40%;
-        }
+/* ================= PRICE ================= */
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
 
-        .tag {
-          width: 50px;
-          height: 16px;
-          border-radius: 6px;
-        }
+.price,
+.monthly {
+  font-weight: 600;
+}
 
-        .btn {
-          height: 32px;
-          border-radius: 8px;
-          flex: 1;
-        }
+/* ================= ACTIONS ================= */
+.actions {
+  display: flex;
+  gap: 10px;
+}
 
-        @keyframes shimmer {
-          0% {
-            background-position: -400px 0;
-          }
-          100% {
-            background-position: 400px 0;
-          }
-        }
+.actions button {
+  flex: 1;
+  padding: 10px;
+  font-size: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
 
-        @media (max-width: 1100px) {
-          .grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
+.outline {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
 
-        @media (max-width: 700px) {
-          .grid {
-            grid-template-columns: 1fr;
-          }
-        }
+.solid {
+  background: var(--accent);
+  border: none;
+  color: #fff;
+}
 
-        /* === ADDED ONLY === */
-        .metaRow {
-          justify-content: space-between;
-          align-items: center;
-        }
-
-        .metaLeft {
-          display: flex;
-          gap: 8px;
-        }
-
-        .loanTag {
-          position: absolute;
-          bottom: 10px;
-          left: 10px;
-          background: #e6f0ff;
-          color: #1a4ed8;
-          padding: 4px 8px;
-          font-size: 11px;
-          border-radius: 10px;
-        }
-
-        /* NEW: No results styles */
-        .no-results {
-          grid-column: 1 / -1;
-          text-align: center;
-          padding: 60px 20px;
-          background: #0b0b0b;
-          border-radius: 16px;
-          border: 1px solid #222;
-        }
-
-        .no-results h3 {
-          font-size: 20px;
-          margin-bottom: 10px;
-        }
-
-        .no-results p {
-          color: #888;
-          margin-bottom: 20px;
-        }
-
-        .clear-btn {
-          background: #111;
-          border: 1px solid #333;
-          color: #fff;
-          padding: 10px 20px;
-          border-radius: 8px;
-          cursor: pointer;
-        }
-
-        .clear-btn:hover {
-          background: #222;
-        }
-          .preorder-cta {
+/* ================= PREORDER CTA ================= */
+.preorder-cta {
   margin-top: 16px;
   display: flex;
-  justify-content: center;   /* ✅ center horizontally */
+  justify-content: center;
   align-items: center;
 }
 
 .preorder-btn {
-  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 12px;
@@ -598,7 +618,7 @@ export default function Product() {
   background: linear-gradient(135deg, #e11d48, #b91c1c);
   color: #fff;
   border: none;
-  border-radius: 14px;
+  border-radius: 999px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -618,6 +638,33 @@ export default function Product() {
   border-radius: 999px;
   font-size: 11px;
   font-weight: 700;
+}
+
+/* ================= NO RESULTS ================= */
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  background: var(--card-bg);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+}
+
+.no-results p {
+  color: var(--muted);
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
 
       `}</style>

@@ -1,16 +1,87 @@
 /* ================= ROOT / RESET ================= */
 
+/* ===== LIGHT MODE (DEFAULT) ===== */
 :root {
+  /* Core */
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Navigation & layout */
+  --nav-bg: #ffffff;
+  --footer-bg: #ffffff;
+
+  /* Surfaces (cards, chips, brands, buttons) */
+  --surface: #f5f5f5;
+  --surface-border: #dddddd;
+
+  /* Text */
+  --text-main: #171717;
+  --text-invert: #ffffff;
+  --text-muted: #555555;
+  --text-soft: #777777;
+
+  /* Borders */
+  --border-main: #dddddd;
+  --border-strong: #bbbbbb;
+
+  /* Accent */
+  --accent: red;
+
+   --elevation-1: 0 6px 16px rgba(0,0,0,0.08);
+  --elevation-2: 0 14px 32px rgba(0,0,0,0.12);
+  --elevation-3: 0 22px 48px rgba(0,0,0,0.16);
 }
 
+/* ===== SYSTEM DARK MODE ===== */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+
+    --nav-bg: #000000;
+    --footer-bg: #000000;
+
+    --surface: #111111;
+    --surface-border: #222222;
+
+    --text-main: #ededed;
+    --text-invert: #ffffff;
+    --text-muted: #bbbbbb;
+    --text-soft: #999999;
+
+    --border-main: #333333;
+    --border-strong: #222222;
   }
 }
+
+/* ===== MANUAL THEME OVERRIDE (ThemeToggle) ===== */
+[data-theme="light"] {
+  --background: #ffffff;
+  --foreground: #171717;
+
+  --nav-bg: #ffffff;
+  --footer-bg: #ffffff;
+
+  --surface: #f5f5f5;
+  --surface-border: #dddddd;
+}
+
+[data-theme="dark"] {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+
+  --nav-bg: #000000;
+  --footer-bg: #000000;
+
+  --surface: #111111;
+  --surface-border: #222222;
+
+   --elevation-1: 0 6px 18px rgba(0,0,0,0.4);
+  --elevation-2: 0 14px 34px rgba(0,0,0,0.55);
+  --elevation-3: 0 22px 50px rgba(0,0,0,0.7);
+}
+
+/* ================= BASE ================= */
 
 html,
 body {
@@ -19,15 +90,15 @@ body {
 }
 
 body {
-  color: var(--foreground);
   background: var(--background);
+  color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 html {
-  overflow-y: scroll; /* prevents navbar shift */
+  overflow-y: scroll;
 }
 
 * {
@@ -41,303 +112,6 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-}
-
-/* ================= NAVBAR (NAMESPACED) ================= */
-
-.nav-bar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: #000;
-  border-bottom: 1px solid red;
-  z-index: 1000;
-}
-
-.nav-container {
-  display: flex;
-  align-items: center;
-  padding: 14px 24px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* LOGO */
-.nav-logo {
-  font-weight: bold;
-  font-size: 16px;
-}
-
-/* DESKTOP MENU (CENTERED) */
-.nav-menu {
-  display: flex;
-  gap: 18px;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.nav-menu a {
-  color: #ddd;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.nav-menu a:hover,
-.nav-active {
-  color: red;
-}
-
-/* RIGHT SIDE */
-.nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-left: auto;
-}
-
-.nav-social {
-  display: flex;
-  gap: 12px;
-}
-
-.nav-social a {
-  display: inline-flex;
-}
-
-/* TOGGLE */
-.nav-toggle {
-  display: none;
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 29px;
-  cursor: pointer;
-}
-
-/* MOBILE */
-@media (max-width: 900px) {
-  .nav-menu {
-    display: none;
-  }
-
-  .nav-toggle {
-    display: block;
-  }
-}
-
-.nav-social a {
-  display: inline-flex;
-  align-items: center;
-}
-
-.nav-social a:hover img {
-  opacity: 0.8;
-}
-
-/* MOBILE MENU */
-.nav-mobile-menu {
-  position: fixed;
-  top: 64px;
-  width: 100%;
-  background: #000;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 16px;
-  z-index: 999;
-}
-
-.nav-mobile-menu a {
-  color: #fff;
-  text-decoration: none;
-  font-size: 15px;
-}
-
-/* SPACER */
-.nav-spacer {
-  height: 64px;
-}
-
-
-/* SPACER */
-.spacer {
-  height: 64px;
-}
-
-/* ================= FOOTER (GLOBAL) ================= */
-
-.footer {
-  background: #000;
-  color: #fff;
-  border-top: 2px solid red;
-}
-
-.footer .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-/* MAIN FOOTER */
-.footer-main {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 40px;
-  padding: 60px 0;
-}
-
-.footer-about {
-  max-width: 320px;
-}
-
-.footer-tagline {
-  margin-top: 16px;
-  font-size: 14px;
-  color: #ccc;
-  line-height: 1.6;
-}
-
-.footer-title {
-  font-size: 16px;
-  margin-bottom: 16px;
-  position: relative;
-}
-
-.footer-title::after {
-  content: "";
-  display: block;
-  width: 28px;
-  height: 2px;
-  background: red;
-  margin-top: 6px;
-}
-
-.footer-links {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.footer-links a {
-  color: #ccc;
-  font-size: 14px;
-}
-
-.footer-links a:hover {
-  color: red;
-}
-
-.contact-details {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  font-size: 14px;
-  color: #ccc;
-}
-
-/* SOCIAL */
-.footer-social {
-  display: flex;
-  flex-direction: column;
-}
-
-.social-icons {
-  display: flex;
-  gap: 12px;
-}
-
-.social-btn {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 1px solid #333;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #111;
-}
-
-/* FOOTER BOTTOM (SINGLE SOURCE) */
-.footer-bottom {
-  border-top: 1px solid #222;
-  background: #000;
-  padding: 24px 0;
-}
-
-.footer-bottom-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  font-size: 13px;
-  color: #aaa;
-}
-
-.legal-links {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-}
-
-.legal-links a {
-  color: #aaa;
-}
-
-.legal-links a:hover {
-  color: red;
-}
-
-.copyright {
-  text-align: center;
-}
-
-/* ================= RESPONSIVE ================= */
-
-@media (max-width: 900px) {
-  .footer-main {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 600px) {
-  .footer-main {
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas:
-      "about about"
-      "links contact"
-      "social social";
-    text-align: center;
-  }
-
-  .footer-about {
-    grid-area: about;
-    margin: 0 auto;
-  }
-
-  .footer-links {
-    grid-area: links;
-  }
-
-  .contact-details {
-    grid-area: contact;
-  }
-
-  .footer-social {
-    grid-area: social;
-    align-items: center;
-  }
-
-  .social-icons {
-    justify-content: center;
-  }
-
-  .footer-title::after {
-    margin-left: auto;
-    margin-right: auto;
-  }
+[data-theme="dark"] {
+  color-scheme: dark;
 }

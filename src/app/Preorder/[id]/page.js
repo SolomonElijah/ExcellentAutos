@@ -257,98 +257,147 @@ export default function PreOrderForm() {
       )}
 
       <style jsx>{`
-        .wrapper {
-          padding: 40px;
-        }
-        .form {
-          max-width: 1100px;
-          margin: auto;
-          background: #000;
-          color: #fff;
-          padding: 40px;
-          border-radius: 16px;
-        }
-        .section {
-          margin: 32px 0 16px;
-          font-size: 18px;
-          border-bottom: 1px solid #111;
-          padding-bottom: 8px;
-        }
-        .grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 20px;
-        }
-        .field {
-          display: flex;
-          flex-direction: column;
-        }
-        label {
-          font-size: 13px;
-          margin-bottom: 6px;
-          color: #aaa;
-        }
-        input,
-        textarea {
-          padding: 14px;
-          border-radius: 10px;
-          background: #0b0b0b;
-          border: 1px solid #111;
-          color: #fff;
-        }
-        .locked {
-          background: #111;
-          color: #777;
-        }
-        textarea {
-          min-height: 120px;
-        }
-        .error {
-          font-size: 12px;
-          color: #f87171;
-          margin-top: 4px;
-        }
-        button {
-          margin-top: 32px;
-          padding: 16px;
-          border-radius: 10px;
-          background: red;
-          color: #fff;
-          font-weight: 600;
-        }
-        .overlay {
-          position: fixed;
-          inset: 0;
-          background: rgba(0, 0, 0, 0.75);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .popup {
-          background: #0b0b0b;
-          padding: 30px;
-          border-radius: 16px;
-          width: 90%;
-          max-width: 400px;
-        }
-          .success {
-  color: #22c55e; /* green */
+/* ================= GLOBAL THEME VARIABLES ================= */
+:global(:root) {
+  --bg-main: #f5f7fb;          /* page background */
+  --bg-card: #ffffff;         /* card background */
+  --bg-input: #ffffff;
+  --border-color: #e5e7eb;
+  --text-main: #111111;
+  --text-muted: #6b7280;
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
+:global([data-theme="dark"]) {
+  --bg-main: #000000;
+  --bg-card: #0b0b0b;          /* slightly lighter than bg */
+  --bg-input: #0f0f0f;
+  --border-color: #1f1f1f;
+  --text-main: #ffffff;
+  --text-muted: #a3a3a3;
+  --shadow-card: 0 12px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* ================= LAYOUT ================= */
+.wrapper {
+  padding: 40px;
+  background: var(--bg-main);
+  min-height: 100vh;
+}
+
+.form {
+  max-width: 1100px;
+  margin: auto;
+  background: var(--bg-card);
+  color: var(--text-main);
+  padding: 40px;
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-color);
+}
+
+/* ================= SECTIONS ================= */
+.section {
+  margin: 32px 0 16px;
+  font-size: 18px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: var(--text-muted);
+}
+
+/* ================= INPUTS ================= */
+input,
+textarea {
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.locked {
+  background: var(--bg-input);
+  color: var(--text-muted);
+}
+
+/* ================= FEEDBACK ================= */
 .error {
-  color: #f87171; /* red */
+  font-size: 12px;
+  color: #f87171;
+  margin-top: 4px;
 }
 
-        .whatsapp {
-          background: #25d366;
-          margin-top: 12px;
-        }
-        @media (max-width: 900px) {
-          .grid {
-            grid-template-columns: 1fr;
-          }
-        }
-      `}</style>
+.success {
+  color: #22c55e;
+}
+
+/* ================= BUTTONS ================= */
+button {
+  margin-top: 32px;
+  padding: 16px;
+  border-radius: 12px;
+  background: red;
+  color: #ffffff;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.whatsapp {
+  background: #25d366;
+  margin-top: 12px;
+}
+
+/* ================= POPUP ================= */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup {
+  background: var(--bg-card);
+  color: var(--text-main);
+  padding: 30px;
+  border-radius: 18px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-color);
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+`}</style>
+
     </div>
   );
 }

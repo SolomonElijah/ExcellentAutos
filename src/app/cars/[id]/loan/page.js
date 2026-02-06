@@ -128,9 +128,18 @@ export default function CarLoanPage() {
                 )}
               </div>
 
-              <div className="locationNote">
+              {/* <div className="locationNote">
                 <small>📍 {car.location}</small>
-              </div>
+              </div> */}
+
+               {!loading && (
+            <button
+              className="applyBtn"
+              onClick={() => router.push(`/cars/${id}/loan/apply`)}
+            >
+              Start Application
+            </button>
+          )}
             </>
           )}
         </div>
@@ -194,225 +203,237 @@ export default function CarLoanPage() {
       </div>
 
       <style>{`
-        .page {
-          display: grid;
-          grid-template-columns: 1fr 1.4fr;
-          gap: 40px;
-          padding: 50px;
-          background: #000;
-          color: #fff;
-          min-height: 100vh;
-        }
+       /* ================= THEME VARIABLES ================= */
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --card: #f8f9fb;
+  --border: #e5e7eb;
 
-        .left,
-        .right {
-          background: #0b0b0b;
-          padding: 30px;
-          border-radius: 16px;
-          border: 1px solid #111;
-        }
+  --text: #111827;
+  --muted: #6b7280;
 
-        .carImg {
-          width: 100%;
-          max-width: 360px;
-          border-radius: 12px;
-          margin-bottom: 16px;
-        }
+  --accent: #ef4444;
+  --accent-soft: rgba(239, 68, 68, 0.1);
+}
 
-        .carName {
-          font-size: 18px;
-          margin-bottom: 20px;
-        }
+[data-theme="dark"] {
+  --bg: #000000;
+  --surface: #0b0b0b;
+  --card: #111111;
+  --border: #1f2937;
 
-        /* LOAN DETAILS STYLING */
-        .loanDetails {
-          margin-bottom: 20px;
-        }
+  --text: #ffffff;
+  --muted: #9ca3af;
+}
 
-        .loanRow {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 12px 0;
-          border-bottom: 1px solid #222;
-        }
+/* ================= PAGE ================= */
+.page {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 40px;
+  padding: 50px;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
 
-        .loanRow:last-child {
-          border-bottom: none;
-        }
+/* ================= PANELS ================= */
+.left,
+.right {
+  background: var(--surface);
+  padding: 32px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+}
 
-        .loanRow .label {
-          color: #aaa;
-          font-size: 14px;
-        }
+/* ================= IMAGE ================= */
+.carImg {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto 20px;
+  display: block;
+  border-radius: 16px;
+  object-fit: contain;
+}
 
-        .loanRow .value {
-          font-weight: 600;
-          font-size: 16px;
-        }
+/* ================= TITLE ================= */
+.carName {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
 
-        .loanRow.highlight {
-          background: rgba(255, 0, 0, 0.1);
-          padding: 16px;
-          border-radius: 8px;
-          margin: 10px 0;
-          border: 1px solid rgba(255, 0, 0, 0.3);
-        }
+/* ================= LOAN DETAILS ================= */
+.loanDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
-        .loanRow.highlight .label {
-          color: #fff;
-          font-weight: 600;
-        }
+.loanRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px dashed var(--border);
+}
 
-        .loanRow.highlight .value {
-          color: red;
-          font-size: 20px;
-          font-weight: 700;
-        }
+.loanRow:last-child {
+  border-bottom: none;
+}
 
-        .locationNote {
-          margin-top: 20px;
-          padding-top: 15px;
-          border-top: 1px solid #222;
-          color: #aaa;
-          font-size: 14px;
-        }
+.loanRow .label {
+  font-size: 13px;
+  color: var(--muted);
+}
 
-        .title {
-          text-align: center;
-          margin-bottom: 30px;
-          color: red;
-        }
+.loanRow .value {
+  font-size: 15px;
+  font-weight: 600;
+}
 
-        .steps {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 30px;
-          margin-bottom: 40px;
-          text-align: center;
-        }
+/* ================= HIGHLIGHT ================= */
+.loanRow.highlight {
+  background: var(--accent-soft);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  padding: 16px;
+  border-radius: 14px;
+  margin: 12px 0;
+}
 
-        .step {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
+.loanRow.highlight .label {
+  color: var(--text);
+  font-weight: 600;
+}
 
-        .icon {
-          width: 70px;
-          height: 70px;
-          border-radius: 50%;
-          background: #111;
-          border: 1px solid #222;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 30px;
-          margin-bottom: 14px;
-        }
+.loanRow.highlight .value {
+  color: var(--accent);
+  font-size: 20px;
+  font-weight: 700;
+}
 
-        .applyBtn {
-          display: block;
-          margin: 0 auto;
-          background: red;
-          color: #fff;
-          border: none;
-          padding: 14px 32px;
-          border-radius: 10px;
-          font-weight: 600;
-          cursor: pointer;
-          width: 100%;
-          max-width: 300px;
-        }
+/* ================= LOCATION ================= */
+.locationNote {
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 13px;
+}
 
-        .applyBtn:hover {
-          background: #cc0000;
-        }
+/* ================= RIGHT PANEL ================= */
+.title {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 30px;
+  color: var(--accent);
+}
 
-        /* SKELETON */
-        .skeleton {
-          background: linear-gradient(
-            90deg,
-            #111 25%,
-            #1a1a1a 37%,
-            #111 63%
-          );
-          background-size: 400% 100%;
-          animation: shimmer 1.4s ease infinite;
-          border-radius: 8px;
-        }
+/* ================= STEPS ================= */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  margin-bottom: 40px;
+}
 
-        .skeleton.img {
-          width: 100%;
-          height: 180px;
-          margin-bottom: 16px;
-        }
+.step {
+  text-align: center;
+}
 
-        .skeleton.text {
-          height: 14px;
-          width: 100%;
-          margin-bottom: 10px;
-        }
+.icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin: 0 auto 14px;
+}
 
-        .skeleton.text.sm {
-          width: 70%;
-        }
+/* ================= CTA ================= */
+.applyBtn {
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+  display: block;
 
-        .skeleton.text.lg {
-          width: 90%;
-        }
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  color: #fff;
+  border: none;
+  padding: 16px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
 
-        .skeleton.row {
-          height: 40px;
-          width: 100%;
-        }
+.applyBtn:hover {
+  opacity: 0.9;
+}
 
-        .skeleton.icon {
-          width: 70px;
-          height: 70px;
-          border-radius: 50%;
-          margin-bottom: 14px;
-        }
+/* ================= SKELETON ================= */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--card) 25%,
+    rgba(255,255,255,0.08) 37%,
+    var(--card) 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 10px;
+}
 
-        @keyframes shimmer {
-          0% {
-            background-position: 200% 0;
-          }
-          100% {
-            background-position: -200% 0;
-          }
-        }
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
 
-        @media (max-width: 900px) {
-          .page {
-            grid-template-columns: 1fr;
-          }
+/* ================= MOBILE LAYOUT ================= */
+@media (max-width: 900px) {
+  .page {
+    grid-template-columns: 1fr;
+    padding: 24px;
+  }
 
-          .steps {
-            grid-template-columns: 1fr;
-          }
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 
-          .loanRow {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 4px;
-          }
+  .loanRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
 
-          .loanRow .value {
-            align-self: flex-end;
-          }
-        }
+  .loanRow .value {
+    align-self: flex-end;
+  }
+}
 
-        @media (max-width: 600px) {
-          .page {
-            padding: 20px;
-          }
+/* ================= SMALL PHONES ================= */
+@media (max-width: 600px) {
+  .left,
+  .right {
+    padding: 22px;
+  }
 
-          .left,
-          .right {
-            padding: 20px;
-          }
-        }
+  .carName {
+    font-size: 18px;
+  }
+
+  .applyBtn {
+    font-size: 14px;
+    padding: 14px;
+  }
+}
+
       `}</style>
     </>
   );

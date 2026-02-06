@@ -121,118 +121,41 @@ export default function SellLanding() {
       </section>
 
       <style >{`
-        .wrapper {
-          min-height: 100vh;
-          background: radial-gradient(circle at top, #111, #000);
-          color: #fff;
-          padding: 60px 20px;
-        }
+        /* ================= THEME VARIABLES ================= */
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --card: #f9fafb;
+  --border: #e5e7eb;
 
-        .hero {
-          max-width: 900px;
-          margin: 0 auto 60px;
-          text-align: center;
-        }
+  --text: #111827;
+  --muted: #6b7280;
 
-        .headline {
-          font-size: 36px;
-          font-weight: 700;
-          margin-bottom: 20px;
-          color: red;
-        }
+  --accent: #ef4444;
+  --accent-hover: #cc0000;
 
-        .subtext {
-          font-size: 16px;
-          line-height: 1.7;
-          color: #ccc;
-          margin-bottom: 30px;
-        }
+  --success: #16a34a;
+}
 
-        .primary-cta,
-        .secondary-cta {
-          background: red;
-          border: none;
-          padding: 16px 44px;
-          border-radius: 14px;
-          font-size: 15px;
-          font-weight: 600;
-          cursor: pointer;
-          color: #fff;
-        }
+[data-theme="dark"] {
+  --bg: #000000;
+  --surface: #0b0b0b;
+  --card: #0b0b0b;
+  --border: #111;
 
-        .trust {
-          display: flex;
-          justify-content: center;
-          gap: 30px;
-          flex-wrap: wrap;
-          margin-bottom: 70px;
-          color: green;
-          font-size: 14px;
-        }
+  --text: #ffffff;
+  --muted: #cccccc;
+}
 
-        .why {
-          max-width: 1000px;
-          margin: 0 auto 80px;
-          text-align: center;
-        }
+/* ================= PAGE ================= */
+.wrapper {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  padding: 60px 20px;
+}
 
-        .why h2 {
-          font-size: 26px;
-          margin-bottom: 40px;
-        }
-
-        .why-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 30px;
-        }
-
-        .why-card {
-          background: #0b0b0b;
-          border: 1px solid #111;
-          border-radius: 18px;
-          padding: 30px;
-        }
-
-        .why-card h3 {
-          margin-bottom: 12px;
-          font-size: 18px;
-          color: red;
-        }
-
-        .why-card p {
-          font-size: 14px;
-          line-height: 1.6;
-          color: #ccc;
-        }
-
-        .steps-section {
-          max-width: 900px;
-          margin: 0 auto 80px;
-          text-align: center;
-        }
-
-        .steps-section h2 {
-          font-size: 26px;
-          margin-bottom: 50px;
-        }
-
-        .steps {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 40px;
-        }
-
-        .step {
-          background: #0b0b0b;
-          border: 1px solid #111;
-          border-radius: 16px;
-          padding: 30px 20px;
-        }
-
-
-        /* ================= SELL HERO ================= */
-
+/* ================= SELL HERO ================= */
 .sell-hero {
   display: flex;
   align-items: center;
@@ -240,7 +163,7 @@ export default function SellLanding() {
   gap: 40px;
   padding: 30px 20px;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto 60px;
 }
 
 .sell-hero-content {
@@ -249,15 +172,15 @@ export default function SellLanding() {
 
 .sell-headline {
   font-size: 40px;
-  font-weight: 700;
-  color: red;
+  font-weight: 800;
+  color: var(--accent);
   margin-bottom: 16px;
 }
 
 .sell-subtext {
   font-size: 15px;
   line-height: 1.7;
-  color: #ccc;
+  color: var(--muted);
   margin-bottom: 24px;
 }
 
@@ -268,7 +191,121 @@ export default function SellLanding() {
   display: block;
 }
 
-/* ===== MOBILE ===== */
+/* ================= CTA ================= */
+.primary-cta,
+.secondary-cta {
+  background: var(--accent);
+  border: none;
+  padding: 16px 44px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+}
+
+.primary-cta:hover,
+.secondary-cta:hover {
+  background: var(--accent-hover);
+}
+
+/* ================= TRUST ================= */
+.trust {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-bottom: 70px;
+  color: var(--success);
+  font-size: 14px;
+}
+
+/* ================= WHY ================= */
+.why {
+  max-width: 1000px;
+  margin: 0 auto 80px;
+  text-align: center;
+}
+
+.why h2 {
+  font-size: 26px;
+  margin-bottom: 40px;
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.why-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 30px;
+}
+
+.why-card h3 {
+  margin-bottom: 12px;
+  font-size: 18px;
+  color: var(--accent);
+}
+
+.why-card p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* ================= STEPS ================= */
+.steps-section {
+  max-width: 900px;
+  margin: 0 auto 80px;
+  text-align: center;
+}
+
+.steps-section h2 {
+  font-size: 26px;
+  margin-bottom: 50px;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.step {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 30px 20px;
+}
+
+.icon {
+  font-size: 40px;
+  margin-bottom: 16px;
+}
+
+/* ================= FINAL CTA ================= */
+.final-cta {
+  text-align: center;
+  padding: 60px 20px;
+  border-top: 1px solid var(--border);
+}
+
+.final-cta h2 {
+  font-size: 28px;
+  margin-bottom: 16px;
+  color: var(--accent);
+}
+
+.final-cta p {
+  color: var(--muted);
+  margin-bottom: 30px;
+}
+
+/* ================= RESPONSIVE ================= */
 @media (max-width: 900px) {
   .sell-hero {
     flex-direction: column;
@@ -276,47 +313,19 @@ export default function SellLanding() {
   }
 
   .sell-hero-image {
-    display: none; /* 🔥 hide image on phones */
+    display: none;
   }
 
   .sell-headline {
     font-size: 26px;
   }
+
+  .why-grid,
+  .steps {
+    grid-template-columns: 1fr;
+  }
 }
 
-
-        .icon {
-          font-size: 40px;
-          margin-bottom: 16px;
-        }
-
-        .final-cta {
-          text-align: center;
-          padding: 60px 20px;
-          border-top: 1px solid #111;
-        }
-
-        .final-cta h2 {
-          font-size: 28px;
-          margin-bottom: 16px;
-          color: red;
-        }
-
-        .final-cta p {
-          color: #ccc;
-          margin-bottom: 30px;
-        }
-
-        @media (max-width: 900px) {
-          .why-grid,
-          .steps {
-            grid-template-columns: 1fr;
-          }
-
-          .headline {
-            font-size: 28px;
-          }
-        }
       `}</style>
     </>
   );

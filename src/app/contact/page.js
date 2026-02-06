@@ -138,98 +138,137 @@ export default function ContactPage() {
         </div>
       )}
 
-      <style>{`
-        /* ================= CONTACT PAGE ONLY ================= */
+      <style jsx>{`
+/* ================= GLOBAL THEME VARIABLES ================= */
+:global(:root) {
+  --bg-main: #f5f7fb;
+  --bg-card: #ffffff;
+  --bg-input: #ffffff;
+  --border-color: #e5e7eb;
+  --text-main: #111111;
+  --text-muted: #6b7280;
+  --accent: red;
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
 
-        .contact-wrapper {
-          min-height: 100vh;
-          background: radial-gradient(circle at top, #111, #000);
-          color: #fff;
-          padding: 90px 20px 70px;
-        }
+:global([data-theme="dark"]) {
+  --bg-main: #000000;
+  --bg-card: #0b0b0b;
+  --bg-input: #0f0f0f;
+  --border-color: #1f1f1f;
+  --text-main: #ffffff;
+  --text-muted: #cccccc;
+  --accent: red;
+  --shadow-card: 0 14px 45px rgba(0, 0, 0, 0.65);
+}
 
-        .contact-intro {
-          max-width: 800px;
-          margin: 0 auto 40px;
-          text-align: center;
-        }
+/* ================= CONTACT PAGE ================= */
+.contact-wrapper {
+  min-height: 100vh;
+  background: radial-gradient(
+    circle at top,
+    var(--bg-card),
+    var(--bg-main)
+  );
+  color: var(--text-main);
+  padding: 90px 20px 70px;
+}
 
-        .contact-headline {
-          font-size: 34px;
-          font-weight: 700;
-          margin-bottom: 16px;
-          color: red;
-        }
+/* ================= INTRO ================= */
+.contact-intro {
+  max-width: 800px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
 
-        .contact-subtext {
-          font-size: 16px;
-          line-height: 1.7;
-          color: #ccc;
-        }
+.contact-headline {
+  font-size: 34px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--accent);
+}
 
-        .contact-form {
-          max-width: 900px;
-          margin: 0 auto;
-          padding: 40px;
-          background: #000;
-          border-radius: 16px;
-          border: 1px solid #111;
-        }
+.contact-subtext {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
 
-        .contact-title {
-          font-size: 22px;
-          margin-bottom: 10px;
-        }
+/* ================= FORM CARD ================= */
+.contact-form {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px;
+  background: var(--bg-card);
+  border-radius: 18px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
+  color: var(--text-main);
+}
 
-        .contact-note {
-          font-size: 14px;
-          color: #aaa;
-          margin-bottom: 25px;
-        }
+.contact-title {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
 
-        .contact-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 16px;
-          margin-bottom: 16px;
-        }
+.contact-note {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 25px;
+}
 
-        .contact-form input,
-        .contact-form textarea {
-          width: 100%;
-          padding: 14px;
-          border-radius: 10px;
-          border: 1px solid #111;
-          background: #0b0b0b;
-          color: #fff;
-        }
+/* ================= GRID ================= */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
 
-        .contact-form textarea {
-          min-height: 140px;
-          margin-bottom: 20px;
-          resize: vertical;
-        }
+/* ================= INPUTS ================= */
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-input);
+  color: var(--text-main);
+}
 
-        .contact-form button {
-          background: red;
-          border: none;
-          padding: 16px;
-          width: 100%;
-          border-radius: 10px;
-          font-weight: 600;
-          cursor: pointer;
-          color: #fff;
-        }
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: var(--text-muted);
+}
 
-        .contact-form button:disabled {
-          opacity: 0.6;
-        }
+.contact-form textarea {
+  min-height: 140px;
+  margin-bottom: 20px;
+  resize: vertical;
+}
 
-        /* POPUP */
-       .contact-overlay {
+/* ================= BUTTON ================= */
+.contact-form button {
+  background: var(--accent);
+  border: none;
+  padding: 16px;
+  width: 100%;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.contact-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ================= POPUP ================= */
+.contact-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -237,18 +276,20 @@ export default function ContactPage() {
 }
 
 .contact-popup {
-  background: #0b0b0b;
-  border: 1px solid #222;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
   padding: 30px;
-  border-radius: 16px;
+  border-radius: 18px;
   width: 90%;
   max-width: 420px;
   text-align: center;
+  box-shadow: var(--shadow-card);
+  color: var(--text-main);
 }
 
 .contact-popup p,
 .contact-popup pre {
-  color: #fff;
+  color: var(--text-muted);
   font-size: 14px;
   line-height: 1.6;
   margin-bottom: 20px;
@@ -256,27 +297,28 @@ export default function ContactPage() {
 }
 
 .contact-popup button {
-  background: red;
+  background: var(--accent);
   border: none;
   padding: 12px 18px;
-  border-radius: 10px;
+  border-radius: 12px;
   font-weight: 600;
-  color: #fff;
+  color: #ffffff;
   cursor: pointer;
   width: 100%;
 }
 
+/* ================= RESPONSIVE ================= */
+@media (max-width: 900px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
 
-        @media (max-width: 900px) {
-          .contact-grid {
-            grid-template-columns: 1fr;
-          }
+  .contact-headline {
+    font-size: 28px;
+  }
+}
+`}</style>
 
-          .contact-headline {
-            font-size: 28px;
-          }
-        }
-      `}</style>
     </>
   );
 }

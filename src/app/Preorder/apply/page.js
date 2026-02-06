@@ -301,160 +301,190 @@ export default function PreOrderForm() {
       )}
 
       <style jsx>{`
-        .preorder-form-namespace {
-          /* Namespace wrapper */
-        }
-        
-        .preorder-form-namespace .preorder-form {
-          max-width: 1100px;
-          margin: 40px auto;
-          padding: 40px;
-          background: #000;
-          color: #fff;
-          border-radius: 16px;
-          border: 1px solid #111;
-        }
+/* ================= GLOBAL THEME VARIABLES ================= */
+:global(:root) {
+  --bg-main: #f5f7fb;           /* page background (light) */
+  --bg-card: #ffffff;          /* card background */
+  --bg-input: #ffffff;
+  --border-color: #e5e7eb;
+  --text-main: #111111;
+  --text-muted: #6b7280;
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
 
-        .preorder-form-namespace .preorder-form__title {
-          font-size: 22px;
-          margin-bottom: 28px;
-        }
+:global([data-theme="dark"]) {
+  --bg-main: #000000;           /* page background (dark) */
+  --bg-card: #0b0b0b;           /* card slightly lifted */
+  --bg-input: #0f0f0f;
+  --border-color: #1f1f1f;
+  --text-main: #ffffff;
+  --text-muted: #a3a3a3;
+  --shadow-card: 0 14px 45px rgba(0, 0, 0, 0.65);
+}
 
-        .preorder-form-namespace .preorder-form__grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 16px;
-        }
+/* ================= NAMESPACE WRAPPER ================= */
+.preorder-form-namespace {
+  background: var(--bg-main);
+}
 
-        .preorder-form-namespace .preorder-form__vehicle-type {
-          grid-column: 1 / -1;
-          margin-bottom: 10px;
-        }
+/* ================= FORM CARD ================= */
+.preorder-form-namespace .preorder-form {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 40px;
+  background: var(--bg-card);
+  color: var(--text-main);
+  border-radius: 18px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
+}
 
-        .preorder-form-namespace .preorder-form__vehicle-type-label {
-          display: block;
-          margin-bottom: 10px;
-          font-weight: 500;
-        }
+/* ================= TITLE ================= */
+.preorder-form-namespace .preorder-form__title {
+  font-size: 22px;
+  margin-bottom: 28px;
+}
 
-        .preorder-form-namespace .preorder-form__radio-group {
-          display: flex;
-          gap: 20px;
-          flex-wrap: wrap;
-        }
+/* ================= GRID ================= */
+.preorder-form-namespace .preorder-form__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
 
-        .preorder-form-namespace .preorder-form__radio-label {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          cursor: pointer;
-        }
+/* ================= VEHICLE TYPE ================= */
+.preorder-form-namespace .preorder-form__vehicle-type {
+  grid-column: 1 / -1;
+  margin-bottom: 10px;
+}
 
-        .preorder-form-namespace .preorder-form__radio-input {
-          margin: 0;
-          width: 18px;
-          height: 18px;
-        }
+.preorder-form-namespace .preorder-form__vehicle-type-label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
 
-        .preorder-form-namespace .preorder-form__input {
-          padding: 14px;
-          border-radius: 10px;
-          border: 1px solid #111;
-          background: #0b0b0b;
-          color: #fff;
-          width: 100%;
-          box-sizing: border-box;
-        }
+.preorder-form-namespace .preorder-form__radio-group {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
 
-        .preorder-form-namespace .preorder-form__textarea {
-          padding: 14px;
-          border-radius: 10px;
-          border: 1px solid #111;
-          background: #0b0b0b;
-          color: #fff;
-          width: 100%;
-          box-sizing: border-box;
-          margin-top: 16px;
-          min-height: 100px;
-          resize: vertical;
-        }
+.preorder-form-namespace .preorder-form__radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--text-main);
+}
 
-        .preorder-form-namespace .preorder-form__submit-btn {
-          background: red;
-          border: none;
-          padding: 16px;
-          width: 100%;
-          border-radius: 10px;
-          font-weight: 600;
-          cursor: pointer;
-          color: #fff;
-          margin-top: 10px;
-        }
+.preorder-form-namespace .preorder-form__radio-input {
+  margin: 0;
+  width: 18px;
+  height: 18px;
+}
 
-        .preorder-form-namespace .preorder-form__submit-btn:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-        }
+/* ================= INPUTS ================= */
+.preorder-form-namespace .preorder-form__input,
+.preorder-form-namespace .preorder-form__textarea {
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-input);
+  color: var(--text-main);
+  width: 100%;
+  box-sizing: border-box;
+}
 
-        .preorder-form-namespace .preorder-form__whatsapp-btn {
-          background: #25d366;
-          border: none;
-          padding: 16px;
-          width: 100%;
-          border-radius: 10px;
-          font-weight: 600;
-          cursor: pointer;
-          color: #fff;
-          margin-top: 10px;
-        }
+.preorder-form-namespace .preorder-form__textarea {
+  margin-top: 16px;
+  min-height: 100px;
+  resize: vertical;
+}
 
-        .preorder-form-namespace .preorder-form__close-btn {
-          background: #333;
-          border: none;
-          padding: 16px;
-          width: 100%;
-          border-radius: 10px;
-          font-weight: 600;
-          cursor: pointer;
-          color: #fff;
-          margin-top: 10px;
-        }
+/* ================= BUTTONS ================= */
+.preorder-form-namespace .preorder-form__submit-btn {
+  background: red;
+  border: none;
+  padding: 16px;
+  width: 100%;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #ffffff;
+  margin-top: 10px;
+}
 
-        .preorder-form-namespace .preorder-form__overlay {
-          position: fixed;
-          inset: 0;
-          background: rgba(0, 0, 0, 0.75);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 9999;
-        }
+.preorder-form-namespace .preorder-form__submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
-        .preorder-form-namespace .preorder-form__popup {
-          background: #0b0b0b;
-          border: 1px solid #222;
-          padding: 30px;
-          border-radius: 16px;
-          max-width: 400px;
-          width: 90%;
-        }
+.preorder-form-namespace .preorder-form__whatsapp-btn {
+  background: #25d366;
+  border: none;
+  padding: 16px;
+  width: 100%;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #ffffff;
+  margin-top: 10px;
+}
 
-        .preorder-form-namespace .preorder-form__popup pre {
-          margin: 0 0 20px 0;
-          font-family: inherit;
-          color: #fff;
-        }
+.preorder-form-namespace .preorder-form__close-btn {
+  background: #333;
+  border: none;
+  padding: 16px;
+  width: 100%;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #ffffff;
+  margin-top: 10px;
+}
 
-        @media (max-width: 900px) {
-          .preorder-form-namespace .preorder-form__grid {
-            grid-template-columns: 1fr;
-          }
-          .preorder-form-namespace .preorder-form__radio-group {
-            flex-direction: column;
-            gap: 10px;
-          }
-        }
-      `}</style>
+/* ================= POPUP ================= */
+.preorder-form-namespace .preorder-form__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.preorder-form-namespace .preorder-form__popup {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 30px;
+  border-radius: 18px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: var(--shadow-card);
+}
+
+.preorder-form-namespace .preorder-form__popup pre {
+  margin: 0 0 20px 0;
+  font-family: inherit;
+  color: var(--text-main);
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 900px) {
+  .preorder-form-namespace .preorder-form__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .preorder-form-namespace .preorder-form__radio-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+`}</style>
+
     </div>
   );
 }
