@@ -153,6 +153,18 @@ export default function PreOrderForm() {
       <form className="form" onSubmit={handleSubmit} noValidate>
         <h2>Car Pre-Order Form</h2>
 
+
+           {/* ===== CAR DETAILS ===== */}
+        <h3 className="section">Car Details</h3>
+        <div className="grid">
+          {Object.entries(car).map(([key, value]) => (
+            <div className="field" key={key}>
+              <label>{key.replace("_", " ").toUpperCase()}</label>
+              <input value={value} readOnly className="locked" />
+            </div>
+          ))}
+        </div>
+
         {/* ===== CUSTOMER DETAILS ===== */}
         <h3 className="section">Customer Details</h3>
         <div className="grid">
@@ -170,16 +182,7 @@ export default function PreOrderForm() {
           ))}
         </div>
 
-        {/* ===== CAR DETAILS ===== */}
-        <h3 className="section">Car Details</h3>
-        <div className="grid">
-          {Object.entries(car).map(([key, value]) => (
-            <div className="field" key={key}>
-              <label>{key.replace("_", " ").toUpperCase()}</label>
-              <input value={value} readOnly className="locked" />
-            </div>
-          ))}
-        </div>
+     
 
         {/* ===== BUDGET & DELIVERY ===== */}
         <h3 className="section">Budget & Delivery</h3>

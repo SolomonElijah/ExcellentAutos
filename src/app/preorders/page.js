@@ -23,7 +23,7 @@ export default function PreOrderLanding() {
 
             <button
               className="primary-cta"
-              onClick={() => router.push("/preorder/apply")}
+              onClick={() => router.push("/preorders/apply")}
             >
               Start Pre-Order
             </button>
@@ -119,7 +119,7 @@ export default function PreOrderLanding() {
 
           <button
             className="secondary-cta"
-            onClick={() => router.push("/Preorder/apply")}
+            onClick={() => router.push("/preorders/apply")}
           >
             Proceed to Pre-Order
           </button>

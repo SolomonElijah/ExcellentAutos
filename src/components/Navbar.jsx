@@ -56,7 +56,7 @@ export default function Navbar() {
             <Link href="/cars">Buy Car</Link>
             <Link href="/sell">Sell & Swap</Link>
             <Link href="/car-loan">Car Loan</Link>
-            <Link href="/preorder">Preorder</Link>
+            <Link href="/preorders">Preorder</Link>
             <Link href="/about-us">About Us</Link>
             <Link href="/contact">Contact</Link>
           </nav>
@@ -96,7 +96,7 @@ export default function Navbar() {
             ["/cars", "Buy Car"],
             ["/sell", "Sell & Swap"],
             ["/car-loan", "Car Loan"],
-            ["/preorder", "Preorder"],
+            ["/preorders", "Preorder"],
             ["/about-us", "About Us"],
             ["/contact", "Contact"],
           ].map(([href, label]) => (
