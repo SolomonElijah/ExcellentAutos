@@ -154,29 +154,33 @@ export default function Navbar() {
   }
 
   /* ================= LOGO ================= */
-  .nav-logo {
-    width: 140px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px;
-    background: rgba(0, 0, 0, 0.04);
-    border-radius: 12px;
-    overflow: hidden;
-  }
+ /* ================= LOGO ================= */
+.nav-logo {
+  width: 140px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0; /* prevents stretching */
+}
 
-  :global([data-theme="dark"]) .nav-logo {
-    background: rgba(255, 255, 255, 0.06);
-  }
+:global([data-theme="dark"]) .nav-logo {
+  background: rgba(255, 255, 255, 0.06);
+}
 
-  .nav-logo img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
-    border-radius: 8px;
-  }
+.nav-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
 
   .logo-placeholder {
     width: 140px;
@@ -184,22 +188,38 @@ export default function Navbar() {
   }
 
   /* Tablet */
-  @media (max-width: 900px) {
-    .nav-logo,
-    .logo-placeholder {
-      width: 120px;
-      height: 36px;
-    }
+ @media (max-width: 900px) {
+  .nav-logo,
+  .logo-placeholder {
+    width: 120px;
+    height: 34px;
+    padding: 3px;
   }
+}
 
   /* Mobile */
-  @media (max-width: 600px) {
-    .nav-logo,
-    .logo-placeholder {
-      width: 110px;
-      height: 32px;
-    }
+ @media (max-width: 600px) {
+  .nav-logo,
+  .logo-placeholder {
+    width: 96px;
+    height: 28px;
+    padding: 2px;
+    border-radius: 10px;
   }
+
+  .nav-logo img {
+    border-radius: 6px;
+  }
+}
+
+@media (max-width: 360px) {
+  .nav-logo,
+  .logo-placeholder {
+    width: 84px;
+    height: 24px;
+  }
+}
+
 
   /* ================= MENU ================= */
   .nav-menu {
