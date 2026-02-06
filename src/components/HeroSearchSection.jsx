@@ -276,6 +276,25 @@ export default function HeroSearchSection() {
       grid-template-columns: repeat(3, 1fr);
     }
   }
+
+  @media (max-width: 600px) {
+  .wrapper {
+    padding: 16px 16px;
+  }
+
+  h3 {
+    margin-bottom: 14px;
+  }
+
+  .group {
+    margin-bottom: 18px;
+  }
+      .group p {
+    margin-bottom: 14px;
+   
+  }
+}
+
 `}</style>
 
     </>

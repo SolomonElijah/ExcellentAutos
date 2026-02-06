@@ -272,9 +272,18 @@ const carouselStyles = `
 @media (min-width: 768px) {
   .slide img {
     height: 300px;
-    padding: 24px;
+    padding: 20px;
   }
 }
+@media (max-width: 600px) {
+  .slide img {
+    object-fit: cover;
+    object-position: center top;
+    padding: 5px;
+  }
+}
+
+
 
 @media (min-width: 1024px) {
   .slide img {

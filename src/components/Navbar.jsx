@@ -201,8 +201,8 @@ export default function Navbar() {
  @media (max-width: 600px) {
   .nav-logo,
   .logo-placeholder {
-    width: 96px;
-    height: 28px;
+    width: 84px;
+    height: 24px;
     padding: 2px;
     border-radius: 10px;
   }
@@ -334,13 +334,13 @@ export default function Navbar() {
 
   @media (max-width: 900px) {
     .nav-spacer {
-      height: 72px;
+      height: 60px;
     }
   }
 
   @media (max-width: 600px) {
     .nav-spacer {
-      height: 60px;
+      height: 40px;
     }
   }
 `}</style>

@@ -480,11 +480,20 @@ export default function HeroProduct() {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
 @media (max-width: 700px) {
   .wrapper {
-    padding: 30px 20px;
+    padding: 20px 16px;
   }
+
+  .title {
+    margin-bottom: 18px;
+  }
+
+  .center {
+    margin-top: 20px;
+  }
+}
+
 
   .grid {
     grid-template-columns: 1fr;
