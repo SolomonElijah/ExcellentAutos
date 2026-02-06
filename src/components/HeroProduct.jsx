@@ -223,6 +223,47 @@ export default function HeroProduct() {
       {/* STYLES — UNCHANGED + SMALL ADDITIONS */}
       <style>{`
        /* ================= SECTION ================= */
+/* ================= THEME TOKENS ================= */
+:root {
+  --background: #ffffff;
+  --foreground: #0f172a;
+
+  --card-bg: #ffffff;
+  --card-text: #0f172a;
+  --card-border: #e5e7eb;
+
+  --image-bg: #f3f4f6;
+
+  --pill-bg: #eef2ff;
+  --pill-text: #3730a3;
+
+  --rating-bg: #fff7ed;
+  --rating-text: #f59e0b;
+
+  --accent: #dc2626;
+}
+
+/* ================= DARK MODE ================= */
+[data-theme="dark"] {
+  --background: #000000;
+  --foreground: #ffffff;
+
+  --card-bg: #0b0b0b;
+  --card-text: #ffffff;
+  --card-border: #1f2937;
+
+  --image-bg: #111827;
+
+  --pill-bg: #111827;
+  --pill-text: #c7d2fe;
+
+  --rating-bg: #1f2937;
+  --rating-text: #facc15;
+
+  --accent: #ef4444;
+}
+
+/* ================= SECTION ================= */
 .wrapper {
   background: var(--background);
   color: var(--foreground);
@@ -245,10 +286,10 @@ export default function HeroProduct() {
 /* ================= CARD ================= */
 .card {
   background: var(--card-bg);
-  color: var(--card-text, #111);
+  color: var(--card-text);
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid var(--card-border, #e5e7eb);
+  border: 1px solid var(--card-border);
   cursor: pointer;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -264,8 +305,8 @@ export default function HeroProduct() {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: var(--image-bg, #f3f4f6);
-  border-bottom: 1px solid var(--card-border, #e5e7eb);
+  background: var(--image-bg);
+  border-bottom: 1px solid var(--card-border);
   overflow: hidden;
   touch-action: pan-y;
 }
@@ -274,35 +315,6 @@ export default function HeroProduct() {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-/* === SLIDER CONTROLS === */
-.imgNav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.55);
-  color: #fff;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.imgWrap:hover .imgNav {
-  opacity: 1;
-}
-
-.imgNav.left {
-  left: 10px;
-}
-
-.imgNav.right {
-  right: 10px;
 }
 
 /* ================= IMAGE DOTS ================= */
@@ -321,14 +333,12 @@ export default function HeroProduct() {
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.5);
   cursor: pointer;
-  transition: transform 0.15s ease, background 0.15s ease;
 }
 
 .dot.active {
-  background: #fff;
+  background: #ffffff;
   transform: scale(1.2);
 }
-
 
 /* ================= BODY ================= */
 .body {
@@ -344,7 +354,6 @@ export default function HeroProduct() {
 /* ================= META ================= */
 .meta {
   display: flex;
-  flex-wrap: wrap;
   gap: 8px;
   font-size: 11px;
   margin-bottom: 12px;
@@ -353,16 +362,16 @@ export default function HeroProduct() {
 }
 
 .meta span {
-  background: var(--pill-bg, #eef2ff);
-  color: var(--pill-text, #3730a3);
+  background: var(--pill-bg);
+  color: var(--pill-text);
   padding: 6px 12px;
   border-radius: 999px;
   font-weight: 600;
 }
 
 .rating {
-  background: var(--rating-bg, #fff7ed);
-  color: var(--rating-text, #f59e0b);
+  background: var(--rating-bg);
+  color: var(--rating-text);
 }
 
 /* ================= PRICE ================= */
@@ -407,7 +416,7 @@ export default function HeroProduct() {
 .solid {
   background: var(--accent);
   border: none;
-  color: #fff;
+  color: #ffffff;
 }
 
 /* ================= LOAN TAG ================= */
@@ -415,11 +424,8 @@ export default function HeroProduct() {
   position: absolute;
   bottom: 10px;
   left: 10px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #e0edff;
-  color: #1d4ed8;
+  background: var(--pill-bg);
+  color: var(--pill-text);
   padding: 6px 12px;
   font-size: 11px;
   border-radius: 999px;
@@ -439,8 +445,7 @@ export default function HeroProduct() {
   gap: 12px;
   padding: 14px 24px;
   background: linear-gradient(135deg, #e11d48, #b91c1c);
-  color: #fff;
-  border: none;
+  color: #ffffff;
   border-radius: 999px;
   font-size: 14px;
   font-weight: 600;
@@ -449,7 +454,7 @@ export default function HeroProduct() {
 }
 
 .preorder-btn__badge {
-  background: #fff;
+  background: #ffffff;
   color: #b91c1c;
   padding: 4px 10px;
   border-radius: 999px;
@@ -465,12 +470,10 @@ export default function HeroProduct() {
 }
 
 .seeMore {
-  background: transparent;
   border: 1px solid var(--accent);
   color: var(--accent);
   padding: 12px 30px;
   border-radius: 999px;
-  cursor: pointer;
   font-weight: 600;
 }
 
@@ -480,9 +483,14 @@ export default function HeroProduct() {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
 @media (max-width: 700px) {
   .wrapper {
     padding: 20px 16px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
   }
 
   .title {
@@ -492,24 +500,6 @@ export default function HeroProduct() {
   .center {
     margin-top: 20px;
   }
-}
-
-
-  .grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ================= DARK MODE ================= */
-[data-theme="dark"] {
-  --card-bg: #0b0b0b;
-  --card-text: #ffffff;
-  --card-border: #1f2937;
-  --image-bg: #111;
-  --pill-bg: #111827;
-  --pill-text: #c7d2fe;
-  --rating-bg: #1f2937;
-  --rating-text: #facc15;
 }
 
       `}</style>
