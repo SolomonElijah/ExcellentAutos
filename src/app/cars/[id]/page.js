@@ -305,7 +305,11 @@ export default function CarDetailsPage() {
             </button>
           )}
         </div>
+ <div className="features card">
+            <h3 className="sectionTitle">Car Description</h3>
+            <p>{car.description || "No additional notes from the seller."}</p>
 
+           </div> 
         {/* SPECS */}
         <div className="specFeatureGrid">
 
@@ -341,7 +345,13 @@ export default function CarDetailsPage() {
               ))}
             </div>
           </div>
+
+
+           
+
+
         </div>
+
 
       </div>
 
