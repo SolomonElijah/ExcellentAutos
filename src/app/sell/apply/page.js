@@ -147,7 +147,7 @@ export default function SellSwapForm() {
 
     try {
       const res = await fetch(
-        "https://system.excellentautosnigeria.com/api/sell-swap",
+        "https://portal.ejccars.com/api/sell-swap",
         {
           method: "POST",
           body: formData,

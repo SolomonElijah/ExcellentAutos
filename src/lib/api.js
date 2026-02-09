@@ -1,6 +1,6 @@
 // src/lib/api.js
 
-export const API_BASE_URL = "https://system.excellentautosnigeria.com/api";
+export const API_BASE_URL = "https://portal.ejccars.com/api";
 
 export async function api(endpoint, options = {}) {
   const res = await fetch(`${API_BASE_URL}${endpoint}`, {

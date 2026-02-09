@@ -37,7 +37,7 @@ export default function SellContact({ car, onClose }) {
     async function loadWhatsapp() {
       try {
         const res = await fetch(
-          "https://system.excellentautosnigeria.com/api/site-settings"
+          "https://portal.ejccars.com/api/site-settings"
         );
         const json = await res.json();
 

@@ -2,7 +2,7 @@ let etag: string | null = null;
 
 export async function fetchCarousel() {
   const res = await fetch(
-    "https://system.excellentautosnigeria.com/api/carousel",
+    "https://portal.ejccars.com/api/carousel",
     {
       headers: {
         Accept: "application/json",

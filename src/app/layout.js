@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata = {
   title: {
-    default: "Excellent J&C Autos – Buy, Sell & Finance Cars in Nigeria",
+    default: "Excellent J&C Autos – Buy, Sell, Preorder & Finance Cars in Nigeria",
     template: "%s | Excellent J&C Autos",
   },
   description:
@@ -21,7 +21,7 @@ export const metadata = {
     "auto marketplace Nigeria",
   ],
 
-  metadataBase: new URL("https://excellentautosnigeria.com"),
+  metadataBase: new URL("https://ejccars.com"),
 
   icons: {
     icon: "/carbg.png",
@@ -32,9 +32,9 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "en_NG",
-    url: "https://excellentautosnigeria.com",
+    url: "https://ejccars.com",
     siteName: "Excellent J&C Autos",
-    title: "Excellent J&C Autos – Buy, Sell & Finance Cars in Nigeria",
+    title: "Excellent J&C Autos – Buy, Sell, Preorder & Finance Cars in Nigeria",
     description:
       "Buy, sell, preorder, and finance cars in Nigeria. Explore verified listings and apply for car loans easily.",
     images: [
@@ -49,9 +49,9 @@ export const metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Excellent J&C Autos – Buy, Sell & Finance Cars in Nigeria",
+    title: "Excellent J&C Autos – Buy, Sell, Preorder & Finance Cars in Nigeria",
     description:
-      "Browse cars for sale, apply for car loans, and sell your vehicle easily in Nigeria.",
+      "Browse cars for sale, apply for car loans, Preorder and sell your vehicle easily in Nigeria.",
     images: ["/carbg.png"],
   },
 
