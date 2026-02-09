@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { API_BASE_URL } from "@/lib/api";
+import { MessageCircle } from "lucide-react";
 
 export default function SellContact({ car, onClose }) {
   if (!car) return null;
@@ -112,7 +113,8 @@ View car: ${siteOrigin}/cars/${car.id}`;
           rel="noopener noreferrer"
           className="whatsapp"
         >
-          Start WhatsApp Chat
+          <MessageCircle size={18} />
+  <span>Start WhatsApp Chat</span>
         </a>
 
         <p className="note">
@@ -127,101 +129,138 @@ View car: ${siteOrigin}/cars/${car.id}`;
 
       {/* STYLES — COMPLETELY UNCHANGED */}
       <style>{`
-        .overlay {
-          position: fixed;
-          inset: 0;
-          background: rgba(0,0,0,.75);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 100;
-        }
+        :root {
+  --modal-bg: #ffffff;
+  --modal-text: #111827;
+  --modal-border: #e5e7eb;
+  --muted: #6b7280;
+  --overlay: rgba(0,0,0,.6);
+  --whatsapp: #25d366;
+}
 
-        .box {
-          background: #000;
-          color: #fff;
-          width: 360px;
-          padding: 22px;
-          border-radius: 14px;
-          position: relative;
-          border: 1px solid #111;
-        }
+[data-theme="dark"] {
+  --modal-bg: #000000;
+  --modal-text: #ffffff;
+  --modal-border: #111;
+  --muted: #9ca3af;
+  --overlay: rgba(0,0,0,.75);
+}
 
-        .close {
-          position: absolute;
-          top: 10px;
-          right: 12px;
-          background: none;
-          border: none;
-          color: #fff;
-          font-size: 22px;
-          cursor: pointer;
-        }
+/* ================= OVERLAY ================= */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
 
-        .title {
-          margin: 0;
-          font-size: 16px;
-        }
+/* ================= MODAL ================= */
+.box {
+  background: var(--modal-bg);
+  color: var(--modal-text);
+  width: 360px;
+  padding: 22px;
+  border-radius: 14px;
+  position: relative;
+  border: 1px solid var(--modal-border);
+}
 
-        .company {
-          color: red;
-          font-size: 13px;
-          margin-bottom: 12px;
-        }
+/* ================= CLOSE ================= */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--modal-text);
+  font-size: 22px;
+  cursor: pointer;
+}
 
-        .carImg {
-          width: 100%;
-          height: 160px;
-          object-fit: cover;
-          border-radius: 10px;
-          margin-bottom: 12px;
-          background: #111;
-        }
+/* ================= HEADER ================= */
+.title {
+  margin: 0;
+  font-size: 16px;
+}
 
-        .carInfo {
-          margin-bottom: 16px;
-        }
+.company {
+  color: red;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
 
-        .carName {
-          font-size: 14px;
-          font-weight: 600;
-          margin: 0;
-        }
+/* ================= IMAGE ================= */
+.carImg {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  background: #111;
+}
 
-        .price {
-          font-size: 13px;
-          margin: 6px 0;
-        }
+/* ================= INFO ================= */
+.carInfo {
+  margin-bottom: 16px;
+}
 
-        .location {
-          font-size: 11px;
-          color: #aaa;
-        }
+.carName {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
 
-        .whatsapp {
-          display: block;
-          background: red;
-          color: #fff;
-          text-align: center;
-          padding: 12px;
-          border-radius: 10px;
-          font-weight: 600;
-          text-decoration: none;
-          margin-bottom: 10px;
-        }
+.price {
+  font-size: 13px;
+  margin: 6px 0;
+}
 
-        .note {
-          font-size: 11px;
-          color: #aaa;
-          text-align: center;
-          margin-bottom: 6px;
-        }
+.location {
+  font-size: 11px;
+  color: var(--muted);
+}
 
-        .agreement {
-          font-size: 11px;
-          color: #777;
-          text-align: center;
-        }
+/* ================= WHATSAPP BUTTON ================= */
+.whatsapp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  background: var(--whatsapp);
+  color: #fff;
+  text-align: center;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 10px;
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.whatsapp:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgba(37, 211, 102, 0.35);
+}
+
+/* ================= FOOTER ================= */
+.note {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.agreement {
+  font-size: 11px;
+  color: #777;
+  text-align: center;
+}
+
       `}</style>
     </div>
   );
