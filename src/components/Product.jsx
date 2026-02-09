@@ -421,6 +421,55 @@ export default function Product() {
   --muted: #9ca3af;
 }
 
+/* ================= PAGINATION ================= */
+.pagination {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  background: var(--card-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+
+  transition: background 0.15s ease,
+              color 0.15s ease,
+              box-shadow 0.15s ease,
+              transform 0.15s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 10px 28px rgba(239, 68, 68, 0.35);
+  transform: translateY(-1px);
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.pagination span {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 6px 10px;
+}
+
 /* ================= LAYOUT ================= */
 .wrapper {
   background: var(--bg);
