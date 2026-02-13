@@ -106,7 +106,7 @@ export default function CarLoanPage() {
 
                 {firstTenure && (
                   <div className="loanRow highlight">
-                    <span className="label">Monthly Payment ({firstTenureKey?.replace('m_', '')} months)</span>
+                    <span className="label">Estimated monthly payment ({firstTenureKey?.replace('m_', '')} months) </span>
                     <span className="value">₦{Number(firstTenure.monthly_payment).toLocaleString()}</span>
                   </div>
                 )}
@@ -203,7 +203,7 @@ export default function CarLoanPage() {
       </div>
 
       <style>{`
-       /* ================= THEME VARIABLES ================= */
+/* ================= THEME VARIABLES ================= */
 :root {
   --bg: #ffffff;
   --surface: #ffffff;
@@ -236,6 +236,11 @@ export default function CarLoanPage() {
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
+
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 /* ================= PANELS ================= */
@@ -245,6 +250,7 @@ export default function CarLoanPage() {
   padding: 32px;
   border-radius: 20px;
   border: 1px solid var(--border);
+  min-width: 0; /* ✅ CRITICAL FIX */
 }
 
 /* ================= IMAGE ================= */
@@ -291,10 +297,11 @@ export default function CarLoanPage() {
 .loanRow .value {
   font-size: 15px;
   font-weight: 600;
+  min-width: 0;
+  word-break: break-word;
 }
 
 /* ================= HIGHLIGHT ================= */
-/* ================= ENHANCED HIGHLIGHT ================= */
 .loanRow.highlight {
   background: linear-gradient(
     135deg,
@@ -324,7 +331,6 @@ export default function CarLoanPage() {
   font-size: 22px;
   font-weight: 800;
 }
-
 
 /* ================= LOCATION ================= */
 .locationNote {
@@ -408,10 +414,17 @@ export default function CarLoanPage() {
 }
 
 /* ================= MOBILE LAYOUT ================= */
+/* ================= MOBILE LAYOUT ================= */
 @media (max-width: 900px) {
   .page {
     grid-template-columns: 1fr;
-    padding: 24px;
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .left,
+  .right {
+    padding: 20px;
   }
 
   .steps {
@@ -420,40 +433,33 @@ export default function CarLoanPage() {
   }
 
   .loanRow {
-   display: flex;
-justify-content: space-between;
-align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
 
-    gap: 6px;
+  .loanRow .label {
+    flex: 1;
+      font-size: 13px;
+    min-width: 0;
   }
 
   .loanRow .value {
-    align-self: flex-end;
+    flex-shrink: 1;
+    min-width: 0;
+    text-align: right;
+    word-break: break-word;
   }
 
-  .loanRow.highlight {
-  padding: 20px;
-  gap: 10px;
+  .loanRow.highlight .value {
+    font-size: 18px;
+  }
 }
 
-.loanRow.highlight .value {
-  font-size: 13px;
-}
-
-.loanRow.highlight .label {
-  font-size: 13px;
-}
-
-  
-}
 
 /* ================= SMALL PHONES ================= */
 @media (max-width: 600px) {
-  .left,
-  .right {
-    padding: 22px;
-  }
-
   .carName {
     font-size: 18px;
   }
@@ -463,8 +469,8 @@ align-items: center;
     padding: 14px;
   }
 }
+`}</style>
 
-      `}</style>
     </>
   );
 }
