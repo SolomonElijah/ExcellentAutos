@@ -106,7 +106,7 @@ export default function CarLoanPage() {
 
                 {firstTenure && (
                   <div className="loanRow highlight">
-                    <span className="label">Estimated monthly payment ({firstTenureKey?.replace('m_', '')} months) </span>
+                    <span className="label">Estimated monthly payment ({firstTenureKey?.replace('m_', '')} months)</span>
                     <span className="value">₦{Number(firstTenure.monthly_payment).toLocaleString()}</span>
                   </div>
                 )}
@@ -441,7 +441,6 @@ export default function CarLoanPage() {
 
   .loanRow .label {
     flex: 1;
-      font-size: 13px;
     min-width: 0;
   }
 

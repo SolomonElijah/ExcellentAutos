@@ -70,14 +70,16 @@ export default function LoanCal({ car }) {
         </div>
       </div>
 
-      <style>{`
-       /* ================= THEME ================= */
+     <style>{`
+/* ================= THEME ================= */
 .loanCal {
   margin: 32px 0;
   padding: 24px;
   border-radius: 18px;
   background: var(--card, #111);
   border: 1px solid var(--border, #222);
+  min-width: 0; /* ✅ CRITICAL: allow shrinking inside grid */
+  box-sizing: border-box;
 }
 
 /* ================= TITLE ================= */
@@ -96,6 +98,7 @@ export default function LoanCal({ car }) {
   margin-bottom: 22px;
   justify-content: center;
   flex-wrap: wrap;
+  min-width: 0;
 }
 
 .tenureBtn {
@@ -127,6 +130,7 @@ export default function LoanCal({ car }) {
   flex-direction: column;
   gap: 14px;
   font-size: 14px;
+  min-width: 0;
 }
 
 .row {
@@ -136,11 +140,24 @@ export default function LoanCal({ car }) {
   padding-bottom: 10px;
   border-bottom: 1px dashed var(--border, #222);
   color: var(--text, #fff);
+  gap: 10px;
+  min-width: 0;
+}
+
+.row span {
+  min-width: 0;
 }
 
 .row span:first-child {
   color: var(--muted, #aaa);
   font-size: 13px;
+  flex: 1;
+}
+
+.row span:last-child {
+  flex-shrink: 1;
+  text-align: right;
+  word-break: break-word;
 }
 
 .row:last-child {
@@ -182,18 +199,21 @@ export default function LoanCal({ car }) {
   }
 
   .row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .row span:first-child {
+    flex: 1;
   }
 
   .row span:last-child {
-    align-self: flex-end;
-    font-weight: 600;
+    text-align: right;
   }
 }
+`}</style>
 
-      `}</style>
     </div>
   );
 }
