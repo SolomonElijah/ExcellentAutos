@@ -224,104 +224,144 @@ export default function CarsFilterBar() {
       )}
 
       {/* STYLES — UNCHANGED */}
-      <style>{`
-        .bar {
-          background: #000;
-          padding: 14px 30px;
-          display: flex;
-          gap: 10px;
-          border-bottom: 1px solid #111;
-          flex-wrap: wrap;
-          align-items: center;
-        }
-        .bar button {
-          background: #0b0b0b;
-          border: 1px solid #222;
-          color: #ccc;
-          padding: 10px 14px;
-          border-radius: 8px;
-          font-size: 13px;
-          cursor: pointer;
-        }
-        .bar button:hover {
-          border-color: red;
-          color: #fff;
-        }
-        .clearTop {
-          border-color: red;
-          color: #fff;
-        }
-        .dropdown {
-          background: #000;
-          max-width: 700px;
-          margin: 12px auto;
-          padding: 20px;
-          border-radius: 10px;
-        }
-        input {
-          width: 100%;
-          padding: 10px;
-          margin: 8px 0 14px;
-          border: 1px solid #ddd;
-          border-radius: 6px;
-        }
-        .chips {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-        }
-        .chips span {
-          padding: 6px 10px;
-          border: 1px solid #ddd;
-          border-radius: 6px;
-          font-size: 12px;
-          cursor: pointer;
-           color: #fff;
+    <style jsx>{`
+  .bar {
+    background: var(--nav-bg);
+    padding: 14px 30px;
+    display: flex;
+    gap: 10px;
+    border-bottom: 1px solid var(--surface-border);
+    flex-wrap: wrap;
+    align-items: center;
+  }
 
-        }
-        .scroll {
-          max-height: 180px;
-          overflow-y: auto;
-        }
-        .range {
-          display: flex;
-          gap: 10px;
-          align-items: center;
-        }
-        .apply {
-          width: 100%;
-          margin-top: 16px;
-          background: red;
-          border: none;
-          padding: 12px;
-          border-radius: 6px;
-          font-weight: 800;
-          cursor: pointer;
-           color: #fff;
-        }
-        .clear {
-          width: 100%;
-          margin-top: 8px;
-          background: #111;
-          border: 1px solid #222;
-          padding: 12px;
-          border-radius: 6px;
-          font-weight: 600;
-          color: #ccc;
-          cursor: pointer;
-        }
-label {
-  color: #fff;
-}
+  .bar button {
+    background: var(--surface);
+    border: 1px solid var(--surface-border);
+    color: var(--foreground);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
 
-h5 {
-  color: #fff;
-}
-  
+  .bar button:hover {
+    border-color: var(--accent);
+  }
 
+  .clearTop {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
 
-      
-      `}</style>
+  .dropdown {
+    background: var(--background);
+    max-width: 700px;
+    margin: 12px auto;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid var(--surface-border);
+    box-shadow: var(--elevation-1);
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0 14px;
+    border: 1px solid var(--surface-border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--foreground);
+    outline: none;
+  }
+
+  input::placeholder {
+    color: var(--text-muted);
+  }
+
+  input:focus {
+    border-color: var(--accent);
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chips span {
+    padding: 6px 10px;
+    border: 1px solid var(--surface-border);
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    background: var(--surface);
+    color: var(--foreground);
+    transition: all 0.2s ease;
+  }
+
+  .chips span:hover {
+    border-color: var(--accent);
+  }
+
+  .scroll {
+    max-height: 180px;
+    overflow-y: auto;
+  }
+
+  .range {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .apply {
+    width: 100%;
+    margin-top: 16px;
+    background: var(--accent);
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 800;
+    cursor: pointer;
+    color: var(--text-invert);
+    transition: opacity 0.2s ease;
+  }
+
+  .apply:hover {
+    opacity: 0.9;
+  }
+
+  .clear {
+    width: 100%;
+    margin-top: 8px;
+    background: transparent;
+    border: 1px solid var(--surface-border);
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    color: var(--foreground);
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .clear:hover {
+    background: var(--surface);
+  }
+
+  label {
+    color: var(--foreground);
+  }
+
+  h5 {
+    margin-top: 10px;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 600;
+  }
+`}</style>
+
     </>
   );
 }

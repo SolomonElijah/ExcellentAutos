@@ -44,60 +44,82 @@ export default function CarsSearchHeader({ onSearch, onClear }) {
         </div>
       </section>
 
-      <style >{`
-        .header {
-          background: #000;
-          padding: 20px 30px;
-          border-bottom: 1px solid #eee;
-        }
+     <style jsx>{`
+  .header {
+    background: var(--nav-bg);
+    padding: 20px 30px;
+    border-bottom: 1px solid var(--surface-border);
+  }
 
-        .searchRow {
-          display: flex;
-          gap: 10px;
-          align-items: center;
-        }
+  .searchRow {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
 
-        .searchRow input {
-          flex: 1;
-          padding: 12px 14px;
-          border-radius: 6px;
-          border: 1px solid #ddd;
-          font-size: 14px;
-        }
+  .searchRow input {
+    flex: 1;
+    padding: 12px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--surface-border);
+    background: var(--surface);
+    color: var(--foreground);
+    font-size: 14px;
+    outline: none;
+  }
 
-        .searchBtn {
-          background: red;
-          border: none;
-          padding: 12px 18px;
-          border-radius: 6px;
-          font-weight: 800;
-          cursor: pointer;
-           color: #fff;
-        }
+  .searchRow input::placeholder {
+    color: var(--text-muted);
+  }
 
-        .clearBtn {
-          background: none;
-          border: none;
-          padding: 12px 18px;
-          border-radius: 6px;
-          font-weight: 600;
-          font-size: 13px;
-          cursor: pointer;
-           color: #fff;
-        }
+  .searchRow input:focus {
+    border-color: var(--accent);
+  }
 
-        @media (max-width: 768px) {
-          .searchRow {
-            flex-direction: column;
-            align-items: stretch;
-          }
+  .searchBtn {
+    background: var(--accent);
+    border: none;
+    padding: 12px 18px;
+    border-radius: 6px;
+    font-weight: 800;
+    cursor: pointer;
+    color: var(--text-invert);
+    transition: opacity 0.2s ease;
+  }
 
-          .searchBtn,
-          .clearBtn {
-            width: 100%;
-          }
-        }
-      `}</style>
+  .searchBtn:hover {
+    opacity: 0.9;
+  }
+
+  .clearBtn {
+    background: transparent;
+    border: 1px solid var(--surface-border);
+    padding: 12px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--foreground);
+    transition: background 0.2s ease;
+  }
+
+  .clearBtn:hover {
+    background: var(--surface);
+  }
+
+  @media (max-width: 768px) {
+    .searchRow {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .searchBtn,
+    .clearBtn {
+      width: 100%;
+    }
+  }
+`}</style>
+
     </>
   );
 }
