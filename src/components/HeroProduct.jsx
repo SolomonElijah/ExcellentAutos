@@ -55,6 +55,19 @@ function CarCard({ car, onContact }) {
   const hasLoan = car.loan?.available === true;
   const loanData = car.loan?.precomputed;
 
+
+
+
+const downPaymentPercent =
+  loanData?.down_payment_percent ?? 0;
+
+const downPaymentAmount =
+  Math.round(
+    (Number(car.price) * downPaymentPercent) / 100
+  );
+
+
+
   const firstTenure =
     loanData?.tenures &&
     (Array.isArray(loanData.tenures)
@@ -123,7 +136,7 @@ function CarCard({ car, onContact }) {
           {loanData && firstTenure && (
             <div>
               <p className="monthly">
-                ₦{Number(firstTenure.monthly_payment).toLocaleString()} / Mo
+                ₦{Number(downPaymentAmount).toLocaleString()}
               </p>
               <small>{loanData.down_payment_percent}% Down payment</small>
             </div>
@@ -378,6 +391,7 @@ export default function HeroProduct() {
 .priceRow {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 14px;
 }
 

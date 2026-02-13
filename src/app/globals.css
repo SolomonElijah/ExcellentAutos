@@ -33,7 +33,7 @@
 }
 
 /* ===== SYSTEM DARK MODE ===== */
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
@@ -52,7 +52,7 @@
     --border-main: #333333;
     --border-strong: #222222;
   }
-}
+} */
 
 /* ===== MANUAL THEME OVERRIDE (ThemeToggle) ===== */
 [data-theme="light"] {

@@ -240,6 +240,16 @@ export default function Product() {
 
               const loanData = car.loan?.precomputed ?? null;
 
+
+
+              const downPaymentPercent =
+  loanData?.down_payment_percent ?? 0;
+
+const downPaymentAmount =
+  Math.round(
+    (Number(car.price) * downPaymentPercent) / 100
+  );
+
               const firstTenure = loanData?.tenures
                 ? loanData.tenures[Object.keys(loanData.tenures)[0]]
                 : null;
@@ -288,7 +298,7 @@ export default function Product() {
                       {hasLoan && loanData && firstTenure ? (
                         <div>
                           <p className="monthly">
-                            ₦{Number(firstTenure.monthly_payment).toLocaleString()} / Mo
+                             ₦{Number(downPaymentAmount).toLocaleString()}
                           </p>
                           <small>
                             {loanData.down_payment_percent}% Down payment
@@ -336,8 +346,8 @@ export default function Product() {
     className="preorder-btn"
     onClick={() => router.push(`/preorder/${car.id}`)}
   >
-    <span className="preorder-btn__main">Pre-Order This Car</span>
-    <span className="preorder-btn__badge">10% OFF</span>
+   <span className="preorder-btn__main">Pre-Order Same Car and Get 10% Discount</span>
+            {/* <span className="preorder-btn__badge">10% OFF</span> */}
   </button>
 </div>
 

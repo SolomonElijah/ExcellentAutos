@@ -94,7 +94,7 @@ export default function CarLoanPage() {
                   <span className="value">₦{Number(car.price).toLocaleString()}</span>
                 </div>
 
-                <div className="loanRow">
+                <div className="loanRow highlight">
                   <span className="label">Down Payment ({downPaymentPercent}%)</span>
                   <span className="value">₦{Number(downPaymentAmount).toLocaleString()}</span>
                 </div>
@@ -294,24 +294,37 @@ export default function CarLoanPage() {
 }
 
 /* ================= HIGHLIGHT ================= */
+/* ================= ENHANCED HIGHLIGHT ================= */
 .loanRow.highlight {
-  background: var(--accent-soft);
-  border: 1px solid rgba(239, 68, 68, 0.25);
-  padding: 16px;
-  border-radius: 14px;
-  margin: 12px 0;
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.12),
+    rgba(239, 68, 68, 0.05)
+  );
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  padding: 18px 20px;
+  border-radius: 16px;
+  margin: 14px 0;
+  box-shadow: 0 6px 18px rgba(239, 68, 68, 0.15);
+  transition: transform 0.2s ease;
+}
+
+.loanRow.highlight:hover {
+  transform: translateY(-2px);
 }
 
 .loanRow.highlight .label {
-  color: var(--text);
+  font-size: 14px;
   font-weight: 600;
+  color: var(--text);
 }
 
 .loanRow.highlight .value {
   color: var(--accent);
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 22px;
+  font-weight: 800;
 }
+
 
 /* ================= LOCATION ================= */
 .locationNote {
@@ -407,14 +420,31 @@ export default function CarLoanPage() {
   }
 
   .loanRow {
-    flex-direction: column;
-    align-items: flex-start;
+   display: flex;
+justify-content: space-between;
+align-items: center;
+
     gap: 6px;
   }
 
   .loanRow .value {
     align-self: flex-end;
   }
+
+  .loanRow.highlight {
+  padding: 20px;
+  gap: 10px;
+}
+
+.loanRow.highlight .value {
+  font-size: 13px;
+}
+
+.loanRow.highlight .label {
+  font-size: 13px;
+}
+
+  
 }
 
 /* ================= SMALL PHONES ================= */

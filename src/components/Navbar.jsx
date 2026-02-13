@@ -63,7 +63,7 @@ export default function Navbar() {
 
           {/* ACTIONS */}
           <div className="nav-actions">
-            {/* <div className="nav-social">
+            <div className="nav-social">
               <a href="https://www.instagram.com/excellent_jc_autos" target="_blank" rel="noreferrer">
                 <img src="/insta.png" alt="Instagram" />
               </a>
@@ -73,7 +73,7 @@ export default function Navbar() {
               <a href="https://www.facebook.com" target="_blank" rel="noreferrer">
                 <img src="/fb.png" alt="Facebook" />
               </a>
-            </div> */}
+            </div>
 
             <ThemeToggle />
 
@@ -341,6 +341,10 @@ export default function Navbar() {
   @media (max-width: 600px) {
     .nav-spacer {
       height: 40px;
+    }
+
+    .nav-social {
+      display: none;
     }
   }
 `}</style>
