@@ -56,7 +56,7 @@ export default function Navbar() {
             <Link href="/cars">Buy Car</Link>
             <Link href="/sell">Sell & Swap</Link>
             <Link href="/car-loan">Car Loan</Link>
-            <Link href="/preorders">Preorder</Link>
+            <Link href="/preorders">Pre-order</Link>
             <Link href="/about-us">About Us</Link>
             <Link href="/contact">Contact</Link>
           </nav>
